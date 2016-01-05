@@ -1,0 +1,80 @@
+﻿<Window x:Class="ReportControlSystem.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="MainWindow" Height="Auto" MinHeight="500"  Width="Auto" MinWidth="700"  Closed="Window_Closed">
+    
+    <Window.Resources >
+        <Storyboard x:Key="open_logon" SpeedRatio="3" Completed="Logon_StoryBoard_Completed">
+            <DoubleAnimation 
+                Storyboard.TargetName="LogonPanel"
+                Storyboard.TargetProperty="(Image.Opacity)"
+                From="0" To="1"
+                RepeatBehavior="1x" AutoReverse="False" />
+        </Storyboard>
+
+        <Storyboard x:Key="close_logon" SpeedRatio="3">
+            <DoubleAnimation 
+                Storyboard.TargetName="LogonPanel"
+                Storyboard.TargetProperty="(Image.Opacity)"
+                From="1" To="0"
+                RepeatBehavior="1x" AutoReverse="False" />
+        </Storyboard>
+        
+    </Window.Resources>
+    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="6*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        
+        <!-- Logon Panel-->
+        <Border Name="LogonPanel" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" BorderBrush="Black" BorderThickness="3" 
+                CornerRadius="6,6,6,6" Height="250" Width="300" VerticalAlignment="Center" HorizontalAlignment="Center"
+                Opacity="1" >
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="0.5*"/>
+                </Grid.RowDefinitions>
+                
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="1.5*"/>
+                </Grid.ColumnDefinitions>
+                
+                <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Content="Control System Logon Panel" FontSize="20" FontWeight="Bold"
+                       HorizontalAlignment="Center"/>
+                
+                <Label Content="User Name:" Grid.Row="1" Grid.Column="0" FontSize="18" VerticalAlignment="Center" HorizontalAlignment="Right"
+                       Margin="0,0,0,0"/>
+                <TextBox Name="txt_username"  Grid.Row="1" Grid.Column="1" FontSize="18" VerticalAlignment="Center"  
+                         IsHitTestVisible="True" Text="User Name" Margin="10,0,20,0"  ToolTip="Enter the name of the authorized user" TabIndex="0" />
+                
+                
+                <Label Content="Password:" Grid.Row="2" Grid.Column="0" FontSize="18" VerticalAlignment="Center" HorizontalAlignment="Right"
+                       Margin="0,0,0,0"/>
+                <PasswordBox Name="txt_password" Password="password"  Grid.Row="2" Grid.Column="1" FontSize="18" VerticalAlignment="Center" 
+                         IsHitTestVisible="True" Margin="10,0,20,0" ToolTip="Enter the password of the authorized user" TabIndex="1"/>
+
+                <Button Grid.Row="3" Grid.Column="0" Margin="12,12,0,6" Content="Clear" FontSize="18" Click="BTN_Clear_Clicked" TabIndex="2"/>
+                <Button Grid.Row="3" Grid.Column="1" Margin="60,12,12,6"  Content="Logon" FontSize="18" Click="BTN_Logon_Clicked" IsDefault="True" TabIndex="3"/>
+
+                <Label Name="lbl_logon_status" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Foreground="Red"  FontSize="15" Content="test"
+                       Margin="10,-9,0,0"/>
+
+                <Border Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" BorderThickness="0,0,0,2" BorderBrush="Black" Margin="3"/>
+          
+                
+            </Grid>
+        </Border>
+    </Grid>
+</Window>
