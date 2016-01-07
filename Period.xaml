@@ -1,0 +1,8 @@
+﻿<Window x:Class="ReportControlSystem.Period"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Period" Height="300" Width="300" Closed="Windows_Closed">
+    <Grid>
+        
+    </Grid>
+</Window>

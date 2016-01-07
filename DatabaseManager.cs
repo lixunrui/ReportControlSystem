@@ -10,36 +10,153 @@ using System.IO;
 
 namespace ReportControlSystem
 {
+    internal enum DataBaseStatus
+    {
+        NewDatabase,
+        DatabaseOK,
+        DatabaseError,
+    };
+
+    internal enum DataBaseName
+    {
+        Users,
+        Category,
+        Period,
+        Period_Type,
+        Staff,
+        All,
+    }
+
     internal class DatabaseManager
     {
-        const String DATABASE_NAME = @"Mia_DB.db";
-
-        SQLiteConnection conn;
-        SQLiteCommand cmd;
+        const String DEFAULT_DATABASE_NAME = @"mia.db";
+        
+        SQLiteConnection m_dbConnection;
+       
         DataSet DS;
 
-        internal DatabaseManager()
+        SQLiteDataAdapter adapter;
+
+        DataBaseStatus _dbStatus;
+
+        public ReportControlSystem.DataBaseStatus DbStatus
         {
-            CreateDatabase();
+            get { return _dbStatus; }
         }
 
-        void CreateDatabase()
+        internal DatabaseManager(String path = null, String databaseName = null)
         {
-            if (!File.Exists(DATABASE_NAME))
+            String dbpath;
+            if (databaseName == null)
             {
-                SQLiteConnection.CreateFile(DATABASE_NAME);
+                dbpath = Path.Combine(path, DEFAULT_DATABASE_NAME);
             }
-            String connectionString = String.Format("Data Source={0};Version=3;", DATABASE_NAME);
-            conn = new SQLiteConnection(connectionString);
+            else
+                dbpath = Path.Combine(path, databaseName);
+
+            // check file existence 
+            if (!File.Exists(dbpath))
+            {
+                // if not exist, then we create a new one
+                SQLiteConnection.CreateFile(dbpath);
+                _dbStatus = DataBaseStatus.NewDatabase;
+            }
+            else
+            {
+                _dbStatus = DataBaseStatus.DatabaseOK;
+            }
+
+            m_dbConnection = new SQLiteConnection();
+
+            string connectionString = string.Format("Data Source={0};Version=3;MultipleActiveResultSets=true;", dbpath);
+
+            m_dbConnection.ConnectionString = connectionString;
+
+            if (_dbStatus == DataBaseStatus.NewDatabase)
+            {
+                InitDatabase();
+            }
         }
 
-        void LoadSQLTextFile(String sqlTextFile)
+        void InitDatabase()
+        {
+            LoadSQLTextFile(SQLStatement.GetCreateUserTableQuery());
+            LoadSQLTextFile(SQLStatement.GetCreateStaffTableQuery());
+            LoadSQLTextFile(SQLStatement.GetCreatePeriodTypeTableQuery());
+            LoadSQLTextFile(SQLStatement.GetCreatePeriodTableQuery());
+            LoadSQLTextFile(SQLStatement.GetCreateCategoryTableQuery());
+            LoadSQLTextFile(SQLStatement.GetCreatePaymentTableQuery());
+            LoadSQLTextFile(SQLStatement.GetInsertUserQuery());
+            LoadSQLTextFile(SQLStatement.GetInsertCategoryQuery());
+            LoadSQLTextFile(SQLStatement.GetInsertPeriodTypeQuery());
+        }
+
+        // Execute all statements that don't need any return data
+        bool LoadSQLTextFile(String sqlTextFile)
         {
             StringReader reader = new StringReader(sqlTextFile);
 
             String query = ParserSQLStatement(reader);
 
+            if (query != null)
+            {
+                try
+                {
+                    using (SQLiteCommand cmd = m_dbConnection.CreateCommand())
+                    {
+                        m_dbConnection.Open();
+
+                        cmd.CommandText = query.Trim();
+
+                        cmd.ExecuteNonQuery();
+
+                        m_dbConnection.Close();
+                    }
+                    return true;
+                }
+                catch (System.Exception ex)
+                {
+                }           
+            }
+            return false;
         }
+
+        /// <summary>
+        /// Execute all SQL statements that have data return
+        /// </summary>
+        /// <param name="sqlTextFile"></param>
+        /// <returns></returns>
+        SQLiteDataReader ExecuteSQLTextFile(String sqlTextFile)
+        {
+            StringReader reader = new StringReader(sqlTextFile);
+
+            SQLiteDataReader sqlReader = null;
+
+            String query = ParserSQLStatement(reader);
+
+            if (query != null)
+            {
+                try
+                {
+                    using (SQLiteCommand cmd = m_dbConnection.CreateCommand())
+                    {
+                        m_dbConnection.Open();
+
+                        cmd.CommandText = query.Trim();
+
+                        sqlReader = cmd.ExecuteReader();
+
+                        m_dbConnection.Close();
+                    }
+                    return sqlReader;
+                }
+                catch (System.Exception ex)
+                {
+                }           
+            }
+            return null;
+        }
+
 
         String ParserSQLStatement(StringReader reader)
         {
@@ -50,16 +167,79 @@ namespace ReportControlSystem
             return sqlStatement;
         }
 
+        // testing function
         internal Boolean CheckUser(String username, String password)
         {
             Boolean valideUser = false;
 
-            if (username.ToLower().Equals("mia") && password.ToLower().Equals("mia"))
+            DataTable table = GetDataTable(SQLStatement.GetUserTableQuery());
+            
+            if (table != null)
             {
-                valideUser = true;
+                string filter = string.Format("Login_Name='{0}'", username);
+                DataRow[] rows = table.Select(filter);
+
+                foreach (DataRow r in rows)
+                {
+                    if (r["Password"].ToString().Equals(MD5PWD.MD5HashPassword(password)))
+                    {
+                        valideUser = true;
+                        break;
+                    }
+                }
             }
 
             return valideUser;
+        }
+
+        internal DataTable GetDataTable(String query)
+        {
+            DataTable table;
+
+            using (SQLiteCommand command = m_dbConnection.CreateCommand())
+            {
+                command.CommandText = query;
+
+                adapter = new SQLiteDataAdapter(command);
+
+                DS = new DataSet();
+
+                adapter.Fill(DS);
+
+                table = DS.Tables[0];
+            }
+            return table;
+        }
+
+        internal bool RestoreTable(DataBaseName dbName)
+        {
+            bool result = false;
+
+            switch (dbName)
+            {
+                case DataBaseName.Users:
+                    result = LoadSQLTextFile(SQLStatement.GetInsertUserQuery());
+                    break;
+                case DataBaseName.Category:
+                    result = LoadSQLTextFile(SQLStatement.GetInsertCategoryQuery());
+                    break;
+                case DataBaseName.Period_Type:
+                    result = LoadSQLTextFile(SQLStatement.GetInsertPeriodTypeQuery());
+                    break;
+                case DataBaseName.Period:
+                    
+                    break;
+                case DataBaseName.Staff:
+                    
+                    break;
+                case DataBaseName.All:
+                    result = (LoadSQLTextFile(SQLStatement.GetInsertUserQuery()) &&
+                            LoadSQLTextFile(SQLStatement.GetInsertCategoryQuery()) &&
+                            LoadSQLTextFile(SQLStatement.GetInsertPeriodTypeQuery()));
+                    break;
+            }
+
+            return result;
         }
     }
 }
