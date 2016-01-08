@@ -55,6 +55,7 @@ namespace ReportControlSystem
             query = @"CREATE TABLE Category (
 		                Category_ID		    INTEGER PRIMARY KEY AUTOINCREMENT,
 		                Category_Name		NVARCHAR(50) NOT NULL,
+                        Category_Description NVARCHAR(300),
 		                Category_Type		BIT NOT NULL
 	                );";
 
@@ -220,6 +221,15 @@ namespace ReportControlSystem
             String query = String.Empty;
 
             query = @"select * from Staff;";
+
+            return query;
+        }
+
+        internal static String GetCategoryTableQuery()
+        {
+            String query = String.Empty;
+
+            query = @"select * from Category;";
 
             return query;
         }

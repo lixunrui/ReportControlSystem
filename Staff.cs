@@ -30,7 +30,5 @@ namespace ReportControlSystem
         {
             _phone = phone;
         }
-
-
     }
 }

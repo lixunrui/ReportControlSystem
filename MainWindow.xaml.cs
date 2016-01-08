@@ -213,7 +213,15 @@ namespace ReportControlSystem
 
         private void BTN_Category_Clicked(object sender, RoutedEventArgs e)
         {
+            this.Hide();
 
+            CategoryManager category = new CategoryManager(this, dbManager);
+
+            category.Owner = this;
+
+            category.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+
+            category.Show();
         }
 
         private void BTN_Staff_Clicked(object sender, RoutedEventArgs e)

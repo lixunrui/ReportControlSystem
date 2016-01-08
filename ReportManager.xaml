@@ -22,7 +22,7 @@
         <TextBlock Grid.Row="0" Grid.Column="2" Text="Report List for Staff" FontSize="24" FontWeight="Bold" Margin="12" HorizontalAlignment="Center" />
         <Border Grid.Row="0" Grid.Column="3" BorderBrush="Black" BorderThickness="0,0,0,2" />
 
-        <ListView Margin="3" Name="StaffListFrom"  Grid.Row="1" Grid.Column="0" ItemsSource="{Binding}" FontSize="15"
+        <ListView Margin="9,3,3,3" Name="StaffListFrom"  Grid.Row="1" Grid.Column="0" ItemsSource="{Binding}" FontSize="15"
                  SelectionChanged="StaffListFrom_SelectionChanged" SelectionMode="Multiple" >
             <ListView.View>
                 <GridView>
@@ -77,7 +77,7 @@
             <Border Grid.Row="3" BorderBrush="Black" BorderThickness="2,0,2,0"/>           
         </Grid>
 
-        <ListView Margin="3" Name="StaffListTo"  Grid.Row="1" Grid.Column="2" ItemsSource="{Binding}" FontSize="15"
+        <ListView Margin="3,3,12,3" Name="StaffListTo"  Grid.Row="1" Grid.Column="2" ItemsSource="{Binding}" FontSize="15"
                  SelectionChanged="StaffListTo_SelectionChanged" SelectionMode="Multiple" >
             <ListView.View>
                 <GridView>
