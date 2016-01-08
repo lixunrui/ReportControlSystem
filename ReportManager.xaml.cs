@@ -67,7 +67,7 @@ namespace ReportControlSystem
             staffRemoveFrom = new List<Staff>();
 
             FromListLocker = new ManualResetEvent(false);
-            ToListLocker = new ManualResetEvent(false);
+            ToListLocker = new ManualResetEvent(true);
 
 
 
@@ -162,28 +162,32 @@ namespace ReportControlSystem
         private void BTN_Add_Clicked(object sender, RoutedEventArgs e)
         {
             FromListLocker.WaitOne();
-                foreach (Staff s in staffAddTo)
-                {
-                    toStaffs.Add(s);
-                    fromStaffs.Remove(s);
-                }
-                staffAddTo.Clear();
+     
+            ToListLocker.Reset();
 
+            foreach (Staff s in staffAddTo)
+            {
+                toStaffs.Add(s);
+                fromStaffs.Remove(s);
+            }
+            staffAddTo.Clear();
+
+            ToListLocker.Set();
 
             UpdateButtons();
         }
 
         private void BTN_Remove_Clicked(object sender, RoutedEventArgs e)
         {
-            ToListLocker.WaitOne();
-
+            FromListLocker.WaitOne();
+            ToListLocker.Reset();
                 foreach (Staff s in staffRemoveFrom)
                 {
                     toStaffs.Remove(s);
                     fromStaffs.Add(s);
                 }
                 staffRemoveFrom.Clear();
- 
+                ToListLocker.Set();
 
 
             UpdateButtons();
@@ -192,13 +196,13 @@ namespace ReportControlSystem
         private void BTN_Add_All_Clicked(object sender, RoutedEventArgs e)
         {
             FromListLocker.WaitOne();
-   
+            ToListLocker.Reset();
                 foreach (Staff s in fromStaffs)
                 {
                     toStaffs.Add(s);
                 }
                 fromStaffs.Clear();
-
+                ToListLocker.Set();
             
             
             UpdateButtons();
@@ -206,62 +210,60 @@ namespace ReportControlSystem
 
         private void BTN_Remove_All_Clicked(object sender, RoutedEventArgs e)
         {
-            ToListLocker.WaitOne();
-           
+            FromListLocker.WaitOne();
+            ToListLocker.Reset();
                 foreach (Staff s in toStaffs)
                 {
                     fromStaffs.Add(s);
                 }
                 toStaffs.Clear();
- 
+                ToListLocker.Set();
             UpdateButtons();
         }
 
         private void StaffListFrom_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            DataGrid thisGrid = (DataGrid)sender;
+           // Thread from_SelectionThread = new Thread(new ParameterizedThreadStart(From_Thread));
+           // from_SelectionThread.Start();
 
-            List<Staff> selectedStaffs = thisGrid.SelectedItems.Cast<Staff>().ToList();
-
-            FromListLocker.Reset();
-            foreach (Staff s in selectedStaffs)
-            {
-                if (staffAddTo.Contains(s))
-                {
-                    Console.WriteLine("Remove {0} from From List", s.Name);
-                    staffAddTo.Remove(s);
-                }
-                else
-                {
-                    Console.WriteLine("Add {0} from From List", s.Name);
-                    staffAddTo.Add(s);
-                }
-            }
-            FromListLocker.Set();
+            Thread from_SelectionThread = new Thread(()=>From_Thread(e, staffAddTo));
+            from_SelectionThread.Start();
         }
 
         private void StaffListTo_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            ToListLocker.Reset();
+            Thread to_SelectionThread = new Thread(() => From_Thread(e, staffRemoveFrom));
+            to_SelectionThread.Start();
+        }
+
+        private void From_Thread(SelectionChangedEventArgs e, List<Staff> list)
+        {
+            Console.WriteLine("from_selection with thread id {0}", Thread.CurrentThread.ManagedThreadId);
+            ToListLocker.WaitOne();
+            Console.WriteLine("Done waiting...");
+            FromListLocker.Reset();
             foreach (Staff s in e.RemovedItems)
             {
-                if (staffRemoveFrom.Contains(s))
+                if (list.Contains(s))
                 {
-                    Console.WriteLine("Remove {0} from To List", s.Name);
-                    staffRemoveFrom.Remove(s);
+                    Console.WriteLine("Remove {0} from From List", s.Name);
+                    list.Remove(s);
                 }
             }
 
             foreach (Staff s in e.AddedItems)
             {
-                if (!staffRemoveFrom.Contains(s))
+                if (!list.Contains(s))
                 {
-                    Console.WriteLine("Add {0} from To List", s.Name);
-                    staffRemoveFrom.Add(s);
+                    Console.WriteLine("Add {0} from From List", s.Name);
+                    list.Add(s);
                 }
             }
-            ToListLocker.Set();
+            FromListLocker.Set();
         }
+
+
+        
 
         private void BTN_Generate_Reports_Clicked(object sender, RoutedEventArgs e)
         {
