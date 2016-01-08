@@ -8,6 +8,12 @@ namespace ReportControlSystem
 {
     internal class Category
     {
+        Int32 _category_ID;
+        public System.Int32 Category_ID
+        {
+            get { return _category_ID; }
+            set { _category_ID = value; }
+        }
         String _category_Name;
         public System.String Category_Name
         {
@@ -29,11 +35,9 @@ namespace ReportControlSystem
             set { _category_Type = value; }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="name">Name of the Category</param>
-        /// <param name="addOrMinus">true: Add; False: Minus</param>
+        internal int _category_Type_bit;
+
+
         internal Category(string name, bool addOrMinus, string des = null)
         {
             _category_Name = name;
@@ -41,11 +45,24 @@ namespace ReportControlSystem
             if (addOrMinus)
             {
                 _category_Type = "+";
+                _category_Type_bit = 1;
             }
             else
             {
                 _category_Type = "-";
+                _category_Type_bit = 0;
             }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="name">Name of the Category</param>
+        /// <param name="addOrMinus">true: Add; False: Minus</param>
+        internal Category(int id, string name, bool addOrMinus, string des = null)
+            : this(name, addOrMinus, des)
+        {
+            _category_ID = id;
         }
     }
 }

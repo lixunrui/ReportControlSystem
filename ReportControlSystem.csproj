@@ -81,6 +81,9 @@
       <DependentUpon>Administrator.xaml</DependentUpon>
     </Compile>
     <Compile Include="Category.cs" />
+    <Compile Include="CategoryAddingDialog.xaml.cs">
+      <DependentUpon>CategoryAddingDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="CategoryManager.xaml.cs">
       <DependentUpon>CategoryManager.xaml</DependentUpon>
     </Compile>
@@ -98,6 +101,10 @@
     <Compile Include="Staff.cs" />
     <Compile Include="User.cs" />
     <Page Include="Administrator.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="CategoryAddingDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

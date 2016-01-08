@@ -86,13 +86,13 @@ namespace ReportControlSystem
             LoadSQLTextFile(SQLStatement.GetCreatePeriodTableQuery());
             LoadSQLTextFile(SQLStatement.GetCreateCategoryTableQuery());
             LoadSQLTextFile(SQLStatement.GetCreatePaymentTableQuery());
-            LoadSQLTextFile(SQLStatement.GetInsertUserQuery());
-            LoadSQLTextFile(SQLStatement.GetInsertCategoryQuery());
-            LoadSQLTextFile(SQLStatement.GetInsertPeriodTypeQuery());
+            LoadSQLTextFile(SQLStatement.GetDefaultInsertUserQuery());
+            LoadSQLTextFile(SQLStatement.GetDefaultInsertCategoryQuery());
+            LoadSQLTextFile(SQLStatement.GetDefaultInsertPeriodTypeQuery());
         }
 
         // Execute all statements that don't need any return data
-        bool LoadSQLTextFile(String sqlTextFile)
+        internal bool LoadSQLTextFile(String sqlTextFile)
         {
             StringReader reader = new StringReader(sqlTextFile);
 
@@ -126,7 +126,7 @@ namespace ReportControlSystem
         /// </summary>
         /// <param name="sqlTextFile"></param>
         /// <returns></returns>
-        SQLiteDataReader ExecuteSQLTextFile(String sqlTextFile)
+        internal SQLiteDataReader ExecuteSQLTextFile(String sqlTextFile)
         {
             StringReader reader = new StringReader(sqlTextFile);
 
@@ -218,13 +218,13 @@ namespace ReportControlSystem
             switch (dbName)
             {
                 case DataBaseName.Users:
-                    result = LoadSQLTextFile(SQLStatement.GetInsertUserQuery());
+                    result = LoadSQLTextFile(SQLStatement.GetDefaultInsertUserQuery());
                     break;
                 case DataBaseName.Category:
-                    result = LoadSQLTextFile(SQLStatement.GetInsertCategoryQuery());
+                    result = LoadSQLTextFile(SQLStatement.GetDefaultInsertCategoryQuery());
                     break;
                 case DataBaseName.Period_Type:
-                    result = LoadSQLTextFile(SQLStatement.GetInsertPeriodTypeQuery());
+                    result = LoadSQLTextFile(SQLStatement.GetDefaultInsertPeriodTypeQuery());
                     break;
                 case DataBaseName.Period:
                     
@@ -233,9 +233,9 @@ namespace ReportControlSystem
                     
                     break;
                 case DataBaseName.All:
-                    result = (LoadSQLTextFile(SQLStatement.GetInsertUserQuery()) &&
-                            LoadSQLTextFile(SQLStatement.GetInsertCategoryQuery()) &&
-                            LoadSQLTextFile(SQLStatement.GetInsertPeriodTypeQuery()));
+                    result = (LoadSQLTextFile(SQLStatement.GetDefaultInsertUserQuery()) &&
+                            LoadSQLTextFile(SQLStatement.GetDefaultInsertCategoryQuery()) &&
+                            LoadSQLTextFile(SQLStatement.GetDefaultInsertPeriodTypeQuery()));
                     break;
             }
 

@@ -156,7 +156,7 @@ namespace ReportControlSystem
 
 #region Add default data
 
-        internal static String GetInsertUserQuery()
+        internal static String GetDefaultInsertUserQuery()
         {
             String query = String.Empty;
 
@@ -167,7 +167,7 @@ namespace ReportControlSystem
             return query;
         }
 
-        internal static String GetInsertCategoryQuery()
+        internal static String GetDefaultInsertCategoryQuery()
         {
             String query = String.Empty;
 
@@ -178,7 +178,7 @@ namespace ReportControlSystem
             return query;
         }
 
-        internal static String GetInsertPeriodTypeQuery()
+        internal static String GetDefaultInsertPeriodTypeQuery()
         {
             String query = String.Empty;
 
@@ -234,6 +234,28 @@ namespace ReportControlSystem
             return query;
         }
 
+#endregion
+
+#region Insert Into
+        internal static String GetInsertCategoryTableQuery(Category c)
+        {
+            String query = String.Empty;
+
+            query = string.Format(@"insert into Category (Category_Name, Category_Description, Category_Type ) values ('{0}','{1}',{2});", c.Category_Name, c.Category_Description, c._category_Type_bit);
+
+            return query;
+        }
+#endregion
+
+#region Delete From
+        internal static String GetDeleteFromCategory(Category c)
+        {
+            String query = String.Empty;
+
+            query = string.Format(@"Delete from Category where Category_ID={0}",c.Category_ID);
+
+            return query;
+        }
 #endregion
 
     }

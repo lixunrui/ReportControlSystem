@@ -54,7 +54,7 @@ namespace ReportControlSystem
 
                 foreach (DataRow r in categoryTable.Rows)
                 {
-                    Category c = new Category(r["Category_Name"].ToString(), Convert.ToBoolean(r["Category_Type"]), r["Category_Description"].ToString());
+                    Category c = new Category(Convert.ToInt32(r["Category_ID"]),r["Category_Name"].ToString(), Convert.ToBoolean(r["Category_Type"]), r["Category_Description"].ToString());
                     category.Add(c);
                 }
 
@@ -64,7 +64,32 @@ namespace ReportControlSystem
 
         private void BTN_Add_New_Clicked(object sender, RoutedEventArgs e)
         {
+            CategoryAddingDialog catAddingDia = new CategoryAddingDialog(this);
 
+            catAddingDia.CategoryPassed += NewCategoryPassed;
+
+            catAddingDia.Owner = this;
+
+            catAddingDia.Focus();
+
+            catAddingDia.Show();
+        }
+
+        void NewCategoryPassed(object sender, CategoryPassedEventArgs e)
+        {
+            CategoryAddingDialog form = (CategoryAddingDialog)sender;
+
+            form.Close();
+            
+            this.Show();
+
+            Category c = e.category;
+
+            // update the source table
+
+            db_Manager.LoadSQLTextFile(SQLStatement.GetInsertCategoryTableQuery(c));
+
+            InitializeCustomComponent();
         }
 
         private void BTN_Delete_Clicked(object sender, RoutedEventArgs e)
@@ -74,6 +99,8 @@ namespace ReportControlSystem
             if (cmd.DataContext is Category)
             {
                 Category c = (Category)cmd.DataContext;
+                db_Manager.LoadSQLTextFile(SQLStatement.GetDeleteFromCategory(c));
+                InitializeCustomComponent();
             }
         }
 
@@ -95,5 +122,11 @@ namespace ReportControlSystem
         }
 
         
+    }
+
+
+    internal class CategoryPassedEventArgs : EventArgs
+    {
+        internal Category category { get; set; }
     }
 }

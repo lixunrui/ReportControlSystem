@@ -25,6 +25,14 @@
                   Margin="3" ItemsSource="{Binding}" FontSize="15">
             <ListView.View>
                 <GridView>
+                    <GridViewColumn Header="Category ID" Width="0" >
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Category_ID}"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    
                     <GridViewColumn Header="Category Name" Width="210" >
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
@@ -67,7 +75,7 @@
         </ListView>
 
         <Label Grid.Row="2" Grid.Column="0" Content="Description:" FontSize="21"  FontWeight="Bold" HorizontalAlignment="Left"/>
-        <TextBlock Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" FontSize="18"  TextWrapping="Wrap" Margin ="150,3,3,3"
+        <TextBox IsReadOnly="True"  Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" FontSize="18"  TextWrapping="Wrap" Margin ="150,3,3,3"
                  Text="{Binding ElementName=CategoryListView, Path=SelectedItem.Category_Description}" HorizontalAlignment="Left" />
 
         <Border Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" BorderBrush="LightSalmon" BorderThickness="3" Margin ="150,3,3,3"/>
