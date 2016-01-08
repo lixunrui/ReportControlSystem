@@ -215,6 +215,14 @@ namespace ReportControlSystem
             return query;
         }
 
+        internal static String GetStaffTableQuery()
+        {
+            String query = String.Empty;
+
+            query = @"select * from Staff;";
+
+            return query;
+        }
 
 #endregion
 
