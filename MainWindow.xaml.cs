@@ -254,6 +254,11 @@ namespace ReportControlSystem
         }
 #endregion
 
+        private void BTN_Payment_Clicked(object sender, RoutedEventArgs e)
+        {
+
+        }
+
     }
 
     /// <summary>
@@ -319,7 +324,7 @@ namespace ReportControlSystem
 
             MaintenanceGroup.Visibility = v;
             ReportGroup.Visibility = v;
-
+            PaymentGroup.Visibility = v;
         }
     }
 }

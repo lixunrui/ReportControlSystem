@@ -26,6 +26,7 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="6*"/>
+            <RowDefinition Height="1.5*"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
@@ -71,7 +72,8 @@
             </Grid>
         </GroupBox>
     
-        <GroupBox Name="ReportGroup" Grid.Row="0" Grid.Column="1" Header="Reports" FontSize="18" BorderThickness="2" BorderBrush="Black" Margin="18">
+        <GroupBox Name="ReportGroup" Grid.Row="0" Grid.RowSpan="2"  Grid.Column="1" Header="Reports" 
+                  FontSize="18"    BorderThickness="2" BorderBrush="Black" Margin="18,18,18,3">
             <Grid Name="PeriodGrid">
                 <!--<Grid.ColumnDefinitions>
                     <ColumnDefinition/>
@@ -83,6 +85,21 @@
             </Grid>
         </GroupBox>
 
+        <GroupBox Name="PaymentGroup"  Grid.Row="1" Grid.Column="0" Header="Payment" FontSize="18"    BorderThickness="2" BorderBrush="Black" Margin="18,3,18,3">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                
+                <Grid.ColumnDefinitions >
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                
+                <Button Grid.Row="0" Grid.Column="0" Content="Make a payment" Margin="24,9,24,9" Click="BTN_Payment_Clicked" />
+                <TextBlock Grid.Row="0" Grid.Column="1" Margin="9,9,9,9" Text="Make a payment" />
+            </Grid>
+        </GroupBox>
 
 
         <!-- Logon Panel-->

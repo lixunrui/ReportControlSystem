@@ -258,5 +258,16 @@ namespace ReportControlSystem
         }
 #endregion
 
+#region Update From
+        internal static String GetUpdateFromCategory(Category c)
+        {
+            String query = String.Empty;
+
+            query = string.Format(@"update Category Set Category_Name='{0}', Category_Description='{1}', Category_Type={2} where Category_ID={3}", c.Category_Name,c.Category_Description,c.Category_Type_bit,c.Category_ID);
+
+            return query;
+        }
+#endregion
+
     }
 }

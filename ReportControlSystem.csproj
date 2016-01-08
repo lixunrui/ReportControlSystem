@@ -80,39 +80,46 @@
     <Compile Include="Administrator.xaml.cs">
       <DependentUpon>Administrator.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Category.cs" />
-    <Compile Include="CategoryAddingDialog.xaml.cs">
+    <Compile Include="Category\Category.cs" />
+    <Compile Include="Category\CategoryAddingDialog.xaml.cs">
       <DependentUpon>CategoryAddingDialog.xaml</DependentUpon>
     </Compile>
-    <Compile Include="CategoryManager.xaml.cs">
+    <Compile Include="Category\CategoryManager.xaml.cs">
       <DependentUpon>CategoryManager.xaml</DependentUpon>
     </Compile>
-    <Compile Include="CustomMessageBox.xaml.cs">
+    <Compile Include="Staff\StaffForm.xaml.cs">
+      <DependentUpon>StaffForm.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Utility\CustomMessageBox.xaml.cs">
       <DependentUpon>CustomMessageBox.xaml</DependentUpon>
     </Compile>
-    <Compile Include="MD5PWD.cs" />
+    <Compile Include="Utility\MD5PWD.cs" />
     <Compile Include="Period.xaml.cs">
       <DependentUpon>Period.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ReportManager.xaml.cs">
+    <Compile Include="Report\ReportManager.xaml.cs">
       <DependentUpon>ReportManager.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SQLStatement.cs" />
-    <Compile Include="Staff.cs" />
+    <Compile Include="SQL\SQLStatement.cs" />
+    <Compile Include="Staff\Staff.cs" />
     <Compile Include="User.cs" />
     <Page Include="Administrator.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="CategoryAddingDialog.xaml">
+    <Page Include="Category\CategoryAddingDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="CategoryManager.xaml">
+    <Page Include="Category\CategoryManager.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="CustomMessageBox.xaml">
+    <Page Include="Staff\StaffForm.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Utility\CustomMessageBox.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -124,7 +131,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="DatabaseManager.cs" />
+    <Compile Include="SQL\DatabaseManager.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -133,7 +140,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="ReportManager.xaml">
+    <Page Include="Report\ReportManager.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
