@@ -70,6 +70,7 @@
       <DependentUpon>ReportManager.xaml</DependentUpon>
     </Compile>
     <Compile Include="SQLStatement.cs" />
+    <Compile Include="Staff.cs" />
     <Page Include="Administrator.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

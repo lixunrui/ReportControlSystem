@@ -13,18 +13,30 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
             <RowDefinition Height="6*"/>
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         
-        <TextBlock Grid.Row="0" Grid.Column="0" Text="Staff List" FontSize="24" FontWeight="Bold" Margin="21" HorizontalAlignment="Center" />
+        <TextBlock Grid.Row="0" Grid.Column="0" Text="Staff List" FontSize="24" FontWeight="Bold" Margin="12" HorizontalAlignment="Center" />
         <Border Grid.Row="0" Grid.Column="0" BorderBrush="Black" BorderThickness="0,0,0,2" />
 
-        <TextBlock Grid.Row="0" Grid.Column="2" Text="Report List for Staff" FontSize="24" FontWeight="Bold" Margin="21" HorizontalAlignment="Center" />
+        <TextBlock Grid.Row="0" Grid.Column="2" Text="Report List for Staff" FontSize="24" FontWeight="Bold" Margin="12" HorizontalAlignment="Center" />
         <Border Grid.Row="0" Grid.Column="3" BorderBrush="Black" BorderThickness="0,0,0,2" />
         
-        <DataGrid Margin="3"  Grid.Row="1" Grid.Column="0"  ItemsSource="{Binding}" AutoGenerateColumns="False">
+        <DataGrid Name="StaffListFrom"  Margin="3"  Grid.Row="1" Grid.Column="0"  ItemsSource="{Binding}" AutoGenerateColumns="False" 
+                  SelectionChanged="StaffListFrom_SelectionChanged" SelectionMode="Extended">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Staff Name" Binding="{Binding Name}" Width="Auto"  IsReadOnly="True" />
-                <DataGridTextColumn Header="Staff Contact" Binding="{Binding Phone}" Width="Auto"  IsReadOnly="True" />
+                <DataGridTemplateColumn Width="30">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <CheckBox IsChecked="{Binding IsSelected, 
+                                RelativeSource={RelativeSource FindAncestor, 
+                                AncestorType={x:Type CheckBox}}}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <!--<DataGridCheckBoxColumn Width="Auto" Binding="{Binding isFixedByBracket, UpdateSourceTrigger=PropertyChanged}" />-->
+                <DataGridTextColumn Header="Staff Name" Binding="{Binding Name}" Width="*"  IsReadOnly="True" />
+                <DataGridTextColumn Header="Staff Contact" Binding="{Binding Phone}" Width="*"  IsReadOnly="True" />
             </DataGrid.Columns>
         </DataGrid>
         
@@ -33,28 +45,43 @@
                 <RowDefinition Height="2.5*"/>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
                 <RowDefinition Height="2*"/>
             </Grid.RowDefinitions>
             
             <TextBlock Name="txtReport" Grid.Row="0" Grid.Column="0" Text="Report" FontSize="18" VerticalAlignment="Top" HorizontalAlignment="Center"/>
             
-            <Button Name="btnAdd"  Grid.Row="1" Margin="21" Content="Add" FontSize="15" Click="BTN_Add_Clicked"/>
-            <Button Name="btnRemove"  Grid.Row="2" Margin="21" Content="Remove" FontSize="15" Click="BTN_Remove_Clicked"/>
-            <Border Grid.Row="1" BorderBrush="Black" BorderThickness="2,0,2,2"/>
-            <Border Grid.Row="2" BorderBrush="Black" BorderThickness="2,0,2,0"/>           
+            <Button Name="btnAdd"  Grid.Row="2" Margin="9" Content="Add" FontSize="15" Click="BTN_Add_Clicked"/>
+            <Button Name="btnRemove"  Grid.Row="3" Margin="9" Content="Remove" FontSize="15" Click="BTN_Remove_Clicked"/>
+            <Border Grid.Row="2" BorderBrush="Black" BorderThickness="2,0,2,2"/>
+            <Border Grid.Row="3" BorderBrush="Black" BorderThickness="2,0,2,0"/>           
         </Grid>
 
-        <ListView Margin="3" Name="lstStaff"  Grid.Row="1" Grid.Column="2" ItemsSource="{Binding}" FontSize="15">
+        <ListView Margin="3" Name="StaffListTo"  Grid.Row="1" Grid.Column="2" ItemsSource="{Binding}" FontSize="15"
+                 SelectionChanged="StaffListTo_SelectionChanged" SelectionMode="Multiple" >
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Header="Name" Width="180">
+                    
+                    <GridViewColumn Width="50">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <Grid>
+                                <CheckBox IsChecked="{Binding Path=IsSelected, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListViewItem}}}"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    
+                    <GridViewColumn Header="Name" Width="150">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <!--<Grid>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="Auto" SharedSizeGroup="name" />
                                     </Grid.ColumnDefinitions>
-                                </Grid>
+                                    
+                                    
+                                </Grid>-->
+                                <TextBlock  Text="{Binding Name}" FontSize="15" HorizontalAlignment="Stretch"/>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
@@ -63,6 +90,18 @@
                 </GridView>
             </ListView.View>
         </ListView>
+        
+        
+        <Button Name="btnAddAll" Grid.Row="2" Grid.Column="0" Margin ="90,12,90,12" Content="Add All" FontSize="15" Click="BTN_Add_All_Clicked"/>
+
+        <Grid Grid.Row="2" Grid.Column="2" Margin="3">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Button Name="btnRemoveAll"  Grid.Column="0"  Margin="12"  Content="Remove All" FontSize="15" Click="BTN_Remove_All_Clicked" />
+            <Button Name="btnGenerate" Foreground="Red"  Grid.Column="1"  Margin="12"  Content="Generate Reports" FontSize="15" Click="BTN_Generate_Reports_Clicked" IsEnabled="False"/>
+        </Grid>
         
     </Grid>
 </Window>

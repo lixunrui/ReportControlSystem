@@ -156,7 +156,7 @@ namespace ReportControlSystem
                     String periodTitle = rows[0]["Period_Type"].ToString();
 
                     // pop up the form
-                    ReportManager rManager = new ReportManager(this);
+                    ReportManager rManager = new ReportManager(this, dbManager);
 
                     rManager.Owner = this;
 
