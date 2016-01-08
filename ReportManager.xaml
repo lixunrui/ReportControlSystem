@@ -21,39 +21,25 @@
 
         <TextBlock Grid.Row="0" Grid.Column="2" Text="Report List for Staff" FontSize="24" FontWeight="Bold" Margin="12" HorizontalAlignment="Center" />
         <Border Grid.Row="0" Grid.Column="3" BorderBrush="Black" BorderThickness="0,0,0,2" />
-
-        <ListView Margin="3" Name="StaffListFrom"  Grid.Row="1" Grid.Column="0" ItemsSource="{Binding}" FontSize="15"
-                 SelectionChanged="StaffListFrom_SelectionChanged" SelectionMode="Multiple" >
-            <ListView.View>
-                <GridView>
-
-                    <GridViewColumn Width="50">
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <CheckBox IsChecked="{Binding Path=IsSelected, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListViewItem}}}"/>
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
-
-                    <GridViewColumn Header="Name" Width="120">
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <TextBlock  Text="{Binding Name}" FontSize="15" HorizontalAlignment="Stretch"/>
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
-                    <GridViewColumn Header="Contact" Width="120">
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <TextBlock  Text="{Binding Phone}" FontSize="15" HorizontalAlignment="Stretch"/>
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
-
-                </GridView>
-            </ListView.View>
-        </ListView>
-
+        
+        <DataGrid Name="StaffListFrom"  Margin="3"  Grid.Row="1" Grid.Column="0"  ItemsSource="{Binding}" AutoGenerateColumns="False" 
+                  SelectionChanged="StaffListFrom_SelectionChanged" SelectionMode="Extended">
+            <DataGrid.Columns>
+                <DataGridTemplateColumn Width="30">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <CheckBox IsChecked="{Binding IsSelected, 
+                                RelativeSource={RelativeSource FindAncestor, 
+                                AncestorType={x:Type CheckBox}}}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <!--<DataGridCheckBoxColumn Width="Auto" Binding="{Binding isFixedByBracket, UpdateSourceTrigger=PropertyChanged}" />-->
+                <DataGridTextColumn Header="Staff Name" Binding="{Binding Name}" Width="*"  IsReadOnly="True" />
+                <DataGridTextColumn Header="Staff Contact" Binding="{Binding Phone}" Width="*"  IsReadOnly="True" />
+            </DataGrid.Columns>
+        </DataGrid>
+        
         <Grid Grid.Row="0" Grid.Column="1" Grid.RowSpan="2">
             <Grid.RowDefinitions>
                 <RowDefinition Height="2.5*"/>

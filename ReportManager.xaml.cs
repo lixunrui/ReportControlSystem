@@ -219,20 +219,19 @@ namespace ReportControlSystem
 
         private void StaffListFrom_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-     
+            DataGrid thisGrid = (DataGrid)sender;
+
+            List<Staff> selectedStaffs = thisGrid.SelectedItems.Cast<Staff>().ToList();
+
             FromListLocker.Reset();
-            foreach (Staff s in e.RemovedItems)
+            foreach (Staff s in selectedStaffs)
             {
                 if (staffAddTo.Contains(s))
                 {
                     Console.WriteLine("Remove {0} from From List", s.Name);
                     staffAddTo.Remove(s);
                 }
-            }
-
-            foreach (Staff s in e.AddedItems)
-            {
-                if (!staffAddTo.Contains(s))
+                else
                 {
                     Console.WriteLine("Add {0} from From List", s.Name);
                     staffAddTo.Add(s);
