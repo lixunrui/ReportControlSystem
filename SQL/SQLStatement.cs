@@ -19,6 +19,16 @@ namespace ReportControlSystem
 
     internal static class SQLStatement
     {
+#region Add 
+        internal static String GetForeignKeySupportQUery()
+        {
+            String query = String.Empty;
+
+            query = @"PRAGMA foreign_keys = ON;";
+
+            return query;
+        }
+#endregion
 
 #region Create Tables
         /// <summary>
@@ -117,10 +127,15 @@ namespace ReportControlSystem
         {
             String query = String.Empty;
 
-            query = @"CREATE TABLE Staff (
-		                Staff_ID			INTEGER PRIMARY KEY AUTOINCREMENT,
-		                Name		        NVARCHAR(90) NOT NULL,
-		                Phone		        NVARCHAR(30)
+            query = @"CREATE TABLE Employee (
+		                Staff_ID		INTEGER PRIMARY KEY AUTOINCREMENT,
+		                Name		    NVARCHAR(90) NOT NULL,
+		                EmployeeCode	NVARCHAR(30) NOT NULL,
+				        TaxCode		    NVARCHAR(1) NOT NULL,
+				        Rate            decimal(3,3) Not Null ,
+				        Hours           decimal(3,3) default 0,
+				        BankCode        NVARCHAR(30) ,
+				        UNIQUE  (Staff_ID, Rate)
 	                );";
 
             return query;
@@ -152,6 +167,23 @@ namespace ReportControlSystem
 
             return query;
         }
+
+
+        internal static String GetCreateStaffCategoryTableQuery()
+        {
+            String query = String.Empty;
+
+            query = @"CREATE TABLE StaffCategory
+                        (
+                        Staff_ID INTEGER not null, 
+                        Category_ID INTEGER  not null,
+                        PRIMARY KEY (Staff_ID, Category_ID),
+                        FOREIGN KEY (Staff_ID) REFERENCES Staff(Staff_ID),
+                        FOREIGN KEY (Category_ID) REFERENCES Category (Category_ID)
+                        );";
+
+            return query;
+        }
 #endregion
 
 #region Add default data
@@ -161,6 +193,8 @@ namespace ReportControlSystem
             String query = String.Empty;
 
             query = @"Delete from Users;";
+
+            query += @"delete from sqlite_sequence where name='Users';";
 
             query += @"INSERT INTO Users (Login_Name, Password) values ('admin','21232f297a57a5a743894a0e4a801fc3');";
 
@@ -173,7 +207,17 @@ namespace ReportControlSystem
 
             query = @"delete from category;";
 
-            query += @"INSERT INTO category (category_name, category_type) values ('Salary', 1);";
+            query += @"delete from sqlite_sequence where name='category';";
+
+            query += @"INSERT INTO category (category_name, category_type) values ('Total gross earnings', 1);";
+            query += @"INSERT INTO category (category_name, category_type) values ('Less taxes', 0);";
+            query += @"INSERT INTO category (category_name, category_type) values ('Child Support', 0);";
+            query += @"INSERT INTO category (category_name, category_type) values ('Civil Enforcement', 0);";
+            query += @"INSERT INTO category (category_name, category_type) values ('Fines in default', 0);";
+            query += @"INSERT INTO category (category_name, category_type) values ('Student loan repayment', 0);";
+            query += @"INSERT INTO category (category_name, category_type) values ('Kiwi Saver', 0);";
+            query += @"INSERT INTO category (category_name, category_type) values ('Loans from Brothers', 0);";
+            query += @"INSERT INTO category (category_name, category_type) values ('Wage paid advance', 0);";
 
             return query;
         }
@@ -183,6 +227,8 @@ namespace ReportControlSystem
             String query = String.Empty;
 
             query = @"delete from PeriodType;";
+
+            query += @"delete from sqlite_sequence where name='PeriodType';";
 
             query += @"INSERT INTO PeriodType (Period_Type) values ('Daily');";
             query += @"INSERT INTO PeriodType (Period_Type) values ('Weekly');";
@@ -197,7 +243,7 @@ namespace ReportControlSystem
 
 #endregion
 
-#region 
+#region Select Query
         internal static String GetUserTableQuery()
         {
             String query = String.Empty;
@@ -220,7 +266,7 @@ namespace ReportControlSystem
         {
             String query = String.Empty;
 
-            query = @"select * from Staff;";
+            query = @"select * from Employee;";
 
             return query;
         }
@@ -230,6 +276,33 @@ namespace ReportControlSystem
             String query = String.Empty;
 
             query = @"select * from Category;";
+
+            return query;
+        }
+
+        internal static String GetStaffCategoryFor(int staffID)
+        {
+            String query = String.Empty;
+
+            query = String.Format(@"select * from StaffCategory where staff_id = {0};", staffID);
+
+            return query;
+        }
+
+        internal static String GetCategoryFor(int categiryID)
+        {
+            String query = String.Empty;
+
+            query = String.Format(@"select * from Category where category_id = {0};", categiryID);
+
+            return query;
+        }
+
+        internal static String GetPaymentTableQuery()
+        {
+            String query = String.Empty;
+
+            query = @"select * from Payment;";
 
             return query;
         }
@@ -245,6 +318,15 @@ namespace ReportControlSystem
 
             return query;
         }
+
+        internal static String GetInsertStaffCategoryTableQuery(int staff_ID, Category c)
+        {
+            String query = String.Empty;
+
+            query = string.Format(@"insert into StaffCategory (Staff_ID, Category_ID ) values ({0},{1});", staff_ID, c.Category_ID);
+
+            return query;
+        }
 #endregion
 
 #region Delete From
@@ -256,6 +338,16 @@ namespace ReportControlSystem
 
             return query;
         }
+
+
+        internal static String GetDeleteFromStaffCategory(int staff_ID, Category c)
+        {
+            String query = String.Empty;
+
+            query = string.Format(@"Delete from StaffCategory where Category_ID={1} AND Staff_ID={0};", staff_ID, c.Category_ID);
+
+            return query;
+        }
 #endregion
 
 #region Update From
@@ -264,6 +356,20 @@ namespace ReportControlSystem
             String query = String.Empty;
 
             query = string.Format(@"update Category Set Category_Name='{0}', Category_Description='{1}', Category_Type={2} where Category_ID={3}", c.Category_Name,c.Category_Description,c.Category_Type_bit,c.Category_ID);
+
+            return query;
+        }
+
+        internal static String GetUpdateForStaff(Staff s)
+        {
+            String query = String.Empty;
+
+            query = string.Format(@"update Employee Set {0}='{7}', {1}='{8}', {2}='{9}', {3}={10}, {4}={11}, {5}='{12}' where {6}={13};", Constants.EmployeeElements.Employee_Name, Constants.EmployeeElements.Employee_Code, Constants.EmployeeElements.Employee_TaxCode, Constants.EmployeeElements.Employee_Rate, 
+                Constants.EmployeeElements.Employee_Hours, Constants.EmployeeElements.Employee_BankCode, 
+                Constants.EmployeeElements.Employee_ID, 
+                s.Name, s.EmployeeCode, 
+                s.TaxCode, s.Rate, 
+                s.Hours, s.BankCode, s.Staff_ID);
 
             return query;
         }

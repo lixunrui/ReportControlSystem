@@ -226,7 +226,15 @@ namespace ReportControlSystem
 
         private void BTN_Staff_Clicked(object sender, RoutedEventArgs e)
         {
+            this.Hide();
 
+            StaffListForm staffForm = new StaffListForm(this, dbManager);
+
+            staffForm.Owner = this;
+
+            staffForm.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+
+            staffForm.Show();
         }
 
 
@@ -258,6 +266,7 @@ namespace ReportControlSystem
         {
 
         }
+
 
     }
 

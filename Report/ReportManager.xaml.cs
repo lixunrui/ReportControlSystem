@@ -66,7 +66,7 @@ namespace ReportControlSystem
             staffAddTo = new List<Staff>();
             staffRemoveFrom = new List<Staff>();
 
-            FromListLocker = new ManualResetEvent(false);
+            FromListLocker = new ManualResetEvent(true);
             ToListLocker = new ManualResetEvent(true);
 
 
@@ -85,12 +85,19 @@ namespace ReportControlSystem
             {
                 foreach (DataRow r in staffTable.Rows)
                 {
-                    Staff staff = new Staff(r["Name"].ToString(), r["Phone"].ToString());
+                    Staff staff = new Staff(Convert.ToInt32(r["Staff_ID"]), r["Name"].ToString(), r["EmployeeCode"].ToString(), r["TaxCode"].ToString(), Convert.ToDecimal(r["Rate"]));
                     fromStaffs.Add(staff);
                 }
             }
-
-            UpdateButtonsStatus(ButtonStatus.CanAdd);
+            if (fromStaffs.Count > 0)
+            {
+                UpdateButtonsStatus(ButtonStatus.CanAdd);
+            }
+            else
+            {
+                UpdateButtonsStatus(ButtonStatus.DisableAll);
+            }
+            
 
             StaffListFrom.DataContext = fromStaffs;
             StaffListTo.DataContext = toStaffs;

@@ -36,7 +36,20 @@ namespace ReportControlSystem
         }
 
         internal int _category_Type_bit;
-
+        public int Category_Type_bit
+        {
+            get { return _category_Type_bit; }
+            set 
+            { 
+                _category_Type_bit = value;
+                if (value == 0)
+                {
+                    _category_Type = Constants.CategoryElements.Deduction;
+                }
+                else
+                    _category_Type = Constants.CategoryElements.Gross;
+            }
+        }
 
         internal Category(string name, bool addOrMinus, string des = null)
         {
@@ -44,12 +57,12 @@ namespace ReportControlSystem
             _category_Description = des;
             if (addOrMinus)
             {
-                _category_Type = "+";
+                _category_Type = Constants.CategoryElements.Gross;
                 _category_Type_bit = 1;
             }
             else
             {
-                _category_Type = "-";
+                _category_Type = Constants.CategoryElements.Deduction;
                 _category_Type_bit = 0;
             }
         }
@@ -64,5 +77,8 @@ namespace ReportControlSystem
         {
             _category_ID = id;
         }
+
+
+        
     }
 }

@@ -75,7 +75,7 @@ namespace ReportControlSystem
             catAddingDia.Show();
         }
 
-        void NewCategoryPassed(object sender, CategoryPassedEventArgs e)
+        void NewCategoryPassed(object sender, ObjectPassedEventArgs e)
         {
             CategoryAddingDialog form = (CategoryAddingDialog)sender;
 
@@ -83,11 +83,28 @@ namespace ReportControlSystem
             
             this.Show();
 
-            Category c = e.category;
+            Category c = (Category)e.item;
 
             // update the source table
 
             db_Manager.LoadSQLTextFile(SQLStatement.GetInsertCategoryTableQuery(c));
+
+            InitializeCustomComponent();
+        }
+
+        void CategoryUpdated(object sender, ObjectPassedEventArgs e)
+        {
+            CategoryAddingDialog form = (CategoryAddingDialog)sender;
+
+            form.Close();
+
+            this.Show();
+
+            Category c = (Category)e.item;
+
+            // update the source table
+
+            db_Manager.LoadSQLTextFile(SQLStatement.GetUpdateFromCategory(c));
 
             InitializeCustomComponent();
         }
@@ -111,8 +128,21 @@ namespace ReportControlSystem
             if (cmd.DataContext is Category)
             {
                 Category c = (Category)cmd.DataContext;
+
+                CategoryAddingDialog catAddingDia = new CategoryAddingDialog(this, c);
+
+                catAddingDia.CategoryPassed += CategoryUpdated;
+
+                catAddingDia.Owner = this;
+
+                catAddingDia.Focus();
+
+                catAddingDia.Show();
+
             }
         }
+
+       
 
         private void BTN_Back_Clicked(object sender, RoutedEventArgs e)
         {
@@ -125,8 +155,5 @@ namespace ReportControlSystem
     }
 
 
-    internal class CategoryPassedEventArgs : EventArgs
-    {
-        internal Category category { get; set; }
-    }
+ 
 }

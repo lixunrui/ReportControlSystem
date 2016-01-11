@@ -8,27 +8,71 @@ namespace ReportControlSystem
 {
     internal class Staff
     {
+        Int32 _staff_ID;
+        public System.Int32 Staff_ID
+        {
+            get { return _staff_ID; }
+        }
+
         String _name;
         public System.String Name
         {
             get { return _name; }
             set { _name = value; }
         }
-        String _phone;
-        public System.String Phone
+
+        String _employeeCode;
+        public System.String EmployeeCode
         {
-            get { return _phone; }
-            set { _phone = value; }
+            get { return _employeeCode; }
+            set { _employeeCode = value; }
         }
 
-        internal Staff(String name)
+        String _taxCode;
+        public System.String TaxCode
         {
+            get { return _taxCode; }
+            set { _taxCode = value; }
+        }
+
+        decimal _rate;
+        public decimal Rate
+        {
+            get { return _rate; }
+            set { _rate = value; }
+        }
+
+        decimal _hours;
+        public decimal Hours
+        {
+            get { return _hours; }
+            set { _hours = value; }
+        }
+
+        String _bankCode;
+        public System.String BankCode
+        {
+            get { return _bankCode; }
+            set { _bankCode = value; }
+        }
+
+
+
+        internal Staff(Int32 ID, String name, String employeeCode, String taxCode, decimal rate)
+        {
+            _staff_ID = ID;
             _name = name;
+            _employeeCode = employeeCode;
+            _taxCode = taxCode;
+            _rate = rate;
         }
 
-        internal Staff(String name, String phone):this(name)
+        internal Staff(Int32 ID, String name, String employeeCode, String taxCode, decimal rate, decimal hours, String bankCode)
+            : this(ID, name, employeeCode, taxCode, rate)
         {
-            _phone = phone;
+            _hours = hours;
+            _bankCode = bankCode;
         }
+
     }
 }

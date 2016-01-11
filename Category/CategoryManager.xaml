@@ -1,7 +1,7 @@
 ﻿<Window x:Class="ReportControlSystem.CategoryManager"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="CategoryManager" Height="Auto"  Width="Auto" Icon="Icons/heimao128.ico" 
+        Title="CategoryManager" Height="Auto"  Width="Auto"
         ResizeMode="NoResize" Closed="Windows_Closed">
     <Grid Margin ="12">
         <Grid.RowDefinitions>
@@ -21,7 +21,8 @@
                    HorizontalAlignment="Center" VerticalAlignment="Center" />
         <Border Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" BorderBrush="Black" BorderThickness="0,0,0,3" Margin="12"/>
         
-        <ListView BorderBrush="LightGray" BorderThickness="3"  Name="CategoryListView"  Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" 
+        <ListView BorderBrush="LightGray" BorderThickness="3"  Name="CategoryListView"  
+                  Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" 
                   Margin="3" ItemsSource="{Binding}" FontSize="15">
             <ListView.View>
                 <GridView>
@@ -80,10 +81,10 @@
 
         <Border Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" BorderBrush="LightSalmon" BorderThickness="3" Margin ="150,3,3,3"/>
     
-        <Button Grid.Row="3" Grid.Column="0" Content="    Add New    " FontSize="18" Margin="24,6,24,6" Click="BTN_Add_New_Clicked" 
-                HorizontalAlignment="Left"/>
+        <Button Grid.Row="3" Grid.Column="2" Content="    Add New    " FontSize="18" Margin="24,6,24,6" Click="BTN_Add_New_Clicked" 
+                HorizontalAlignment="Right"/>
 
-        <Button Grid.Row="3" Grid.Column="2" Content ="      Back      " FontSize="18" Margin="24,6,24,6" HorizontalAlignment="Right"
+        <Button Grid.Row="3" Grid.Column="0" Content ="      Back      " FontSize="18" Margin="24,6,24,6" HorizontalAlignment="Left"
                 Click ="BTN_Back_Clicked"/>
     </Grid>
 </Window>

@@ -86,6 +86,10 @@ namespace ReportControlSystem
             LoadSQLTextFile(SQLStatement.GetCreatePeriodTableQuery());
             LoadSQLTextFile(SQLStatement.GetCreateCategoryTableQuery());
             LoadSQLTextFile(SQLStatement.GetCreatePaymentTableQuery());
+            LoadSQLTextFile(SQLStatement.GetCreateStaffCategoryTableQuery());
+
+            LoadSQLTextFile(SQLStatement.GetForeignKeySupportQUery());
+
             LoadSQLTextFile(SQLStatement.GetDefaultInsertUserQuery());
             LoadSQLTextFile(SQLStatement.GetDefaultInsertCategoryQuery());
             LoadSQLTextFile(SQLStatement.GetDefaultInsertPeriodTypeQuery());

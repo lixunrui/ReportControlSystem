@@ -125,32 +125,40 @@
 
                 <Grid Grid.Row="1" Grid.Column="0" Grid.RowSpan="2" Grid.ColumnSpan="2">
                     <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="2*"/>
                         <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="2*"/>
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
                         <RowDefinition/>
                         <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
                     </Grid.RowDefinitions>
                     
-                    <Image Grid.Row="0" Grid.RowSpan="2" Grid.Column="0" Source="Icons/heimao.jpg" />
+                    <Image Grid.Row="0" Grid.RowSpan="4" Grid.Column="0" Source="Icons/heimao.jpg" />
 
-                    <Label Content="User Name:" Grid.Row="0" Grid.Column="1" FontSize="18" VerticalAlignment="Center" HorizontalAlignment="Right"
+                    <Label Content="User Name:" Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2"  FontSize="15" 
+                           VerticalAlignment="Center" HorizontalAlignment="Center"
                        Margin="0,0,0,0"/>
-                    <TextBox Name="txt_username"  Grid.Row="0" Grid.Column="2" FontSize="18" VerticalAlignment="Center"  
-                         IsHitTestVisible="True" Text="User Name" Margin="10,0,20,0"  ToolTip="Enter the name of the authorized user" TabIndex="0" />
+                    <TextBox Name="txt_username"  Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" FontSize="15" 
+                             VerticalAlignment="Center"  
+                         IsHitTestVisible="True" Text="" Margin="10,0,10,0" Focusable="True"
+                             ToolTip="Enter the name of the authorized user" TabIndex="0" />
 
 
-                    <Label Content="Password:" Grid.Row="1" Grid.Column="1" FontSize="18" VerticalAlignment="Center" HorizontalAlignment="Right"
+                    <Label Content="Password:" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" FontSize="15" 
+                           VerticalAlignment="Center" HorizontalAlignment="Center"
                        Margin="0,0,0,0"/>
-                    <PasswordBox Name="txt_password" Password=""  Grid.Row="1" Grid.Column="2" FontSize="18" VerticalAlignment="Center" 
-                         IsHitTestVisible="True" Margin="10,0,20,0" ToolTip="Enter the password of the authorized user" TabIndex="1"/>
+                    <PasswordBox Name="txt_password" Password=""  Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" FontSize="15"
+                                 VerticalAlignment="Center" 
+                         IsHitTestVisible="True" Margin="10,0,10,0" ToolTip="Enter the password of the authorized user" TabIndex="1"/>
 
                 </Grid>
                 
                 <Button Grid.Row="3" Grid.Column="0" Margin="12,12,0,6" Content="Clear" FontSize="18" Click="BTN_Clear_Clicked" TabIndex="2"/>
                 <Button Grid.Row="3" Grid.Column="1" Margin="60,12,12,6"  Content="Logon" FontSize="18" Click="BTN_Logon_Clicked" IsDefault="True" TabIndex="3"/>
+                
 
                 <Label Name="lbl_logon_status" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Foreground="Red"  
                        FontSize="15" Content="Status:"                       Margin="10,-3,0,0"/>

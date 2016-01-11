@@ -21,8 +21,9 @@ namespace ReportControlSystem
     {
         Window _parent;
         Boolean categoty_type;
+        Category oldCategory;
 
-        internal event EventHandler<CategoryPassedEventArgs> CategoryPassed;
+        internal event EventHandler<ObjectPassedEventArgs> CategoryPassed;
 
         public CategoryAddingDialog()
         {
@@ -33,13 +34,31 @@ namespace ReportControlSystem
             : this()
         {
             _parent = form;
+            btnSave.Click += BTN_Save_Clicked;
         }
 
+        internal CategoryAddingDialog(Window form, Category c)
+            : this(form)
+        {
+            oldCategory = c;
+            btnSave.Click += BTN_Save_Edit_Clicked;
+            LoadCategoryToDialog();
+        }
+
+        private void LoadCategoryToDialog()
+        {
+            txt_cagetory_name.Text = oldCategory.Category_Name;
+            txt_cagetory_des.Text = oldCategory.Category_Description;
+            //comCategoryType.SelectedIndex = oldCategory._category_Type_bit;
+        }
+
+        
         private void LoadTypeToBox(object sender, RoutedEventArgs e)
         {
             List<string> data = new List<string>();
-            data.Add("Positive");
-            data.Add("Negative");
+            
+            data.Add("Negative"); // 0
+            data.Add("Positive"); // 1
             
             // ... Get the ComboBox reference.
             var comboBox = sender as ComboBox;
@@ -47,8 +66,16 @@ namespace ReportControlSystem
             // ... Assign the ItemsSource to the List.
             comboBox.ItemsSource = data;
 
-            // ... Make the first item selected.
-            comboBox.SelectedIndex = 0;
+            if (oldCategory == null)
+            {
+                // ... Make the first item selected.
+                comboBox.SelectedIndex = 0;
+            }
+            else
+            {
+                comboBox.SelectedIndex = oldCategory._category_Type_bit;
+            }
+            
         }
 
         private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -81,14 +108,32 @@ namespace ReportControlSystem
 
             Category c = new Category(cat_Name, categoty_type, cat_Des);
 
-            CategoryPassedEventArgs newCat = new CategoryPassedEventArgs();
+            ObjectPassedEventArgs newCat = new ObjectPassedEventArgs();
+           
 
-            newCat.category = c;
+            newCat.item = c;
 
             if (CategoryPassed != null)
             {
                 CategoryPassed(this, newCat);
             }
+        }
+
+        void BTN_Save_Edit_Clicked(object sender, RoutedEventArgs e)
+        {
+            oldCategory.Category_Name = txt_cagetory_name.Text;
+            oldCategory.Category_Description = txt_cagetory_des.Text;
+            oldCategory.Category_Type_bit = Convert.ToInt32(categoty_type);
+
+            ObjectPassedEventArgs updatedCat = new ObjectPassedEventArgs();
+
+            updatedCat.item = oldCategory;
+
+            if (CategoryPassed != null)
+            {
+                CategoryPassed(this, updatedCat);
+            }
+
         }
     }
 }
