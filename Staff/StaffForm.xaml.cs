@@ -68,21 +68,7 @@ namespace ReportControlSystem
 
         private void BTN_Save_Clicked(object sender, RoutedEventArgs e)
         {
-            if (currentStaff == null)
-            {
-                currentStaff = new Staff(txtName.Text, txtEmployeeCode.Text, txtTaxCode.Text, Convert.ToDecimal(txtRate.Text), Convert.ToDecimal(txtHours.Text), txtBankCode.Text);
-                db_manager.ExecuteSQLTextFile(SQLStatement.GetInsertStaffTableQuery(currentStaff));
-            }
-            else
-            {
-                currentStaff.Name = txtName.Text;
-                currentStaff.EmployeeCode = txtEmployeeCode.Text;
-                currentStaff.TaxCode = txtTaxCode.Text;
-                currentStaff.Rate = Convert.ToDecimal(txtRate.Text);
-                currentStaff.Hours = Convert.ToDecimal(txtHours.Text);
-                currentStaff.BankCode = txtBankCode.Text;
-                db_manager.ExecuteSQLTextFile(SQLStatement.GetUpdateForStaff(currentStaff));
-            }
+            UpdateCurrentEmployee();
 
             InitEmployee();
 
@@ -93,6 +79,29 @@ namespace ReportControlSystem
                 StaffChanged(this, null);
             }
 
+        }
+
+        private void UpdateCurrentEmployee()
+        {
+            if (currentStaff == null)
+            {
+                currentStaff = new Staff(txtName.Text, txtEmployeeCode.Text, txtTaxCode.Text, Convert.ToDecimal(txtRate.Text), Convert.ToDecimal(txtHours.Text), txtBankCode.Text);
+                db_manager.ExecuteSQLTextFile(SQLStatement.GetInsertStaffTableQuery(currentStaff));
+            }
+            else
+            {
+                if (formHasChanged)
+                {
+                    currentStaff.Name = txtName.Text;
+                    currentStaff.EmployeeCode = txtEmployeeCode.Text;
+                    currentStaff.TaxCode = txtTaxCode.Text;
+                    currentStaff.Rate = Convert.ToDecimal(txtRate.Text);
+                    currentStaff.Hours = Convert.ToDecimal(txtHours.Text);
+                    currentStaff.BankCode = txtBankCode.Text;
+                    db_manager.ExecuteSQLTextFile(SQLStatement.GetUpdateForStaff(currentStaff));
+                }
+                
+            }
         }
 
 
@@ -147,9 +156,10 @@ namespace ReportControlSystem
 
             txtHours.IsReadOnly = readOnly;
 
-            btnUpdate.IsEnabled = readOnly;
+            txtBankCode.IsReadOnly = readOnly;
 
-            
+            btnUpdate.IsEnabled = readOnly;
+  
         }
 
         private void Windows_Loaded(object sender, RoutedEventArgs e)
@@ -243,12 +253,12 @@ namespace ReportControlSystem
 
         private void BTN_ConfirmAdding_Clicked(object sender, RoutedEventArgs e)
         {
+            UpdateCurrentEmployee();
+
             foreach (Category a in selectedCategories)
             {
                 db_manager.ExecuteSQLTextFile(SQLStatement.GetInsertStaffCategoryTableQuery(currentStaff.Staff_ID, a));
             }
-
-            
 
             ResetPanel();
             
