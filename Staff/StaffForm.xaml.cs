@@ -68,14 +68,21 @@ namespace ReportControlSystem
 
         private void BTN_Save_Clicked(object sender, RoutedEventArgs e)
         {
-            currentStaff.Name = txtName.Text;
-            currentStaff.EmployeeCode = txtEmployeeCode.Text;
-            currentStaff.TaxCode = txtTaxCode.Text;
-            currentStaff.Rate = Convert.ToDecimal(txtRate.Text);
-            currentStaff.Hours = Convert.ToDecimal(txtHours.Text);
-            currentStaff.BankCode = txtBankCode.Text;
-
-            db_manager.ExecuteSQLTextFile(SQLStatement.GetUpdateForStaff(currentStaff));
+            if (currentStaff == null)
+            {
+                currentStaff = new Staff(txtName.Text, txtEmployeeCode.Text, txtTaxCode.Text, Convert.ToDecimal(txtRate.Text), Convert.ToDecimal(txtHours.Text), txtBankCode.Text);
+                db_manager.ExecuteSQLTextFile(SQLStatement.GetInsertStaffTableQuery(currentStaff));
+            }
+            else
+            {
+                currentStaff.Name = txtName.Text;
+                currentStaff.EmployeeCode = txtEmployeeCode.Text;
+                currentStaff.TaxCode = txtTaxCode.Text;
+                currentStaff.Rate = Convert.ToDecimal(txtRate.Text);
+                currentStaff.Hours = Convert.ToDecimal(txtHours.Text);
+                currentStaff.BankCode = txtBankCode.Text;
+                db_manager.ExecuteSQLTextFile(SQLStatement.GetUpdateForStaff(currentStaff));
+            }
 
             InitEmployee();
 

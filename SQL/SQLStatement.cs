@@ -327,6 +327,17 @@ namespace ReportControlSystem
 
             return query;
         }
+
+        internal static String GetInsertStaffTableQuery(Staff s)
+        {
+            String query = String.Empty;
+
+            query = string.Format(@"insert into Employee (Name, EmployeeCode, TaxCode, Rate, Hours, BankCode ) values ('{0}','{1}', '{2}', {3}, {4}, '{5}');", s.Name, s.EmployeeCode, s.TaxCode, s.Rate,s.Hours, s.BankCode);
+
+            return query;
+        }
+
+
 #endregion
 
 #region Delete From
@@ -348,6 +359,17 @@ namespace ReportControlSystem
 
             return query;
         }
+
+        internal static String GetDeleteFromStaff(int staffID)
+        {
+            String query = String.Empty;
+
+            query = string.Format("delete from Employee where Staff_ID={0};", staffID);
+
+            return query;
+        }
+
+
 #endregion
 
 #region Update From

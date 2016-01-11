@@ -98,7 +98,8 @@ namespace ReportControlSystem
 
         private void BTN_DeleteStaff_Clicked(object sender, RoutedEventArgs e)
         {
-
+            db_manager.ExecuteSQLTextFile(SQLStatement.GetDeleteFromStaff(currentStaff.Staff_ID));
+            InitEmployeeTable();
         }
 
         private void BTN_Back_Clicked(object sender, RoutedEventArgs e)
@@ -122,7 +123,20 @@ namespace ReportControlSystem
 
         private void Employee_SelectedChanged(object sender, SelectionChangedEventArgs e)
         {
+            //foreach (Staff s in e.RemovedItems)
+            //{
+            //    if (currentStaff==s)
+            //    {
+            //    }
+            //}
 
+            foreach (Staff s in e.AddedItems)
+            {
+                if (currentStaff != s)
+                {
+                    currentStaff = s;
+                }
+            }
         }
     }
 }

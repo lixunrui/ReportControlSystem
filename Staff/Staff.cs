@@ -56,15 +56,31 @@ namespace ReportControlSystem
             set { _bankCode = value; }
         }
 
-
-
-        internal Staff(Int32 ID, String name, String employeeCode, String taxCode, decimal rate)
+        internal Staff( String name, String employeeCode, String taxCode, decimal rate)
         {
-            _staff_ID = ID;
             _name = name;
             _employeeCode = employeeCode;
             _taxCode = taxCode;
             _rate = rate;
+        }
+
+        internal Staff(String name, String employeeCode, String taxCode, decimal rate, decimal hours)
+            : this(name, employeeCode, taxCode, rate)
+        {
+            _hours = hours;
+        }
+
+        internal Staff(String name, String employeeCode, String taxCode, decimal rate, decimal hours, String bankCode)
+            : this(name, employeeCode, taxCode, rate)
+        {
+            _hours = hours;
+            _bankCode = bankCode;
+        }
+
+        internal Staff(Int32 ID, String name, String employeeCode, String taxCode, decimal rate)  
+            :this(name, employeeCode, taxCode, rate)
+        {
+            _staff_ID = ID;
         }
 
         internal Staff(Int32 ID, String name, String employeeCode, String taxCode, decimal rate, decimal hours, String bankCode)
