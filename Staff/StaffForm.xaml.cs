@@ -47,6 +47,18 @@ namespace ReportControlSystem
             currentStaff = staff;
         }
 
+        private void Windows_Loaded(object sender, RoutedEventArgs e)
+        {
+            InitEmployee();
+            InitializeCategoryList();
+            if (currentStaff == null)
+            {
+                UpdateFieldsStatus(FieldStatus.Editable);
+                btnDelete.IsEnabled = false;
+            }
+            CategoryList.Visibility = Visibility.Collapsed;
+        }
+
         private void Windows_Closed(object sender, EventArgs e)
         {
             _parnet.Show();
@@ -54,6 +66,52 @@ namespace ReportControlSystem
             this.Close();
         }
 
+#region Startup
+
+        private void InitEmployee()
+        {
+            if (currentStaff != null)
+            {
+                txtName.Text = currentStaff.Name;
+                txtEmployeeCode.Text = currentStaff.EmployeeCode;
+                txtTaxCode.Text = currentStaff.TaxCode;
+                txtRate.Text = currentStaff.Rate.ToString();
+                txtHours.Text = currentStaff.Hours.ToString();
+                txtBankCode.Text = currentStaff.BankCode;
+
+                LoadEmployeeCategories();
+            }
+        }
+
+        private void LoadEmployeeCategories()
+        {
+            DataTable categoryTableForStaff = db_manager.GetDataTable(SQLStatement.GetStaffCategoryFor(currentStaff.Staff_ID));
+
+            List<Category> cats = new List<Category>();
+
+            foreach (DataRow r in categoryTableForStaff.Rows)
+            {
+                DataTable categoriesTable = db_manager.GetDataTable(SQLStatement.GetCategoryFor(Convert.ToInt32(r["Category_ID"])));
+                foreach (DataRow c in categoriesTable.Rows)
+                {
+                    Category cat = new Category(Convert.ToInt32(c["Category_ID"]), c["Category_Name"].ToString(), Convert.ToBoolean(c["Category_Type"]), c["Category_Description"].ToString());
+                    cats.Add((Category)cat);
+                }
+            }
+
+            Staff_Category_ListView.ItemsSource = cats;
+
+            // in case we click back after adding categories into a new staff, but without click saving
+            if (StaffChanged != null)
+            {
+                StaffChanged(this, null);
+            }
+        }
+
+#endregion
+
+        #region Main Panel Events
+        // click back, back to the main page
         private void BTN_Back_Clicked(object sender, RoutedEventArgs e)
         {
             _parnet.Show();
@@ -61,11 +119,28 @@ namespace ReportControlSystem
             this.Close();
         }
 
+        // delete the current staff
         private void BTN_Delete_Clicked(object sender, RoutedEventArgs e)
         {
+            db_manager.ExecuteSQLTextFile(SQLStatement.GetDeleteFromStaff(currentStaff.Staff_ID));
 
+            if (StaffChanged != null)
+            {
+                StaffChanged(this, null);
+            }
+
+            _parnet.Show();
+            this.Close();
         }
 
+        // update the current staff
+        private void BTN_UpdateStaff_Clicked(object sender, RoutedEventArgs e)
+        {
+            formHasChanged = true;
+            UpdateFieldsStatus(FieldStatus.Editable);
+        }
+
+        // save all changes
         private void BTN_Save_Clicked(object sender, RoutedEventArgs e)
         {
             UpdateCurrentEmployee();
@@ -81,6 +156,29 @@ namespace ReportControlSystem
 
         }
 
+        // add a new category
+        private void BTN_Add_Clicked(object sender, RoutedEventArgs e)
+        {
+            InitializeCategoryList();
+            CategoryGroup.Visibility = Visibility.Collapsed;
+            CategoryList.Visibility = Visibility.Visible;
+            selectedCategories = new List<Category>();
+        }
+
+        // remove an/some category from the list
+        private void BTN_Remove_Clicked(object sender, RoutedEventArgs e)
+        {
+            foreach (Category cat in selectedCategories)
+            {
+                db_manager.ExecuteSQLTextFile(SQLStatement.GetDeleteFromStaffCategory(currentStaff.Staff_ID, cat));
+            }
+
+            LoadEmployeeCategories();
+        }
+
+        #endregion
+
+#region Main Panel Support functions
         private void UpdateCurrentEmployee()
         {
             if (currentStaff == null)
@@ -100,34 +198,9 @@ namespace ReportControlSystem
                     currentStaff.BankCode = txtBankCode.Text;
                     db_manager.ExecuteSQLTextFile(SQLStatement.GetUpdateForStaff(currentStaff));
                 }
-                
-            }
-        }
-
-
-        // add a new category
-        private void BTN_Add_Clicked(object sender, RoutedEventArgs e)
-        {
-            CategoryGroup.Visibility = Visibility.Collapsed;
-            CategoryList.Visibility = Visibility.Visible;
-            selectedCategories = new List<Category>();
-
-        }
-
-        private void BTN_Remove_Clicked(object sender, RoutedEventArgs e)
-        {
-            foreach (Category cat in selectedCategories)
-            {
-                db_manager.ExecuteSQLTextFile(SQLStatement.GetDeleteFromStaffCategory(currentStaff.Staff_ID, cat));
             }
 
-            LoadEmployeeCategories();
-        }
-
-        private void BTN_UpdateStaff_Clicked(object sender, RoutedEventArgs e)
-        {
-            formHasChanged = true;
-            UpdateFieldsStatus(FieldStatus.Editable);
+            btnDelete.IsEnabled = true;
         }
 
         void UpdateFieldsStatus(FieldStatus s)
@@ -159,38 +232,22 @@ namespace ReportControlSystem
             txtBankCode.IsReadOnly = readOnly;
 
             btnUpdate.IsEnabled = readOnly;
-  
+
         }
 
-        private void Windows_Loaded(object sender, RoutedEventArgs e)
-        {
-            InitEmployee();
-            InitializeCategoryList();
-            if (currentStaff == null)
-            {
-                UpdateFieldsStatus(FieldStatus.Editable);
-            }
-            CategoryList.Visibility = Visibility.Collapsed;
-        }
+#endregion
 
-        private void InitEmployee()
-        {
-            if (currentStaff!=null)
-            {
-                txtName.Text = currentStaff.Name;
-                txtEmployeeCode.Text = currentStaff.EmployeeCode;
-                txtTaxCode.Text = currentStaff.TaxCode;
-                txtRate.Text = currentStaff.Rate.ToString();
-                txtHours.Text = currentStaff.Hours.ToString();
-                txtBankCode.Text = currentStaff.BankCode;
-
-                LoadEmployeeCategories();
-            }
-        }
-
+        #region Sub Category Panel Events
         private void InitializeCategoryList()
         {
-            DataTable categoryTable = db_manager.GetDataTable(SQLStatement.GetCategoryTableQuery());
+            DataTable categoryTable;
+
+            if (currentStaff == null)
+            {
+                categoryTable = db_manager.GetDataTable(SQLStatement.GetCategoryTableQuery());
+            }
+            else
+                categoryTable = db_manager.GetDataTable(SQLStatement.GetCategoryNotForStaffTableQuery(currentStaff.Staff_ID));
 
             if (categoryTable != null)
             {
@@ -202,29 +259,42 @@ namespace ReportControlSystem
                     category.Add(c);
                 }
 
-                CategoryList.DataContext = category;
+                StaffCategoryList.DataContext = category;
+                StaffCategoryList.SelectedItems.Clear();
             }
         }
 
-        private void LoadEmployeeCategories()
+        private void BTN_CancelAdding_Clicked(object sender, RoutedEventArgs e)
         {
-            DataTable categoryTableForStaff = db_manager.GetDataTable(SQLStatement.GetStaffCategoryFor(currentStaff.Staff_ID));
-
-            List<Category> cats = new List<Category>();
-
-            foreach (DataRow r in categoryTableForStaff.Rows)
-            {
-                DataTable categoriesTable = db_manager.GetDataTable(SQLStatement.GetCategoryFor(Convert.ToInt32(r["Category_ID"])));
-                foreach (DataRow c in categoriesTable.Rows)
-                {
-                    Category cat = new Category(Convert.ToInt32(c["Category_ID"]), c["Category_Name"].ToString(), Convert.ToBoolean(c["Category_Type"]), c["Category_Description"].ToString());
-                    cats.Add((Category)cat);
-                }
-            }
-
-            Staff_Category_ListView.ItemsSource = cats;
+            ResetPanel();
         }
 
+        private void BTN_ConfirmAdding_Clicked(object sender, RoutedEventArgs e)
+        {
+            UpdateCurrentEmployee();
+
+            foreach (Category a in selectedCategories)
+            {
+                db_manager.ExecuteSQLTextFile(SQLStatement.GetInsertStaffCategoryTableQuery(currentStaff.Staff_ID, a));
+            }
+
+            ResetPanel();
+
+        }
+
+        void ResetPanel()
+        {
+            LoadEmployeeCategories();
+            CategoryList.Visibility = Visibility.Collapsed;
+            CategoryGroup.Visibility = Visibility.Visible;
+            selectedCategories.Clear();
+            StaffCategoryList.SelectedItems.Clear();
+        }
+
+        #endregion
+
+
+#region Common selection event
         private void CategorySelectChanged(object sender, SelectionChangedEventArgs e)
         {
             foreach (Category cat in e.RemovedItems)
@@ -245,31 +315,7 @@ namespace ReportControlSystem
                 }
             }
         }
-
-        private void BTN_CancelAdding_Clicked(object sender, RoutedEventArgs e)
-        {
-            ResetPanel();
-        }
-
-        private void BTN_ConfirmAdding_Clicked(object sender, RoutedEventArgs e)
-        {
-            UpdateCurrentEmployee();
-
-            foreach (Category a in selectedCategories)
-            {
-                db_manager.ExecuteSQLTextFile(SQLStatement.GetInsertStaffCategoryTableQuery(currentStaff.Staff_ID, a));
-            }
-
-            ResetPanel();
-            
-        }
-
-        void ResetPanel()
-        {
-            LoadEmployeeCategories();
-            CategoryList.Visibility = Visibility.Collapsed;
-            CategoryGroup.Visibility = Visibility.Visible;
-            selectedCategories.Clear();
-        }
+#endregion
+         
     }
 }

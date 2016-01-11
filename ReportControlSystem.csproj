@@ -87,6 +87,7 @@
     <Compile Include="Category\CategoryManager.xaml.cs">
       <DependentUpon>CategoryManager.xaml</DependentUpon>
     </Compile>
+    <Compile Include="PeriodType.cs" />
     <Compile Include="Staff\StaffListForm.xaml.cs">
       <DependentUpon>StaffListForm.xaml</DependentUpon>
     </Compile>

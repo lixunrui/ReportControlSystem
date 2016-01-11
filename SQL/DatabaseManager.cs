@@ -108,6 +108,11 @@ namespace ReportControlSystem
                 {
                     using (SQLiteCommand cmd = m_dbConnection.CreateCommand())
                     {
+                        if (m_dbConnection.State != ConnectionState.Closed)
+                        {
+                            m_dbConnection.Close();
+                        }
+
                         m_dbConnection.Open();
 
                         cmd.CommandText = query.Trim();
@@ -144,6 +149,11 @@ namespace ReportControlSystem
                 {
                     using (SQLiteCommand cmd = m_dbConnection.CreateCommand())
                     {
+                        if (m_dbConnection.State != ConnectionState.Closed)
+                        {
+                            m_dbConnection.Close();
+                        }
+
                         m_dbConnection.Open();
 
                         cmd.CommandText = query.Trim();

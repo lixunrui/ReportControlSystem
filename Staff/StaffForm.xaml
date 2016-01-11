@@ -151,7 +151,7 @@
                         </Grid.ColumnDefinitions>
 
 
-                        <ListView Grid.Row="0" Grid.RowSpan="2"  Grid.Column="0" Grid.ColumnSpan="2"  ItemsSource="{Binding}"
+                        <ListView Name="StaffCategoryList"  Grid.Row="0" Grid.RowSpan="2"  Grid.Column="0" Grid.ColumnSpan="2"  ItemsSource="{Binding}"
                                       SelectionChanged="CategorySelectChanged" SelectionMode="Multiple">
                             <ListView.View>
                                 <GridView>
@@ -163,7 +163,7 @@
                                         </GridViewColumn.CellTemplate>
                                     </GridViewColumn>
 
-                                    <GridViewColumn Header="Name" Width="Auto">
+                                    <GridViewColumn Header="Name" Width="Auto" >
                                         <GridViewColumn.CellTemplate>
                                             <DataTemplate>
                                                 <TextBlock Text="{Binding Category_Name}"/>
@@ -192,7 +192,8 @@
         </GroupBox>
 
         <Button Grid.Row="1" Grid.Column="0" Content="Back" FontSize="18" Margin="24,12,24,12" Click="BTN_Back_Clicked"/>
-        <Button Grid.Row="1" Grid.Column="1" Content="Delete Staff" ToolTip="Delete the current staff info"  FontSize="18" Margin="24,12,24,12" Click="BTN_Delete_Clicked"/>
+        <Button Name="btnDelete"  Grid.Row="1" Grid.Column="1" Content="Delete Staff" ToolTip="Delete the current staff info"  FontSize="18" Margin="24,12,24,12" 
+                Click="BTN_Delete_Clicked"/>
         <Button Name="btnSaveChange"  Grid.Row="1" Grid.Column="2" Content="Save Changes" FontSize="18" Margin="24,12,24,12" Click="BTN_Save_Clicked" IsEnabled="False"/>
     </Grid>
 </Window>

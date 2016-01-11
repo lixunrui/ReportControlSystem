@@ -280,6 +280,16 @@ namespace ReportControlSystem
             return query;
         }
 
+
+        internal static String GetCategoryNotForStaffTableQuery(int stallID)
+        {
+            String query = String.Empty;
+
+            query = string.Format(@"select * from category where category_id not in (select category_id from staffCategory where staff_ID={0} );",stallID);
+
+            return query;
+        }
+
         internal static String GetStaffCategoryFor(int staffID)
         {
             String query = String.Empty;
@@ -306,6 +316,7 @@ namespace ReportControlSystem
 
             return query;
         }
+
 
 #endregion
 
@@ -364,7 +375,9 @@ namespace ReportControlSystem
         {
             String query = String.Empty;
 
-            query = string.Format("delete from Employee where Staff_ID={0};", staffID);
+            query = string.Format("delete from StaffCategory where staff_ID={0};", staffID);
+
+            query += string.Format("delete from Employee where Staff_ID={0};", staffID);
 
             return query;
         }

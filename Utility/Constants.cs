@@ -38,5 +38,10 @@ namespace ReportControlSystem
             internal static String Category_ID = "Category_ID";
         }
 
+        internal static class PeriodTypesElements
+        {
+            internal static String Period_Type_ID = "Period_Type_ID";
+            internal static String Period_Type = "Period_Type";
+        }
     }
 }

@@ -202,7 +202,7 @@ namespace ReportControlSystem
         {
             this.Hide();
 
-            Period period = new Period(this);
+            Period period = new Period(this, dbManager);
 
             period.Owner = this;
 
