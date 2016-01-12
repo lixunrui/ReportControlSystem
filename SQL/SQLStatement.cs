@@ -92,6 +92,7 @@ namespace ReportControlSystem
 		                Start_Date          DateTime,
                         End_Date            DateTime,
 		                Period_Type_ID		INT,
+                        Period_Status       bit not null default 0,
                         FOREIGN KEY (Period_Type_ID) REFERENCES Period_Type
 	                );";
 
@@ -110,7 +111,8 @@ namespace ReportControlSystem
 
             query = @"CREATE TABLE PeriodType (
 		                Period_Type_ID		INTEGER PRIMARY KEY AUTOINCREMENT,
-		                Period_Type		    nvarchar(30) default NULL
+		                Period_Type		    nvarchar(30) default NULL,
+                        Period_Status Integer not null default 0
 	                );";
 
             return query;
@@ -262,11 +264,20 @@ namespace ReportControlSystem
             return query;
         }
 
+        internal static String GetDateRangeFromPeriodTypeTableWhereIDQuery(int periodTypeID)
+        {
+            String query = String.Empty;
+
+            query = string.Format(@"select PeriodDateRange from PeriodType where Period_Type_ID={0};", periodTypeID);
+
+            return query;
+        }
+
         internal static String GetPeriodTableQuery()
         {
             String query = String.Empty;
 
-            query = @"select Period_ID, Start_Date, End_Date, period.Period_Type_ID, periodType.Period_Type from period left join periodType on period.Period_Type_ID = periodType.Period_Type_ID;";
+            query = @"select Period_ID, Start_Date, End_Date, period_status, period.Period_Type_ID, periodType.Period_Type, PeriodDateRange from period left join periodType on period.Period_Type_ID = periodType.Period_Type_ID;";
 
             return query;
         }
@@ -330,7 +341,7 @@ namespace ReportControlSystem
         {
             String query = String.Empty;
 
-            query = string.Format(@"select Period_ID, Start_Date, End_Date, period.Period_Type_ID, periodType.Period_Type from period left join periodType on period.Period_Type_ID = periodType.Period_Type_ID where period.Period_Type_ID={0};", periodTypeID);
+            query = string.Format(@"select Period_ID, Start_Date, End_Date, period_status, period.Period_Type_ID,PeriodDateRange, periodType.Period_Type from period left join periodType on period.Period_Type_ID = periodType.Period_Type_ID where period.Period_Type_ID={0};", periodTypeID);
 
             return query;
         }
@@ -362,6 +373,15 @@ namespace ReportControlSystem
             String query = String.Empty;
 
             query = string.Format(@"insert into Employee (Name, EmployeeCode, TaxCode, Rate, Hours, BankCode ) values ('{0}','{1}', '{2}', {3}, {4}, '{5}');", s.Name, s.EmployeeCode, s.TaxCode, s.Rate,s.Hours, s.BankCode);
+
+            return query;
+        }
+
+        internal static String GetInsertPeriodTableQuery(Period period)
+        {
+            String query = String.Empty;
+
+            query = string.Format(@"insert into Period (start_date, end_date, period_type_Id ) values ('{0}','{1}', {2});", period.Start_Date.ToString("yyyy-MM-dd"), period.End_Date.ToString("yyyy-MM-dd"), period.Period_Type_ID);
 
             return query;
         }
@@ -423,6 +443,16 @@ namespace ReportControlSystem
                 s.Name, s.EmployeeCode, 
                 s.TaxCode, s.Rate, 
                 s.Hours, s.BankCode, s.Staff_ID);
+
+            return query;
+        }
+
+
+        internal static String GetUpdatePeriodCloseFromID(int periodID)
+        {
+            String query = String.Empty;
+
+            query = string.Format(@"update Period set period_staus = 1 where Period_ID={0};", periodID);
 
             return query;
         }

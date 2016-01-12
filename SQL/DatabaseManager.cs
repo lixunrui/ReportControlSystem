@@ -160,7 +160,7 @@ namespace ReportControlSystem
 
                         sqlReader = cmd.ExecuteReader();
 
-                        m_dbConnection.Close();
+                       // m_dbConnection.Close();
                     }
                     return sqlReader;
                 }

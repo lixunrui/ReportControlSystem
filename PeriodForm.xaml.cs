@@ -23,6 +23,7 @@ namespace ReportControlSystem
         MainWindow _parent;
         DatabaseManager db_manager;
         Dictionary<Int32, String> PeriodTypes;
+        DateTime selectedDate;
 
         public PeriodForm()
         {
@@ -47,6 +48,7 @@ namespace ReportControlSystem
         {
             LoadPeriodType();
             LoadPeriodTable();
+            //ShowCalendarPanel(false);
         }
 
         void LoadPeriodType()
@@ -85,7 +87,7 @@ namespace ReportControlSystem
             List<Period> periods = new List<Period>();
             foreach (DataRow r in periodTable.Rows)
             {
-                Period period = new Period(Convert.ToInt32(r[Constants.PeriodElements.Period_ID]), Convert.ToDateTime(r[Constants.PeriodElements.Start_Date]), Convert.ToDateTime(r[Constants.PeriodElements.End_Date]), Convert.ToInt32(r[Constants.PeriodElements.Period_Type_ID]), r[Constants.PeriodElements.Period_Type].ToString());
+                Period period = new Period(Convert.ToInt32(r[Constants.PeriodElements.Period_ID]), Convert.ToDateTime(r[Constants.PeriodElements.Start_Date]), Convert.ToDateTime(r[Constants.PeriodElements.End_Date]), Convert.ToInt32(r[Constants.PeriodElements.Period_Type_ID]), r[Constants.PeriodElements.Period_Type].ToString(), Convert.ToBoolean(r[Constants.PeriodElements.Period_Status]), Convert.ToInt32(r[Constants.PeriodElements.PeriodDateRange]));
 
                 periods.Add(period);
             }
@@ -106,7 +108,70 @@ namespace ReportControlSystem
 
         private void BTN_ClosePeriod_Clicked(object sender, RoutedEventArgs e)
         {
+            // close the current period
+            Button cmd = sender as Button;
 
+            if (cmd.DataContext is Period)
+            {
+                Period period = (Period)cmd.DataContext;
+
+                // close the period
+                db_manager.LoadSQLTextFile(SQLStatement.GetUpdatePeriodCloseFromID(period.Period_ID));
+
+                // show the calendar
+               //// ShowCalendarPanel(true);
+
+               // // create new period from the next Monday of the closed period
+               // DateTime newStartDate = period.End_Date;
+
+               // do 
+               // {
+               //     newStartDate.AddDays(1);
+               // } while (newStartDate.DayOfWeek != DayOfWeek.Monday);
+
+               // DateTime newEndData = newStartDate;
+
+                LoadPeriodTable();
+            }
+            
+            // show calendar panel to start the next one
         }
+
+        private void BTN_Add_New_Period(object sender, RoutedEventArgs e)
+        {
+            AddPeriodForm newForm = new AddPeriodForm(this, db_manager, PeriodTypes);
+
+            newForm.Show();
+
+            this.Hide();
+        }
+
+        //void ShowCalendarPanel(bool showPanel)
+        //{
+        //    Visibility visiblity = Visibility.Visible;
+
+        //    if (showPanel)
+        //    {
+        //        visiblity = Visibility.Visible;
+        //        PeriodList.IsEnabled = false;
+        //    }
+        //    else
+        //    {
+        //        visiblity = Visibility.Collapsed;
+        //        PeriodList.IsEnabled = true;
+        //    }
+
+        //    Calendar_Panel.Visibility = visiblity;
+        //}
+
+        //private void CalendarSelectionDatesChanged(object sender, SelectionChangedEventArgs e)
+        //{
+
+        //}
+
+        //private void BTN_Create_Period_Clicked(object sender, RoutedEventArgs e)
+        //{
+
+        //}
     }
 }

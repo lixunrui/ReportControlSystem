@@ -51,6 +51,11 @@ namespace ReportControlSystem
             internal static String End_Date = "End_Date";
             internal static String Period_Type_ID = "Period_Type_ID";
             internal static String Period_Type = "Period_Type";
+            internal static String Period_Status = "Period_Status";
+
+            internal static String Period_Status_Closed = "Period Closed";
+            internal static String Period_Status_Open = "Period Open";
+            internal static String PeriodDateRange = "PeriodDateRange";
         }
     }
 }

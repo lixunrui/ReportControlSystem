@@ -48,6 +48,36 @@ namespace ReportControlSystem
             get { return _period_Type; }
             set { _period_Type = value; }
         }
+        Boolean _period_Status;
+        public System.Boolean Period_Status
+        {
+            set 
+            { 
+                if (value) // 1: true - closed
+                {
+                    _period_Status_Str = Constants.PeriodElements.Period_Status_Closed;
+                }
+                else
+                {
+                    _period_Status_Str = Constants.PeriodElements.Period_Status_Open;
+                }
+                _period_Status = value; 
+            }
+            get { return !_period_Status; }
+        }
+
+        String _period_Status_Str;
+        public System.String Period_Status_Str
+        {
+            get { return _period_Status_Str; }
+        }
+
+        Int32 _periodDateRange;
+        public System.Int32 PeriodDateRange
+        {
+            get { return _periodDateRange; }
+            set { _periodDateRange = value; }
+        }
         internal Period(DateTime startDT, DateTime endDT, int periodTypeID)
         {
             _start_Date = startDT;
@@ -55,13 +85,24 @@ namespace ReportControlSystem
             _period_Type_ID = periodTypeID;
         }
 
-        internal Period(Int32 id, DateTime startDT, DateTime endDT, int periodTypeID, String period_type)
+        internal Period(Int32 id, DateTime startDT, DateTime endDT, int periodTypeID, String period_type, Boolean status, Int32 dateRange)
         {
             _period_ID = id;
             _start_Date = startDT;
             _end_Date = endDT;
             _period_Type_ID = periodTypeID;
             _period_Type = period_type;
+            _period_Status = status;
+            if (status) // 1: true - closed
+            {
+                _period_Status_Str = Constants.PeriodElements.Period_Status_Closed;
+            }
+            else
+            {
+                _period_Status_Str = Constants.PeriodElements.Period_Status_Open;
+            }
+
+            _periodDateRange = dateRange;
         }
     }
 }

@@ -122,7 +122,7 @@ namespace ReportControlSystem
         // delete the current staff
         private void BTN_Delete_Clicked(object sender, RoutedEventArgs e)
         {
-            db_manager.ExecuteSQLTextFile(SQLStatement.GetDeleteFromStaff(currentStaff.Staff_ID));
+            db_manager.LoadSQLTextFile(SQLStatement.GetDeleteFromStaff(currentStaff.Staff_ID));
 
             if (StaffChanged != null)
             {
@@ -170,7 +170,7 @@ namespace ReportControlSystem
         {
             foreach (Category cat in selectedCategories)
             {
-                db_manager.ExecuteSQLTextFile(SQLStatement.GetDeleteFromStaffCategory(currentStaff.Staff_ID, cat));
+                db_manager.LoadSQLTextFile(SQLStatement.GetDeleteFromStaffCategory(currentStaff.Staff_ID, cat));
             }
 
             LoadEmployeeCategories();
@@ -184,7 +184,7 @@ namespace ReportControlSystem
             if (currentStaff == null)
             {
                 currentStaff = new Staff(txtName.Text, txtEmployeeCode.Text, txtTaxCode.Text, Convert.ToDecimal(txtRate.Text), Convert.ToDecimal(txtHours.Text), txtBankCode.Text);
-                db_manager.ExecuteSQLTextFile(SQLStatement.GetInsertStaffTableQuery(currentStaff));
+                db_manager.LoadSQLTextFile(SQLStatement.GetInsertStaffTableQuery(currentStaff));
             }
             else
             {
@@ -196,7 +196,7 @@ namespace ReportControlSystem
                     currentStaff.Rate = Convert.ToDecimal(txtRate.Text);
                     currentStaff.Hours = Convert.ToDecimal(txtHours.Text);
                     currentStaff.BankCode = txtBankCode.Text;
-                    db_manager.ExecuteSQLTextFile(SQLStatement.GetUpdateForStaff(currentStaff));
+                    db_manager.LoadSQLTextFile(SQLStatement.GetUpdateForStaff(currentStaff));
                 }
             }
 
@@ -275,7 +275,7 @@ namespace ReportControlSystem
 
             foreach (Category a in selectedCategories)
             {
-                db_manager.ExecuteSQLTextFile(SQLStatement.GetInsertStaffCategoryTableQuery(currentStaff.Staff_ID, a));
+                db_manager.LoadSQLTextFile(SQLStatement.GetInsertStaffCategoryTableQuery(currentStaff.Staff_ID, a));
             }
 
             ResetPanel();

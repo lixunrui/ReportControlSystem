@@ -77,6 +77,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="AddPeriodForm.xaml.cs">
+      <DependentUpon>AddPeriodForm.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Administrator.xaml.cs">
       <DependentUpon>Administrator.xaml</DependentUpon>
     </Compile>
@@ -109,6 +112,10 @@
     <Compile Include="SQL\SQLStatement.cs" />
     <Compile Include="Staff\Staff.cs" />
     <Compile Include="User.cs" />
+    <Page Include="AddPeriodForm.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Administrator.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

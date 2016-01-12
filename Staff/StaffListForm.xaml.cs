@@ -98,7 +98,7 @@ namespace ReportControlSystem
 
         private void BTN_DeleteStaff_Clicked(object sender, RoutedEventArgs e)
         {
-            db_manager.ExecuteSQLTextFile(SQLStatement.GetDeleteFromStaff(currentStaff.Staff_ID));
+            db_manager.LoadSQLTextFile(SQLStatement.GetDeleteFromStaff(currentStaff.Staff_ID));
             InitEmployeeTable();
         }
 
