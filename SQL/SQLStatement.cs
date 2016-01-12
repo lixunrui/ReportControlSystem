@@ -89,8 +89,8 @@ namespace ReportControlSystem
 
             query = @"CREATE TABLE Period (
 		                Period_ID			INTEGER PRIMARY KEY AUTOINCREMENT,
-		                Start_Time          Datetime,
-                        End_Time            Datetime,
+		                Start_Date          DateTime,
+                        End_Date            DateTime,
 		                Period_Type_ID		INT,
                         FOREIGN KEY (Period_Type_ID) REFERENCES Period_Type
 	                );";
@@ -262,6 +262,15 @@ namespace ReportControlSystem
             return query;
         }
 
+        internal static String GetPeriodTableQuery()
+        {
+            String query = String.Empty;
+
+            query = @"select Period_ID, Start_Date, End_Date, period.Period_Type_ID, periodType.Period_Type from period left join periodType on period.Period_Type_ID = periodType.Period_Type_ID;";
+
+            return query;
+        }
+
         internal static String GetStaffTableQuery()
         {
             String query = String.Empty;
@@ -313,6 +322,15 @@ namespace ReportControlSystem
             String query = String.Empty;
 
             query = @"select * from Payment;";
+
+            return query;
+        }
+
+        internal static String GetPeriodFromTypeID(int periodTypeID)
+        {
+            String query = String.Empty;
+
+            query = string.Format(@"select Period_ID, Start_Date, End_Date, period.Period_Type_ID, periodType.Period_Type from period left join periodType on period.Period_Type_ID = periodType.Period_Type_ID where period.Period_Type_ID={0};", periodTypeID);
 
             return query;
         }

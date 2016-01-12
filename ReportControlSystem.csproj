@@ -100,8 +100,8 @@
       <DependentUpon>CustomMessageBox.xaml</DependentUpon>
     </Compile>
     <Compile Include="Utility\MD5PWD.cs" />
-    <Compile Include="Period.xaml.cs">
-      <DependentUpon>Period.xaml</DependentUpon>
+    <Compile Include="PeriodForm.xaml.cs">
+      <DependentUpon>PeriodForm.xaml</DependentUpon>
     </Compile>
     <Compile Include="Report\ReportManager.xaml.cs">
       <DependentUpon>ReportManager.xaml</DependentUpon>
@@ -146,7 +146,7 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="Period.xaml">
+    <Page Include="PeriodForm.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

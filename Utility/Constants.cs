@@ -43,5 +43,14 @@ namespace ReportControlSystem
             internal static String Period_Type_ID = "Period_Type_ID";
             internal static String Period_Type = "Period_Type";
         }
+
+        internal static class PeriodElements
+        {
+            internal static String Period_ID = "Period_ID";
+            internal static String Start_Date = "Start_Date";
+            internal static String End_Date = "End_Date";
+            internal static String Period_Type_ID = "Period_Type_ID";
+            internal static String Period_Type = "Period_Type";
+        }
     }
 }
