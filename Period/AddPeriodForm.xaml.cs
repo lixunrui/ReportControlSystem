@@ -26,6 +26,10 @@ namespace ReportControlSystem
         DateTime? startDT;
         DateTime? endDT;
         Dictionary<int, string> periodTypes;
+        Period period;
+        PeriodType newPeriodType;
+
+        internal EventHandler<ObjectPassedEventArgs> NewPeriodAddedEvent;
 
         public AddPeriodForm()
         {
@@ -36,19 +40,41 @@ namespace ReportControlSystem
             :this()
         {
             _parent = form;
-            periodTypes = _periodTypes;
+            period = new Period(DateTime.Now, DateTime.Now);
+            
             db_manager = _db_manager;
-            comboxPeriodType.ItemsSource = periodTypes.Values;
+            
             dateStart.SelectedDate = DateTime.Now;
             dateEnd.SelectedDate = DateTime.Now;
+
+            InitComBoxPeriodType(_periodTypes);
+
             periodTypeID = 0;
         }
 
+        void InitComBoxPeriodType(Dictionary<int, string> _periodTypes)
+        {
+            _periodTypes.Add(0, "Custom");
+
+            periodTypes = _periodTypes;
+
+            comboxPeriodType.ItemsSource = _periodTypes.Values;
+
+            comboxPeriodType.SelectedIndex = 0;
+
+            UpdateDatePickerStatus(false);
+        }
+
+        private void UpdateDatePickerStatus(bool show)
+        {
+            //dateStart.IsEnabled = show;
+            dateEnd.IsEnabled = show;
+            //txtTypeName.IsReadOnly = !show;
+        }
 
         private void Windows_Closed(object sender, EventArgs e)
         {
-            _parent.Show();
-            this.Close();
+            CloseWindow();
         }
 
         private void StartDateChanged(object sender, SelectionChangedEventArgs e)
@@ -60,6 +86,7 @@ namespace ReportControlSystem
             if (startDT == null)
             {
                 startDT = DateTime.Now;
+                period.Start_Date = startDT.Value;
             }
             UpdateEndDate();
         }
@@ -73,6 +100,7 @@ namespace ReportControlSystem
             if (endDT == null)
             {
                 endDT = DateTime.Now;
+                period.End_Date = endDT.Value;
             }
         }
 
@@ -91,6 +119,8 @@ namespace ReportControlSystem
             reader.Close();
 
             dateEnd.SelectedDate = startDT.Value.AddDays(range);
+
+            period.End_Date = dateEnd.SelectedDate.Value;
         }
 
         private void ComboxSelectionChangeed(object sender, SelectionChangedEventArgs e)
@@ -102,31 +132,65 @@ namespace ReportControlSystem
             // find the key from
             int key = periodTypes.FirstOrDefault(x => x.Value.Equals(item.ToString())).Key;
 
-            if (key > 0)
+            periodTypeID = key;
+
+            if (periodTypeID > 0)
             {
-                periodTypeID = key;
+                period.Period_Type_ID = periodTypeID;
+                UpdateEndDate();
+                UpdateDatePickerStatus(false);
+                txtSelectedTypeName.Text = "Selected Type Name:";
+                txtTypeName.Text = item.ToString();
+            }
+            else
+            {
+                newPeriodType = new PeriodType("Custom Period Type");
+                UpdateDatePickerStatus(true);
+                txtSelectedTypeName.Text = "Insert Type Name:";
+                txtTypeName.IsReadOnly = false;
             }
             
         }
 
-        
-
         private void BTN_Cancel_Clicked(object sender, RoutedEventArgs e)
         {
-            _parent.Show();
-            this.Close();
+            CloseWindow();
         }
 
         private void BTN_Create_Clicked(object sender, RoutedEventArgs e)
         {
             if (periodTypeID == 0)
             {
-                MessageBox.Show("Please select a valid period type.");
-                return;
+               
+                newPeriodType.PeriodDateRange = (period.End_Date - period.Start_Date).Days;
+
+                if (txtTypeName.Text.Length > 0)
+                {
+                    newPeriodType.Period_Type = txtTypeName.Text + String.Format("Time: {0} Days", newPeriodType.PeriodDateRange);
+                }
+
+                db_manager.LoadSQLTextFile(SQLStatement.GetInsertPeriodTypeTableQuery(newPeriodType));
+                SQLiteDataReader reader = db_manager.ExecuteSQLTextFile(SQLStatement.GetMaxPeriodTypeIDQuery());
+                while (reader.Read())
+                {
+                    period.Period_Type_ID = Convert.ToInt32(reader[0]);
+                }
             }
+
+            db_manager.LoadSQLTextFile(SQLStatement.GetInsertPeriodTableQuery(period));
+
+            if (NewPeriodAddedEvent != null)
+            {
+                NewPeriodAddedEvent(this, null);
+            }
+            CloseWindow();
         }
 
-       
+        void CloseWindow()
+        {
+            _parent.Show();
+            this.Close();
+        }
 
     }
 }

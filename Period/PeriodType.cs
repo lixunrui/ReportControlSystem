@@ -14,6 +14,18 @@ namespace ReportControlSystem
             get { return _period_Type; }
             set { _period_Type = value; }
         }
+
+        Int32 _periodDateRange;
+        public System.Int32 PeriodDateRange
+        {
+            get { return _periodDateRange; }
+            set { _periodDateRange = value; }
+        }
+
+        internal PeriodType(String typeName)
+        {
+            _period_Type = typeName;
+        }
     }
 
     internal class Period
@@ -55,11 +67,11 @@ namespace ReportControlSystem
             { 
                 if (value) // 1: true - closed
                 {
-                    _period_Status_Str = Constants.PeriodElements.Period_Status_Closed;
+                    _period_Status_Str = Constants.PeriodElements.Period_Status_Already_Closed;
                 }
                 else
                 {
-                    _period_Status_Str = Constants.PeriodElements.Period_Status_Open;
+                    _period_Status_Str = Constants.PeriodElements.Period_Status_Close;
                 }
                 _period_Status = value; 
             }
@@ -78,6 +90,18 @@ namespace ReportControlSystem
             get { return _periodDateRange; }
             set { _periodDateRange = value; }
         }
+
+        internal Period()
+        {
+
+        }
+
+        internal Period(DateTime startDT, DateTime endDT)
+        {
+            _start_Date = startDT;
+            _end_Date = endDT;
+        }
+
         internal Period(DateTime startDT, DateTime endDT, int periodTypeID)
         {
             _start_Date = startDT;
@@ -95,11 +119,11 @@ namespace ReportControlSystem
             _period_Status = status;
             if (status) // 1: true - closed
             {
-                _period_Status_Str = Constants.PeriodElements.Period_Status_Closed;
+                _period_Status_Str = Constants.PeriodElements.Period_Status_Already_Closed;
             }
             else
             {
-                _period_Status_Str = Constants.PeriodElements.Period_Status_Open;
+                _period_Status_Str = Constants.PeriodElements.Period_Status_Close;
             }
 
             _periodDateRange = dateRange;

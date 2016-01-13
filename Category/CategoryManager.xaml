@@ -1,7 +1,7 @@
 ﻿<Window x:Class="ReportControlSystem.CategoryManager"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="CategoryManager" Height="Auto"  Width="Auto"
+        Title="CategoryManager" Height="660"  Width="750"
         ResizeMode="NoResize" Closed="Windows_Closed">
     <Grid Margin ="12">
         <Grid.RowDefinitions>
@@ -62,11 +62,10 @@
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <DockPanel LastChildFill="True">
-                                    <Button  Content="   Update   " DockPanel.Dock="Left"  Click="BTN_Update_Clicked"/>
+                                    <Button  Content="Update" DockPanel.Dock="Left"  Click="BTN_Update_Clicked"/>
                                     
-                                    <Button  Content="   Delete   " DockPanel.Dock="Right"  Click="BTN_Delete_Clicked"/>
+                                    <Button  Content="Delete" DockPanel.Dock="Right"  Click="BTN_Delete_Clicked"/>
 
-                                    <Button  Content="            " Visibility="Hidden"/>
                                 </DockPanel>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>

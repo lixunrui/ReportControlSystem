@@ -57,7 +57,7 @@ namespace ReportControlSystem
 
             PeriodTypes = new Dictionary<Int32, String>();
 
-            PeriodTypes.Add(-1, "All Types");
+            PeriodTypes.Add(0, "All Types");
 
             foreach (DataRow r in periodTypeTable.Rows)
             {
@@ -95,10 +95,10 @@ namespace ReportControlSystem
             PeriodList.ItemsSource = periods;
         }
 
-        private void PeriodSelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
+        //private void PeriodSelectionChanged(object sender, SelectionChangedEventArgs e)
+        //{
 
-        }
+        //}
 
         private void ComboBoxSelectedChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -139,11 +139,27 @@ namespace ReportControlSystem
 
         private void BTN_Add_New_Period(object sender, RoutedEventArgs e)
         {
+            PeriodTypes.Remove(0);
+
             AddPeriodForm newForm = new AddPeriodForm(this, db_manager, PeriodTypes);
+
+            newForm.NewPeriodAddedEvent += new EventHandler<ObjectPassedEventArgs>(AddPeriodAdded);
 
             newForm.Show();
 
             this.Hide();
+        }
+
+        private void AddPeriodAdded(object sender, ObjectPassedEventArgs e)
+        {
+            LoadPeriodTable();
+        }
+
+        private void BTN_Back_Clicked(object sender, RoutedEventArgs e)
+        {
+            _parent.Reload();
+            _parent.Show();
+            this.Close();
         }
 
         //void ShowCalendarPanel(bool showPanel)

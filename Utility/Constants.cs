@@ -53,8 +53,8 @@ namespace ReportControlSystem
             internal static String Period_Type = "Period_Type";
             internal static String Period_Status = "Period_Status";
 
-            internal static String Period_Status_Closed = "Period Closed";
-            internal static String Period_Status_Open = "Period Open";
+            internal static String Period_Status_Close = "Close Period";
+            internal static String Period_Status_Already_Closed = "Period Closed";
             internal static String PeriodDateRange = "PeriodDateRange";
         }
     }

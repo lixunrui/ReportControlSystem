@@ -15,27 +15,23 @@ using System.Windows.Shapes;
 namespace ReportControlSystem
 {
     /// <summary>
-    /// Interaction logic for Administrator.xaml
+    /// Interaction logic for PaymentForm.xaml
     /// </summary>
-    public partial class Administrator : Window
+    public partial class PaymentForm : Window
     {
-        MainWindow _parent;
-
-        public Administrator()
+        public PaymentForm()
         {
             InitializeComponent();
         }
 
-        public Administrator(MainWindow main)
-            : this()
+        private void ComFrequencySelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            _parent = main;
+
         }
 
-        private void Window_Closed(object sender, EventArgs e)
+        private void ComEmployeeSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            _parent.Show();
-            this.Close();
+
         }
     }
 }

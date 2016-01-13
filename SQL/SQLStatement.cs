@@ -232,12 +232,12 @@ namespace ReportControlSystem
 
             query += @"delete from sqlite_sequence where name='PeriodType';";
 
-            query += @"INSERT INTO PeriodType (Period_Type) values ('Daily');";
-            query += @"INSERT INTO PeriodType (Period_Type) values ('Weekly');";
-            query += @"INSERT INTO PeriodType (Period_Type) values ('Fortnightly');";
-            query += @"INSERT INTO PeriodType (Period_Type) values ('Monthly');";
-            query += @"INSERT INTO PeriodType (Period_Type) values ('Quarterly');";
-            query += @"INSERT INTO PeriodType (Period_Type) values ('Annually');";
+            query += @"INSERT INTO PeriodType (Period_Type,PeriodDateRange) values ('Daily', 1);";
+            query += @"INSERT INTO PeriodType (Period_Type,PeriodDateRange) values ('Weekly', 7);";
+            query += @"INSERT INTO PeriodType (Period_Type,PeriodDateRange) values ('Fortnightly', 14);";
+            query += @"INSERT INTO PeriodType (Period_Type,PeriodDateRange) values ('Monthly', 30);";
+            query += @"INSERT INTO PeriodType (Period_Type,PeriodDateRange) values ('Quarterly', 90);";
+            query += @"INSERT INTO PeriodType (Period_Type,PeriodDateRange) values ('Annually',365);";
 
             return query;
         }
@@ -260,6 +260,15 @@ namespace ReportControlSystem
             String query = String.Empty;
 
             query = @"select * from PeriodType;";
+
+            return query;
+        }
+
+        internal static String GetMaxPeriodTypeIDQuery()
+        {
+            String query = String.Empty;
+
+            query = @"select MAX(Period_Type_ID) from PeriodType;";
 
             return query;
         }
@@ -387,6 +396,16 @@ namespace ReportControlSystem
         }
 
 
+        internal static String GetInsertPeriodTypeTableQuery(PeriodType periodType)
+        {
+            String query = String.Empty;
+
+            query = string.Format(@"insert into PeriodType (Period_Type, PeriodDateRange) values ('{0}',{1});", periodType.Period_Type, periodType.PeriodDateRange);
+
+            return query;
+        }
+
+
 #endregion
 
 #region Delete From
@@ -452,7 +471,7 @@ namespace ReportControlSystem
         {
             String query = String.Empty;
 
-            query = string.Format(@"update Period set period_staus = 1 where Period_ID={0};", periodID);
+            query = string.Format(@"update Period set period_status = 1 where Period_ID={0};", periodID);
 
             return query;
         }

@@ -77,10 +77,13 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="AddPeriodForm.xaml.cs">
+    <Compile Include="Payment\PaymentForm.xaml.cs">
+      <DependentUpon>PaymentForm.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Period\AddPeriodForm.xaml.cs">
       <DependentUpon>AddPeriodForm.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Administrator.xaml.cs">
+    <Compile Include="User\Administrator.xaml.cs">
       <DependentUpon>Administrator.xaml</DependentUpon>
     </Compile>
     <Compile Include="Category\Category.cs" />
@@ -90,20 +93,20 @@
     <Compile Include="Category\CategoryManager.xaml.cs">
       <DependentUpon>CategoryManager.xaml</DependentUpon>
     </Compile>
-    <Compile Include="PeriodType.cs" />
+    <Compile Include="Period\PeriodType.cs" />
     <Compile Include="Staff\StaffListForm.xaml.cs">
       <DependentUpon>StaffListForm.xaml</DependentUpon>
     </Compile>
     <Compile Include="Staff\StaffForm.xaml.cs">
       <DependentUpon>StaffForm.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Utilities.cs" />
+    <Compile Include="Utility\Utilities.cs" />
     <Compile Include="Utility\Constants.cs" />
     <Compile Include="Utility\CustomMessageBox.xaml.cs">
       <DependentUpon>CustomMessageBox.xaml</DependentUpon>
     </Compile>
     <Compile Include="Utility\MD5PWD.cs" />
-    <Compile Include="PeriodForm.xaml.cs">
+    <Compile Include="Period\PeriodForm.xaml.cs">
       <DependentUpon>PeriodForm.xaml</DependentUpon>
     </Compile>
     <Compile Include="Report\ReportManager.xaml.cs">
@@ -111,12 +114,16 @@
     </Compile>
     <Compile Include="SQL\SQLStatement.cs" />
     <Compile Include="Staff\Staff.cs" />
-    <Compile Include="User.cs" />
-    <Page Include="AddPeriodForm.xaml">
+    <Compile Include="User\User.cs" />
+    <Page Include="Payment\PaymentForm.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Administrator.xaml">
+    <Page Include="Period\AddPeriodForm.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="User\Administrator.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -153,7 +160,7 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="PeriodForm.xaml">
+    <Page Include="Period\PeriodForm.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
