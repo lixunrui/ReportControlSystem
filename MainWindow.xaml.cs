@@ -264,7 +264,14 @@ namespace ReportControlSystem
 
         private void BTN_Payment_Clicked(object sender, RoutedEventArgs e)
         {
+            PaymentForm paymentForm = new PaymentForm(this, dbManager);
 
+            paymentForm.Owner = this;
+
+            this.Hide();
+            //paymentForm.Activate();
+            paymentForm.Show();
+            
         }
 
 

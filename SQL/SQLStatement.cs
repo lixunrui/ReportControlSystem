@@ -300,6 +300,15 @@ namespace ReportControlSystem
             return query;
         }
 
+        internal static String GetStaffFromIDQuery(int id)
+        {
+            String query = String.Empty;
+
+            query = String.Format(@"select * from Employee where {0}={1};", Constants.EmployeeElements.Employee_ID, id);
+
+            return query;
+        }
+
         internal static String GetCategoryTableQuery()
         {
             String query = String.Empty;
@@ -310,11 +319,11 @@ namespace ReportControlSystem
         }
 
 
-        internal static String GetCategoryNotForStaffTableQuery(int stallID)
+        internal static String GetCategoryNotForStaffTableQuery(int staffID)
         {
             String query = String.Empty;
 
-            query = string.Format(@"select * from category where category_id not in (select category_id from staffCategory where staff_ID={0} );",stallID);
+            query = string.Format(@"select * from category where category_id not in (select category_id from staffCategory where staff_ID={0} );",staffID);
 
             return query;
         }
@@ -462,6 +471,17 @@ namespace ReportControlSystem
                 s.Name, s.EmployeeCode, 
                 s.TaxCode, s.Rate, 
                 s.Hours, s.BankCode, s.Staff_ID);
+
+            return query;
+        }
+
+        internal static String GetUpdateHoursForStaff(int id)
+        {
+            String query = String.Empty;
+
+            query = string.Format(@"update Employee Set {0}=0 where {1}={2};", Constants.EmployeeElements.Employee_Hours, 
+                Constants.EmployeeElements.Employee_ID,
+                id);
 
             return query;
         }
