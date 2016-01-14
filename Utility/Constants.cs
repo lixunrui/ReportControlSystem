@@ -57,5 +57,14 @@ namespace ReportControlSystem
             internal static String Period_Status_Already_Closed = "Period Closed";
             internal static String PeriodDateRange = "PeriodDateRange";
         }
+
+        internal static class PaymentElements
+        {
+            internal static String PaymentID = "ID";
+            internal static String Payment_StaffID = "Staff_ID";
+            internal static String Payment_PeriodID = "Period_ID";
+            internal static String Payment_CategoryID = "Category_ID";
+            internal static String Payment_Amount = "Amount";
+        }
     }
 }

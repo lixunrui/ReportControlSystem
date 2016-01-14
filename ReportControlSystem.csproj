@@ -77,6 +77,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Payment.cs" />
     <Compile Include="Payment\PaymentForm.xaml.cs">
       <DependentUpon>PaymentForm.xaml</DependentUpon>
     </Compile>
@@ -115,6 +116,7 @@
     <Compile Include="SQL\SQLStatement.cs" />
     <Compile Include="Staff\Staff.cs" />
     <Compile Include="User\User.cs" />
+    <Compile Include="Validation.cs" />
     <Page Include="Payment\PaymentForm.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

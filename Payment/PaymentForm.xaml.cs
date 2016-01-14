@@ -26,6 +26,8 @@ namespace ReportControlSystem
         Dictionary<Int32, String> PeriodTypes;
         Dictionary<Int32, String> Employees;
         Staff currentSelectedStaff;
+        List<Category> staffCategories;
+        Int32 currentPeriodID;
 
         public PaymentForm()
         {
@@ -105,6 +107,8 @@ namespace ReportControlSystem
             // find the period
             if (key > 0)
             {
+                currentPeriodID = key;
+
                 SQLiteDataReader reader = db_manager.ExecuteSQLTextFile(SQLStatement.GetPeriodFromTypeID(key));
                 while (reader.Read())
                 {
@@ -147,7 +151,6 @@ namespace ReportControlSystem
 
                 UpdateEmployeeInfo();
 
-
                 reader = db_manager.ExecuteSQLTextFile(SQLStatement.GetStaffCategoryFor(key));
                 while (reader.Read())
                 {
@@ -168,6 +171,7 @@ namespace ReportControlSystem
         private void LoadCategories(List<Int32> categoryID)
         {
             PaymentPanel.Children.Clear();
+            staffCategories = new List<Category>();
 
             foreach (int id in categoryID)
             {
@@ -176,21 +180,44 @@ namespace ReportControlSystem
                 {
                     Category c = new Category(Convert.ToInt32(reader[Constants.CategoryElements.Category_ID]), reader[Constants.CategoryElements.Category_Name].ToString(), Convert.ToBoolean(reader[Constants.CategoryElements.Category_Type]), reader[Constants.CategoryElements.Category_Description].ToString());
 
-                   TextBlock txtCName = new TextBlock();
-                   txtCName.Text = c.Category_Name;
-                   txtCName.FontSize = 18;
-                   txtCName.Margin = new Thickness(3, 0, 0, 0);
+                    staffCategories.Add(c);
 
-                   TextBox txtContent = new TextBox();
-                   txtContent.Margin = new Thickness(9,0,0,0);
-                   Border border = new Border();
-                   border.BorderBrush = Brushes.Black;
-                   border.BorderThickness = new Thickness(0, 0, 0, 1);
-                   border.Margin = new Thickness(9,0,0,9);
+                    TextBlock txtCName = new TextBlock();
+                    txtCName.Text = c.Category_Name;
+                    txtCName.FontSize = 18;
+                    txtCName.Margin = new Thickness(3, 0, 0, 0);
 
-                   PaymentPanel.Children.Add(txtCName);
-                   PaymentPanel.Children.Add(txtContent);
-                   PaymentPanel.Children.Add(border);
+                    TextBox txtContent = new TextBox();
+                    txtContent.Margin = new Thickness(9,0,0,0);
+                    txtContent.Name = String.Format("txt{0}", c.Category_Name.Replace(" ", String.Empty));
+
+                    //TODO: Validation Binding not working...
+                    Binding validationBinding = new Binding("Text");
+
+                    DecimalValidation decimalValidation = new DecimalValidation();
+
+                    validationBinding.ValidationRules.Add(decimalValidation);
+                    validationBinding.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
+                    //validationBinding.Source = txtContent;
+
+                    txtContent.SetBinding(TextBox.TextProperty, validationBinding);
+
+                    Border border = new Border();
+                    border.BorderBrush = Brushes.Black;
+                    border.BorderThickness = new Thickness(0, 0, 0, 1);
+                    border.Margin = new Thickness(9,0,0,9);
+
+                    PaymentPanel.Children.Add(txtCName);
+                    
+                    PaymentPanel.Children.Add(txtContent);
+
+                    if (PaymentPanel.FindName(txtContent.Name) != null)
+                        PaymentPanel.UnregisterName(txtContent.Name);
+                 
+                    PaymentPanel.RegisterName(txtContent.Name, txtContent);
+                    
+
+                    PaymentPanel.Children.Add(border);
                 }
             }
         }
@@ -200,13 +227,29 @@ namespace ReportControlSystem
             ExitForm();
         }
 
+        private void BTN_Save_Clicked(object sender, RoutedEventArgs e)
+        {
+            foreach (Category c in staffCategories)
+            {
+                string txtName = string.Format("txt{0}", c.Category_Name.Replace(" ", String.Empty));
+
+                TextBox txtBox = (TextBox) PaymentPanel.FindName(txtName);
+
+                decimal currentAmount = Convert.ToDecimal(txtBox.Text);
+
+                db_manager.LoadSQLTextFile(SQLStatement.GetInsertPaymentTableQuery(currentSelectedStaff.Staff_ID, currentPeriodID, c.Category_ID, currentAmount));
+
+                db_manager.LoadSQLTextFile(SQLStatement.GetUpdateHoursForStaff(currentSelectedStaff.Staff_ID));
+            }
+
+            ExitForm();
+        }
+
         private void ExitForm()
         {
             _parent.Activate();
             _parent.Show();
             this.Close();
         }
-
-        
     }
 }

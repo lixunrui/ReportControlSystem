@@ -63,6 +63,6 @@
         </GroupBox>
         
         <Button Content="Cancel" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" Margin="12"  FontSize="18" Click="BTN_Cancel_Clicked"/>
-        <Button Content="Save the Payment" Grid.Row="5" Grid.Column="2" Margin="12"  FontSize="18"  />
+        <Button Content="Save the Payment" Grid.Row="5" Grid.Column="2" Margin="12"  FontSize="18" Click="BTN_Save_Clicked"  />
     </Grid>
 </Window>

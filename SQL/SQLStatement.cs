@@ -414,6 +414,19 @@ namespace ReportControlSystem
             return query;
         }
 
+        internal static String GetInsertPaymentTableQuery(int staffID, int periodID, int categoryID, decimal amount)
+        {
+            String query = String.Empty;
+
+            query = String.Format("insert into payment ({0},{1},{2},{3}) values ({4},{5},{6},{7});", Constants.PaymentElements.Payment_StaffID,
+                Constants.PaymentElements.Payment_PeriodID,
+                Constants.PaymentElements.Payment_CategoryID,
+                Constants.PaymentElements.Payment_Amount,
+                staffID, periodID, categoryID, amount);
+
+            return query;
+        }
+
 
 #endregion
 
