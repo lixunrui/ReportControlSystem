@@ -65,7 +65,7 @@ namespace ReportControlSystem
 
                 // add rate
                 loop++;
-                CreateHeader(loop, 1, Constants.EmployeeElements.Employee_Code, 0, FontSizeLevel.NormalFontSize, false, null, null);
+                CreateHeader(loop, 1, Constants.EmployeeElements.Employee_Rate, 0, FontSizeLevel.NormalFontSize, false, null, null);
                 AddData(loop, 2, table.Rows[0][3].ToString(), null, 1, true, false, Color.Red);
 
                 // hours
