@@ -145,7 +145,8 @@
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
             <Button Name="btnRemoveAll"  Grid.Column="0"  Margin="12"  Content="Remove All" FontSize="15" Click="BTN_Remove_All_Clicked" />
-            <Button Name="btnGenerate" Foreground="Red"  Grid.Column="1"  Margin="12"  Content="Generate Reports" FontSize="15" Click="BTN_Generate_Reports_Clicked" IsEnabled="False"/>
+            <Button Name="btnGenerate" Foreground="Red"  Grid.Column="1"  Margin="12"  Content="Generate Reports" 
+                    FontSize="15" Click="BTN_Generate_Reports_Clicked" IsEnabled="False"/>
         </Grid>
         
     </Grid>

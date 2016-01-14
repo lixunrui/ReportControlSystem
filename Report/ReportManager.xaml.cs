@@ -14,6 +14,7 @@ using System.Windows.Shapes;
 using System.Collections.ObjectModel;
 using System.Data;
 using System.Threading;
+using System.Data.SQLite;
 
 namespace ReportControlSystem
 {
@@ -41,21 +42,24 @@ namespace ReportControlSystem
         List<Staff> staffRemoveFrom;
 
         DataTable staffTable;
-        DatabaseManager dbManager;
+        DatabaseManager db_Manager;
 
         ManualResetEvent FromListLocker;
         ManualResetEvent ToListLocker;
+
+        int currentPeriod;
 
         public ReportManager()
         {
             InitializeComponent();
         }
 
-        internal ReportManager(MainWindow main, DatabaseManager _dbManager)
+        internal ReportManager(MainWindow main, DatabaseManager _dbManager, int periodID)
             : this()
         {
             _parent = main;
-            dbManager = _dbManager;
+            db_Manager = _dbManager;
+            currentPeriod = periodID;
             InitializeCustomComponents();
         }
 
@@ -69,8 +73,6 @@ namespace ReportControlSystem
             FromListLocker = new ManualResetEvent(true);
             ToListLocker = new ManualResetEvent(true);
 
-
-
             UpdateButtonsStatus(ButtonStatus.DisableAll);
 
             // Get staff info from database
@@ -79,7 +81,7 @@ namespace ReportControlSystem
 
         private void BuildStaffFromTable()
         {
-            staffTable = dbManager.GetDataTable(SQLStatement.GetStaffTableQuery());
+            staffTable = db_Manager.GetDataTable(SQLStatement.GetStaffTableQuery());
 
             if (staffTable != null)
             {
@@ -274,7 +276,18 @@ namespace ReportControlSystem
 
         private void BTN_Generate_Reports_Clicked(object sender, RoutedEventArgs e)
         {
+            List<DataTable> tables = new List<DataTable>();
+            foreach (Staff s in toStaffs)
+            {
+                DataTable table = db_Manager.GetDataTable(SQLStatement.GetPaymentDetailsFromStaffIDAndPeriodIDTableQuery(s.Staff_ID, currentPeriod));
+                if (table !=null && table.Rows.Count>0)
+                {
+                    tables.Add(table);
+                }
+            }
 
+            ReportGenerator manager = new ReportGenerator(this.txtReport.Text);
+            manager.GenerateReport(tables);
         }
 
     }

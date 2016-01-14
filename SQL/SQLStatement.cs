@@ -264,6 +264,52 @@ namespace ReportControlSystem
             return query;
         }
 
+        internal static String GetAllClosedPeriodDetailsQuery()
+        {
+            String query = String.Empty;
+
+            query = @"select period.Period_ID, period.Start_Date, period.End_Date, 
+period.Period_Type_ID, period.Period_Status, 
+periodType.Period_Type, periodType.PeriodDateRange  
+from period inner join periodtype 
+on periodType.period_type_ID=period.period_type_ID 
+where period_status = 1;";
+
+            return query;
+        }
+
+        internal static String GetPeriodAndTypeTableQuery()
+        {
+            String query = String.Empty;
+
+            query = @"select * from periodtype inner join period on                periodType.period_type_id = period.Period_type_ID 
+where period_status=1;";
+
+            return query;
+        }
+
+        internal static String GetPaymentDetailsFromStaffIDAndPeriodIDTableQuery(int staffID, int periodID)
+        {
+            String query = String.Empty;
+
+            query = String.Format(@"select employee.name, employee.employeecode, employee.Taxcode,
+employee.rate, employee.hours,  
+period.start_date, period.end_date,
+category.category_name, category.category_Type, payment.amount
+from 
+payment inner join employee 
+on employee.staff_id = payment.staff_id
+inner join period
+on period.period_ID = payment.period_id
+inner join periodType
+on periodType.period_Type_ID = period.Period_Type_ID
+inner join category
+on category.category_id = payment.category_id
+where period.period_ID = {0} and employee.staff_id = {1};", periodID, staffID);
+
+            return query;
+        }
+
         internal static String GetMaxPeriodTypeIDQuery()
         {
             String query = String.Empty;
@@ -359,7 +405,7 @@ namespace ReportControlSystem
         {
             String query = String.Empty;
 
-            query = string.Format(@"select Period_ID, Start_Date, End_Date, period_status, period.Period_Type_ID,PeriodDateRange, periodType.Period_Type from period left join periodType on period.Period_Type_ID = periodType.Period_Type_ID where period.Period_Type_ID={0};", periodTypeID);
+            query = string.Format(@"select Period_ID, Start_Date, End_Date, period_status, period.Period_Type_ID,PeriodDateRange, periodType.Period_Type from period left join periodType on period.Period_Type_ID = periodType.Period_Type_ID where period.Period_ID={0};", periodTypeID);
 
             return query;
         }

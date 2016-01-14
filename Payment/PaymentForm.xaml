@@ -45,7 +45,8 @@
 
         <TextBlock  Text="Frequency:" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center" 
                     FontSize="18"/>
-        <ComboBox Name="comPeriodType" FontSize="18" Grid.Row="2" Grid.Column="1" VerticalAlignment="Center"  ItemsSource="{Binding}" 
+        <ComboBox Name="comPeriodType" FontSize="18" Grid.Row="2" Grid.Column="1" VerticalAlignment="Center"  
+                  ItemsSource="{Binding ClosedPeriods}" DisplayMemberPath="Period_Type" 
                   SelectionChanged="ComFrequencySelectionChanged"/>
 
         <TextBlock Text="Start Date:" Grid.Row="3" Grid.Column="0" FontSize="18" VerticalAlignment="Center" HorizontalAlignment="Center"/>

@@ -29,6 +29,8 @@ namespace ReportControlSystem
         List<Category> staffCategories;
         Int32 currentPeriodID;
 
+        List<Period> ClosedPeriods;
+
         public PaymentForm()
         {
             InitializeComponent();
@@ -52,16 +54,29 @@ namespace ReportControlSystem
 
         private void InitPeriodCombox()
         {
-            DataTable periodTypeTable = db_manager.GetDataTable(SQLStatement.GetPeriodTypeTableQuery());
+            DataTable periodTypeTable = db_manager.GetDataTable(SQLStatement.GetPeriodAndTypeTableQuery());
 
             PeriodTypes = new Dictionary<Int32, String>();
 
+            ClosedPeriods = new List<Period>();
+
             foreach (DataRow r in periodTypeTable.Rows)
             {
-                PeriodTypes.Add(Convert.ToInt32(r[Constants.PeriodTypesElements.Period_Type_ID]), r[Constants.PeriodTypesElements.Period_Type].ToString());
+                PeriodTypes.Add(Convert.ToInt32(r[Constants.PeriodElements.Period_ID]), r[Constants.PeriodTypesElements.Period_Type].ToString());
+
+                Period period = new Period(Convert.ToInt32(r[Constants.PeriodElements.Period_ID]),
+                    Convert.ToDateTime(r[Constants.PeriodElements.Start_Date]),
+                    Convert.ToDateTime(r[Constants.PeriodElements.End_Date]),
+                    Convert.ToInt32(r[Constants.PeriodElements.Period_Type_ID]),
+                    r[Constants.PeriodElements.Period_Type].ToString(),
+                    Convert.ToBoolean(r[Constants.PeriodElements.Period_Status]),
+                    Convert.ToInt32(r[Constants.PeriodElements.PeriodDateRange]));
+
+                ClosedPeriods.Add(period);
             }
 
-            comPeriodType.ItemsSource = PeriodTypes.Values;
+            comPeriodType.ItemsSource = ClosedPeriods; // PeriodTypes.Values;
+            
             comPeriodType.SelectedIndex = 0;
         }
 
@@ -100,21 +115,17 @@ namespace ReportControlSystem
         {
             ComboBox cmb = sender as ComboBox;
 
-            var item = cmb.SelectedValue;
+            var item = cmb.SelectedItem as Period;
+           
+            currentPeriodID = item.Period_ID;
 
-            int key = PeriodTypes.FirstOrDefault(x => x.Value.Equals(item.ToString())).Key;
+            SQLiteDataReader reader = db_manager.ExecuteSQLTextFile(SQLStatement.GetPeriodFromTypeID(currentPeriodID));
 
-            // find the period
-            if (key > 0)
+            while (reader.Read())
             {
-                currentPeriodID = key;
-
-                SQLiteDataReader reader = db_manager.ExecuteSQLTextFile(SQLStatement.GetPeriodFromTypeID(key));
-                while (reader.Read())
-                {
-                    LoadDate(Convert.ToDateTime(reader[Constants.PeriodElements.Start_Date]), Convert.ToDateTime(reader[Constants.PeriodElements.End_Date]));
-                }
+                LoadDate(Convert.ToDateTime(reader[Constants.PeriodElements.Start_Date]), Convert.ToDateTime(reader[Constants.PeriodElements.End_Date]));
             }
+            
             
         }
 

@@ -24,7 +24,7 @@ namespace ReportControlSystem
     public partial class MainWindow : Window
     {
         DatabaseManager dbManager;
-        DataTable periodTable;
+        DataTable periodDetailTable;
 
         public MainWindow()
         {
@@ -58,9 +58,9 @@ namespace ReportControlSystem
                 PeriodGrid.Children.Clear();
             }
 
-            periodTable = dbManager.GetDataTable(SQLStatement.GetPeriodTypeTableQuery());
+            periodDetailTable = dbManager.GetDataTable(SQLStatement.GetAllClosedPeriodDetailsQuery());
 
-            if (periodTable == null || periodTable.Rows.Count == 0)
+            if (periodDetailTable == null || periodDetailTable.Rows.Count == 0)
             {
                 // create a message label to indicate there is no period type available
                 // and offer a button to create default period type table
@@ -106,7 +106,7 @@ namespace ReportControlSystem
             }
             else
             {
-                periodNum = periodTable.Rows.Count;
+                periodNum = periodDetailTable.Rows.Count;
 
                 for (int i = 1; i <= periodNum; i++ )
                 {
@@ -119,7 +119,7 @@ namespace ReportControlSystem
                 {
                     Button btn = new Button();
 
-                    string btnContent = string.Format("{0} Report", periodTable.Rows[i]["Period_Type"].ToString());
+                    string btnContent = string.Format("{0}:{1}-{2} Report", periodDetailTable.Rows[i]["Period_Type"].ToString(), periodDetailTable.Rows[i][Constants.PeriodElements.Start_Date].ToString(), periodDetailTable.Rows[i][Constants.PeriodElements.End_Date].ToString());
 
                     btn.Content = btnContent;
                     btn.FontSize = 15;
@@ -128,7 +128,7 @@ namespace ReportControlSystem
                     btn.Margin = new Thickness(12);
 
                     // set tag
-                    btn.Tag = periodTable.Rows[i]["Period_Type_ID"];
+                    btn.Tag = periodDetailTable.Rows[i]["Period_ID"];
 
                     btn.Click += BTN_Period_Type_Clicked;
 
@@ -143,26 +143,26 @@ namespace ReportControlSystem
         // Pop up the report form
         void BTN_Period_Type_Clicked(object sender, RoutedEventArgs e)
         {
-            if (periodTable != null)
+            if (periodDetailTable != null)
             {
                 int periodID = Convert.ToInt32((sender as Button).Tag);
 
-                string filter = string.Format("Period_Type_ID={0}", periodID);
+                string filter = string.Format("Period_ID={0}", periodID);
 
-                DataRow[] rows = periodTable.Select(filter);
+                DataRow[] rows = periodDetailTable.Select(filter);
 
                 if (rows[0] != null)
                 {
                     String periodTitle = rows[0]["Period_Type"].ToString();
 
                     // pop up the form
-                    ReportManager rManager = new ReportManager(this, dbManager);
+                    ReportManager rManager = new ReportManager(this, dbManager, periodID);
 
                     rManager.Owner = this;
 
-                    rManager.Title = periodTitle;
+                    rManager.Title = string.Format("{0}\n{1}{2}", periodTitle, rows[0][Constants.PeriodElements.Start_Date].ToString(), rows[0][Constants.PeriodElements.End_Date].ToString());
 
-                    rManager.txtReport.Text = periodTitle + "Report";
+                    rManager.txtReport.Text = periodTitle + " Report";
 
                     this.Hide();
 
