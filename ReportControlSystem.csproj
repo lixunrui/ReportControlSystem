@@ -79,7 +79,12 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Payment.cs" />
+    <Compile Include="AminAddForm.xaml.cs">
+      <DependentUpon>AminAddForm.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="User\AdminConfiguration.xaml.cs">
+      <DependentUpon>AdminConfiguration.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Payment\PaymentForm.xaml.cs">
       <DependentUpon>PaymentForm.xaml</DependentUpon>
     </Compile>
@@ -119,7 +124,15 @@
     <Compile Include="SQL\SQLStatement.cs" />
     <Compile Include="Staff\Staff.cs" />
     <Compile Include="User\User.cs" />
-    <Compile Include="Validation.cs" />
+    <Compile Include="Utility\Validation.cs" />
+    <Page Include="AminAddForm.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="User\AdminConfiguration.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Payment\PaymentForm.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

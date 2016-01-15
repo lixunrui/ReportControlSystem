@@ -11,6 +11,7 @@ namespace ReportControlSystem
         Int32 _staff_ID;
         public System.Int32 Staff_ID
         {
+            set { _staff_ID = value; }
             get { return _staff_ID; }
         }
 

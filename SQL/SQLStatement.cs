@@ -66,7 +66,8 @@ namespace ReportControlSystem
 		                Category_ID		    INTEGER PRIMARY KEY AUTOINCREMENT,
 		                Category_Name		NVARCHAR(50) NOT NULL,
                         Category_Description NVARCHAR(300),
-		                Category_Type		BIT NOT NULL
+		                Category_Type		BIT NOT NULL,
+                        Deleted             bin not null default 0
 	                );";
 
             return query;
@@ -89,10 +90,11 @@ namespace ReportControlSystem
 
             query = @"CREATE TABLE Period (
 		                Period_ID			INTEGER PRIMARY KEY AUTOINCREMENT,
-		                Start_Date          DateTime,
-                        End_Date            DateTime,
+		                Start_Date          Date,
+                        End_Date            Date,
 		                Period_Type_ID		INT,
                         Period_Status       bit not null default 0,
+                        Deleted             bin not null default 0,
                         FOREIGN KEY (Period_Type_ID) REFERENCES Period_Type
 	                );";
 
@@ -112,7 +114,8 @@ namespace ReportControlSystem
             query = @"CREATE TABLE PeriodType (
 		                Period_Type_ID		INTEGER PRIMARY KEY AUTOINCREMENT,
 		                Period_Type		    nvarchar(30) default NULL,
-                        Period_Status Integer not null default 0
+                        PeriodDateRange     Int not null default 1,
+                        Deleted             bin not null default 0
 	                );";
 
             return query;
@@ -137,6 +140,7 @@ namespace ReportControlSystem
 				        Rate            decimal(3,3) Not Null ,
 				        Hours           decimal(3,3) default 0,
 				        BankCode        NVARCHAR(30) ,
+                        Deleted             bin not null default 0,
 				        UNIQUE  (Staff_ID, Rate)
 	                );";
 
@@ -159,6 +163,7 @@ namespace ReportControlSystem
             query = @"CREATE TABLE Payment (
 		                ID					INTEGER PRIMARY KEY AUTOINCREMENT,
 		                Staff_ID            INTEGER,
+                        Hours               decimal(5,2) not null default 0.0,
                         Period_ID           INTEGER,
                         Category_ID         INTEGER,
                         Amount              decimal(12,4) NOT NULL DEFAULT 0.0,
@@ -255,11 +260,20 @@ namespace ReportControlSystem
             return query;
         }
 
+        internal static String GetUserFromIDQuery(int id)
+        {
+            String query = String.Empty;
+
+            query = String.Format(@"select * from Users where ID={0};", id);
+
+            return query;
+        }
+
         internal static String GetPeriodTypeTableQuery()
         {
             String query = String.Empty;
 
-            query = @"select * from PeriodType;";
+            query = @"select * from PeriodType where deleted = 0;";
 
             return query;
         }
@@ -278,12 +292,17 @@ where period_status = 1;";
             return query;
         }
 
+
+        /// <summary>
+        /// Return all OPEN period to be selected.
+        /// </summary>
+        /// <returns></returns>
         internal static String GetPeriodAndTypeTableQuery()
         {
             String query = String.Empty;
 
             query = @"select * from periodtype inner join period on                periodType.period_type_id = period.Period_type_ID 
-where period_status=1;";
+where period_status=0;";
 
             return query;
         }
@@ -293,7 +312,7 @@ where period_status=1;";
             String query = String.Empty;
 
             query = String.Format(@"select employee.name, employee.employeecode, employee.Taxcode,
-employee.rate, employee.hours,  
+employee.rate, payment.Hours,  
 period.start_date, period.end_date,
 category.category_name, category.category_Type, payment.amount
 from 
@@ -341,7 +360,17 @@ where period.period_ID = {0} and employee.staff_id = {1};", periodID, staffID);
         {
             String query = String.Empty;
 
-            query = @"select * from Employee;";
+            query = @"select * from Employee where deleted = 0;";
+
+            return query;
+        }
+
+
+        internal static String GetMaxStaffIDTableQuery()
+        {
+            String query = String.Empty;
+
+            query = @"select Count(Staff_ID) from Employee;";
 
             return query;
         }
@@ -350,7 +379,7 @@ where period.period_ID = {0} and employee.staff_id = {1};", periodID, staffID);
         {
             String query = String.Empty;
 
-            query = String.Format(@"select * from Employee where {0}={1};", Constants.EmployeeElements.Employee_ID, id);
+            query = String.Format(@"select * from Employee where {0}={1} and deleted = 0;", Constants.EmployeeElements.Employee_ID, id);
 
             return query;
         }
@@ -359,7 +388,7 @@ where period.period_ID = {0} and employee.staff_id = {1};", periodID, staffID);
         {
             String query = String.Empty;
 
-            query = @"select * from Category;";
+            query = @"select * from Category  where deleted = 0;";
 
             return query;
         }
@@ -460,15 +489,16 @@ where period.period_ID = {0} and employee.staff_id = {1};", periodID, staffID);
             return query;
         }
 
-        internal static String GetInsertPaymentTableQuery(int staffID, int periodID, int categoryID, decimal amount)
+        internal static String GetInsertPaymentTableQuery(int staffID, int periodID, int categoryID, decimal amount, decimal hours)
         {
             String query = String.Empty;
 
-            query = String.Format("insert into payment ({0},{1},{2},{3}) values ({4},{5},{6},{7});", Constants.PaymentElements.Payment_StaffID,
+            query = String.Format("insert into payment ({0},{1},{2},{3}, {4}) values ({5},{6},{7},{8},{9});", Constants.PaymentElements.Payment_StaffID,
                 Constants.PaymentElements.Payment_PeriodID,
                 Constants.PaymentElements.Payment_CategoryID,
                 Constants.PaymentElements.Payment_Amount,
-                staffID, periodID, categoryID, amount);
+                Constants.PaymentElements.Payment_Hours,
+                staffID, periodID, categoryID, amount, hours);
 
             return query;
         }
@@ -481,7 +511,7 @@ where period.period_ID = {0} and employee.staff_id = {1};", periodID, staffID);
         {
             String query = String.Empty;
 
-            query = string.Format(@"Delete from Category where Category_ID={0}",c.Category_ID);
+            query = string.Format(@"update Category set deleted = 1 where Category_ID={0}",c.Category_ID);
 
             return query;
         }
@@ -491,7 +521,7 @@ where period.period_ID = {0} and employee.staff_id = {1};", periodID, staffID);
         {
             String query = String.Empty;
 
-            query = string.Format(@"Delete from StaffCategory where Category_ID={1} AND Staff_ID={0};", staff_ID, c.Category_ID);
+            query = string.Format(@"Update StaffCategory set deleted = 1 where Category_ID={1} AND Staff_ID={0};", staff_ID, c.Category_ID);
 
             return query;
         }
@@ -500,13 +530,22 @@ where period.period_ID = {0} and employee.staff_id = {1};", periodID, staffID);
         {
             String query = String.Empty;
 
-            query = string.Format("delete from StaffCategory where staff_ID={0};", staffID);
+            query = string.Format("Update from StaffCategory set deleted = 1 where staff_ID={0};", staffID);
 
-            query += string.Format("delete from Employee where Staff_ID={0};", staffID);
+            query += string.Format("Update from Employee set deleted = 1 where Staff_ID={0};", staffID);
 
             return query;
         }
 
+
+        internal static String GetDeleteFromUser(int userID)
+        {
+            String query = String.Empty;
+
+            query = string.Format("delete from Users where ID={0};", userID);
+
+            return query;
+        }
 
 #endregion
 
@@ -551,6 +590,18 @@ where period.period_ID = {0} and employee.staff_id = {1};", periodID, staffID);
             String query = String.Empty;
 
             query = string.Format(@"update Period set period_status = 1 where Period_ID={0};", periodID);
+
+            return query;
+        }
+
+        internal static String GetUserUpdateFromID(int userID, string loginName, string pwd)
+        {
+            String query = String.Empty;
+
+            query = string.Format(@"update Users set {0} = '{1}', {2} = '{3}' where ID={4};", 
+                Constants.UserElements.LoginName,loginName,
+                Constants.UserElements.Password, pwd, 
+                userID);
 
             return query;
         }

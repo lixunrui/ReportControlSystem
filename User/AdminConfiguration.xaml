@@ -1,0 +1,43 @@
+﻿<Window x:Class="ReportControlSystem.AdminConfiguration"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="AdminConfiguration" Height="300" Width="500" WindowStyle="None">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        
+        <TextBlock Text="Configuration User" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"
+                   FontSize="24" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+        
+        <TextBlock Grid.Row="1" Grid.Column="0" Text="Login Name:" FontSize="21"
+                   VerticalAlignment="Center" HorizontalAlignment="Center"/>
+        <TextBox Name="txtLoginName"  Grid.Row="1" Grid.Column="1" FontSize="21" MinWidth="180"
+                   VerticalAlignment="Center" HorizontalAlignment="Left" BorderBrush="Black"/>
+
+
+        <TextBlock Grid.Row="2" Grid.Column="0" Text="Old Password:" FontSize="21"
+                   VerticalAlignment="Center" HorizontalAlignment="Center"/>
+        <PasswordBox Name="txtOldPWD"  Grid.Row="2" Grid.Column="1" FontSize="21" MinWidth="180"
+                   VerticalAlignment="Center" HorizontalAlignment="Left" BorderBrush="Black"
+                 LostFocus="Event_LostFocus_CheckPWD" GotFocus="Event_GotFocus_OldPWD"/>
+        
+        
+        <TextBlock Grid.Row="3" Grid.Column="0" Text="New Password:" FontSize="21"
+                   VerticalAlignment="Center" HorizontalAlignment="Center"/>
+        <PasswordBox Name="txtNewPWD" Grid.Row="3" Grid.Column="1" FontSize="21" MinWidth="180"
+                   VerticalAlignment="Center" HorizontalAlignment="Left" BorderBrush="Black"/>
+
+        <Button Grid.Row="4" Grid.Column="0" FontSize="21" Content="Cancel" Margin="21,3,21,9" Click="BTN_Cancel_Clicked"/>
+        <Button Name="btnUpdate"  Grid.Row="4" Grid.Column="1" FontSize="21" Content="Update" Margin="21,3,21,9" Click="BTN_Update_Clicked"/>
+    </Grid>
+</Window>

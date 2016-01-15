@@ -33,6 +33,8 @@ namespace ReportControlSystem
             : this()
         {
             _parent = form;
+            this.Owner = form;
+            this.WindowStartupLocation = WindowStartupLocation.CenterOwner;
             db_Manager = m;
             InitializeCustomComponent();
         }
@@ -70,9 +72,7 @@ namespace ReportControlSystem
 
             catAddingDia.Owner = this;
 
-            catAddingDia.Focus();
-
-            catAddingDia.Show();
+            catAddingDia.ShowDialog();
         }
 
         void NewCategoryPassed(object sender, ObjectPassedEventArgs e)
@@ -142,7 +142,6 @@ namespace ReportControlSystem
             }
         }
 
-       
 
         private void BTN_Back_Clicked(object sender, RoutedEventArgs e)
         {

@@ -2,7 +2,8 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="CategoryAddingDialog" ResizeMode="NoResize"  Height="350" Width="450" 
-        WindowStartupLocation="CenterOwner"  Closed="Windows_Closed">
+        WindowStartupLocation="CenterOwner"  Closed="Windows_Closed" WindowStyle="None" 
+        BorderBrush="Black" BorderThickness="3">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
@@ -23,13 +24,48 @@
 
         <TextBlock Grid.Row="1" Grid.Column="0" Text="Category Name:" FontSize="18" Margin="9" 
                    VerticalAlignment="Center"  TextWrapping="Wrap" HorizontalAlignment="Center"/>
-        <TextBox Name="txt_cagetory_name"  Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" FontSize="18" Text="Name" VerticalAlignment="Center" Margin="9" />
+        <TextBox Name="txt_cagetory_name"  Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" FontSize="18"  
+                 VerticalAlignment="Center" Margin="9">
+            <TextBox.Resources>
+                <VisualBrush x:Key="HelpBrush" TileMode="None" Opacity="0.3" Stretch="None" AlignmentX="Left">
+                    <VisualBrush.Visual>
+                        <TextBlock FontStyle="Italic" FontSize="15"  Text="Insert Category Name"/>
+                    </VisualBrush.Visual>
+                </VisualBrush>
+            </TextBox.Resources>
+            <TextBox.Style>
+                <Style TargetType="TextBox">
+                    <Style.Triggers>
+                        <Trigger Property="Text" Value="">
+                            <Setter Property="Background" Value="{StaticResource HelpBrush}"/>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBox.Style>
+        </TextBox>
         <Border Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" BorderBrush="Black" BorderThickness="3" Margin="3" CornerRadius="3"/>
 
         <TextBlock Grid.Row="2" Grid.Column="0" Text="Category Description:" FontSize="18" Margin="9" 
                    VerticalAlignment="Center" TextWrapping="Wrap" HorizontalAlignment="Center"/>
         <TextBox Name="txt_cagetory_des" TextWrapping="Wrap"  Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" 
-                 FontSize="18" Text="Name" VerticalAlignment="Center" Margin="9" />
+                 FontSize="18" VerticalAlignment="Center" Margin="9">
+            <TextBox.Resources>
+                <VisualBrush x:Key="HelpBrush" TileMode="None" Opacity="0.3" Stretch="None" AlignmentX="Left">
+                    <VisualBrush.Visual>
+                        <TextBlock FontStyle="Italic" FontSize="15"  Text="Option: Type Category Description"/>
+                    </VisualBrush.Visual>
+                </VisualBrush>
+            </TextBox.Resources>
+            <TextBox.Style>
+                <Style TargetType="TextBox">
+                    <Style.Triggers>
+                        <Trigger Property="Text" Value="">
+                            <Setter Property="Background" Value="{StaticResource HelpBrush}"/>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBox.Style>
+        </TextBox>
         <Border Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" BorderBrush="Black" BorderThickness="3" Margin="3" CornerRadius="3"/>
 
         <TextBlock Grid.Row="3" Grid.Column="0" Text="Category Type:" FontSize="18" Margin="9" 

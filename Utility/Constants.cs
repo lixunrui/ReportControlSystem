@@ -65,6 +65,14 @@ namespace ReportControlSystem
             internal static String Payment_PeriodID = "Period_ID";
             internal static String Payment_CategoryID = "Category_ID";
             internal static String Payment_Amount = "Amount";
+            internal static String Payment_Hours = "Hours";
+        }
+
+        internal static class UserElements
+        {
+            internal static String UserID = "ID";
+            internal static String LoginName = "Login_Name";
+            internal static String Password = "Password";
         }
     }
 }

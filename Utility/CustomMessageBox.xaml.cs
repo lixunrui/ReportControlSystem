@@ -20,42 +20,75 @@ namespace ReportControlSystem
     /// </summary>
     public partial class CustomMessageBox : Window
     {
-        
-        EventWaitHandle[] handler = new EventWaitHandle[1];
-        public CustomMessageBox()
+        internal int DialogIndex;
+        //EventWaitHandle[] handler = new EventWaitHandle[1];
+
+        ManualResetEvent resetEvent;
+
+        internal CustomMessageBox()
         {
             InitializeComponent();
         }
 
-        public CustomMessageBox(AutoResetEvent eventFlag, string message)
+        internal CustomMessageBox(Window parent, string message=null)
             : this()
         {
-            handler[0] = eventFlag;
+            this.Owner = parent;
             txtMsg.Text = message;
         }
 
-        //TODO: cannot display the message
-        internal void Show(String message)
+        internal CustomMessageBox(Window parent, string message, ManualResetEvent _resetEvent)
+            :this(parent,message)
         {
-            this.Show();
-            txtMsg.Text = message;
-            Thread monitor = new Thread(StartMonitor);
-            monitor.Start();
-            //monitor.Join();
-
+            resetEvent = _resetEvent;
         }
 
-        void StartMonitor()
+        internal CustomMessageBox(Window parent, string message, params string[] buttonText) 
+            : this(parent, message )
         {
-            int result = EventWaitHandle.WaitAny(handler, 6000);
+            DrawTheDialog(buttonText.Length, buttonText);
+        }
 
-            if (result == 0)
+        void DrawTheDialog(int buttonNum, params string[] buttonTexts)
+        {
+            for (int i = 0; i < buttonNum; i++ )
             {
-                this.Dispatcher.BeginInvoke((Action)(() =>
-                {
-                    this.Close();
-                }));
+                ColumnDefinition colDef = new ColumnDefinition();
+
+                GridLayout.ColumnDefinitions.Add(colDef);
+
+                Button btn = new Button();
+
+                btn.Content=buttonTexts[i];
+
+                btn.Tag = i;
+
+                btn.Margin = new Thickness(12,3,12,3);
+
+                btn.Click += BTN_Clicked;
+
+                Grid.SetColumn(btn, i);
+                Grid.SetRow(btn, 2);
+
+                GridLayout.Children.Add(btn);
             }
+        }
+
+        private void BTN_Clicked(object sender, RoutedEventArgs e)
+        {
+            Button btn = sender as Button;
+
+            if (btn != null)
+            {
+                DialogIndex = Convert.ToInt32(btn.Tag);
+                this.Close();
+            }
+        }
+
+        internal void WaitUntiReceiveSign()
+        {
+            resetEvent.WaitOne();
+            this.Close();
         }
     }
 }

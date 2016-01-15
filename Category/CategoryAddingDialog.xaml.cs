@@ -34,6 +34,8 @@ namespace ReportControlSystem
             : this()
         {
             _parent = form;
+            this.Owner = form;
+            this.WindowStartupLocation = WindowStartupLocation.CenterOwner;
             btnSave.Click += BTN_Save_Clicked;
         }
 

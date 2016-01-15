@@ -135,10 +135,18 @@
                 </GridView>
             </ListView.View>
         </ListView>
-        
-        
-        <Button Name="btnAddAll" Grid.Row="2" Grid.Column="0" Margin ="90,12,90,12" Content="Add All" FontSize="15" Click="BTN_Add_All_Clicked"/>
+       
+        <Grid Margin="3" Grid.Row="2" Grid.Column="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
 
+            <Button Grid.Column="0" Content="Back" FontSize="15" Margin="12" Click="BTN_Back_Clicked"/>
+            <Button Name="btnAddAll"  Grid.Column="1" Content="Add All" Margin="12" FontSize="15" Click="BTN_Add_All_Clicked"/>
+        </Grid>
+        
+        
         <Grid Grid.Row="2" Grid.Column="2" Margin="3">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>

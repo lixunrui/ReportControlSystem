@@ -58,6 +58,8 @@ namespace ReportControlSystem
             : this()
         {
             _parent = main;
+            this.Owner = main;
+            this.WindowStartupLocation = WindowStartupLocation.CenterOwner;
             db_Manager = _dbManager;
             currentPeriod = periodID;
             InitializeCustomComponents();
@@ -271,7 +273,11 @@ namespace ReportControlSystem
             FromListLocker.Set();
         }
 
-
+        private void BTN_Back_Clicked(object sender, RoutedEventArgs e)
+        {
+            _parent.Show();
+            this.Close();
+        }
         
 
         private void BTN_Generate_Reports_Clicked(object sender, RoutedEventArgs e)
@@ -280,15 +286,50 @@ namespace ReportControlSystem
             foreach (Staff s in toStaffs)
             {
                 DataTable table = db_Manager.GetDataTable(SQLStatement.GetPaymentDetailsFromStaffIDAndPeriodIDTableQuery(s.Staff_ID, currentPeriod));
-                if (table !=null && table.Rows.Count>0)
+                if (table != null && table.Rows.Count > 0)
                 {
                     tables.Add(table);
                 }
             }
 
+            CustomMessageBox cDialog = new CustomMessageBox(this, "Select Report Type:", "Detail Report", "Rough Report");
+
+            cDialog.ShowDialog();
+
+            int index = cDialog.DialogIndex;
+
+            //ManualResetEvent eventTrigger = new ManualResetEvent(false);
+            //cDialog = new CustomMessageBox(this, "Loading...", eventTrigger);
+
+            //Thread reportThread = new Thread(() => ShowWaitDialog(cDialog));
+
+            //reportThread.Start();
+
             ReportGenerator manager = new ReportGenerator(this.txtReport.Text);
-            manager.GenerateReport(tables);
+
+            if (index == 0) // detail report
+            {
+                manager.GenerateDetailedReport(tables);
+            }
+            else
+            {
+                manager.GenerateRoughReport(tables);
+            }
+
+            //Thread.Sleep(3000);
+
+            //cDialog.Close();
         }
 
+        //void ShowWaitDialog(CustomMessageBox cDialog)
+        //{
+        //    this.Dispatcher.BeginInvoke((Action)(() =>
+        //    {
+        //        cDialog.ShowDialog();
+
+        //        cDialog.WaitUntiReceiveSign();
+        //    }));
+
+        //}
     }
 }

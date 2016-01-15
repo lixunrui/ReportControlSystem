@@ -42,6 +42,8 @@ namespace ReportControlSystem
             :this()
         {
             _parnet = form;
+            this.Owner = form;
+            this.WindowStartupLocation = WindowStartupLocation.CenterOwner;
             db_manager = manager;
             formHasChanged = false;
             currentStaff = staff;
@@ -185,6 +187,16 @@ namespace ReportControlSystem
             {
                 currentStaff = new Staff(txtName.Text, txtEmployeeCode.Text, txtTaxCode.Text, Convert.ToDecimal(txtRate.Text), Convert.ToDecimal(txtHours.Text), txtBankCode.Text);
                 db_manager.LoadSQLTextFile(SQLStatement.GetInsertStaffTableQuery(currentStaff));
+                // update current staff ID
+                DataTable staffs = db_manager.GetDataTable(SQLStatement.GetMaxStaffIDTableQuery());
+                if (staffs != null && staffs.Rows.Count == 1)
+                {
+                    currentStaff.Staff_ID = Convert.ToInt32(staffs.Rows[0][0]);
+                }
+                else
+                {
+                    MessageBox.Show("Error when Adding staff");
+                }
             }
             else
             {

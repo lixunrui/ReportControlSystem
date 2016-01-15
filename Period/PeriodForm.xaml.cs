@@ -34,6 +34,8 @@ namespace ReportControlSystem
             :this()
         {
             _parent = main;
+            this.Owner = main;
+            this.WindowStartupLocation = WindowStartupLocation.CenterOwner;
             db_manager = db_Manager;
         }
 
@@ -87,7 +89,7 @@ namespace ReportControlSystem
             List<Period> periods = new List<Period>();
             foreach (DataRow r in periodTable.Rows)
             {
-                Period period = new Period(Convert.ToInt32(r[Constants.PeriodElements.Period_ID]), Convert.ToDateTime(r[Constants.PeriodElements.Start_Date]), Convert.ToDateTime(r[Constants.PeriodElements.End_Date]), Convert.ToInt32(r[Constants.PeriodElements.Period_Type_ID]), r[Constants.PeriodElements.Period_Type].ToString(), Convert.ToBoolean(r[Constants.PeriodElements.Period_Status]), Convert.ToInt32(r[Constants.PeriodElements.PeriodDateRange]));
+                Period period = new Period(Convert.ToInt32(r[Constants.PeriodElements.Period_ID]), Convert.ToDateTime(r[Constants.PeriodElements.Start_Date]).Date, Convert.ToDateTime(r[Constants.PeriodElements.End_Date]).Date, Convert.ToInt32(r[Constants.PeriodElements.Period_Type_ID]), r[Constants.PeriodElements.Period_Type].ToString(), Convert.ToBoolean(r[Constants.PeriodElements.Period_Status]), Convert.ToInt32(r[Constants.PeriodElements.PeriodDateRange]));
 
                 periods.Add(period);
             }
@@ -161,33 +163,5 @@ namespace ReportControlSystem
             _parent.Show();
             this.Close();
         }
-
-        //void ShowCalendarPanel(bool showPanel)
-        //{
-        //    Visibility visiblity = Visibility.Visible;
-
-        //    if (showPanel)
-        //    {
-        //        visiblity = Visibility.Visible;
-        //        PeriodList.IsEnabled = false;
-        //    }
-        //    else
-        //    {
-        //        visiblity = Visibility.Collapsed;
-        //        PeriodList.IsEnabled = true;
-        //    }
-
-        //    Calendar_Panel.Visibility = visiblity;
-        //}
-
-        //private void CalendarSelectionDatesChanged(object sender, SelectionChangedEventArgs e)
-        //{
-
-        //}
-
-        //private void BTN_Create_Period_Clicked(object sender, RoutedEventArgs e)
-        //{
-
-        //}
     }
 }

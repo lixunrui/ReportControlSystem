@@ -40,6 +40,9 @@ namespace ReportControlSystem
             :this()
         {
             _parent = form;
+            this.Owner = form;
+            this.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+
             period = new Period(DateTime.Now, DateTime.Now);
             
             db_manager = _db_manager;
@@ -86,7 +89,7 @@ namespace ReportControlSystem
             if (startDT == null)
             {
                 startDT = DateTime.Now;
-                period.Start_Date = startDT.Value;
+                period.Start_Date = startDT.Value.Date;
             }
             UpdateEndDate();
         }
@@ -100,7 +103,7 @@ namespace ReportControlSystem
             if (endDT == null)
             {
                 endDT = DateTime.Now;
-                period.End_Date = endDT.Value;
+                period.End_Date = endDT.Value.Date;
             }
         }
 
@@ -120,7 +123,7 @@ namespace ReportControlSystem
 
             dateEnd.SelectedDate = startDT.Value.AddDays(range);
 
-            period.End_Date = dateEnd.SelectedDate.Value;
+            period.End_Date = dateEnd.SelectedDate.Value.Date;
         }
 
         private void ComboxSelectionChangeed(object sender, SelectionChangedEventArgs e)
@@ -161,8 +164,8 @@ namespace ReportControlSystem
         {
             if (periodTypeID == 0)
             {
-               
-                newPeriodType.PeriodDateRange = (period.End_Date - period.Start_Date).Days;
+
+                newPeriodType.PeriodDateRange = (period.End_Date.Date - period.Start_Date.Date).Days;
 
                 if (txtTypeName.Text.Length > 0)
                 {

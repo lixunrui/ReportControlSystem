@@ -1,0 +1,29 @@
+﻿<Window x:Class="ReportControlSystem.AminAddForm"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="AminAddForm" Height="210" Width="500" WindowStyle="None">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        
+        <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" FontSize="21" 
+                   VerticalAlignment="Center" HorizontalAlignment="Center"
+                   Text="Insert password to delete:"/>
+        
+        <PasswordBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" MinWidth="120" Margin="21,3,21,3"
+                     BorderBrush="Black"/>
+
+        <Button Grid.Row="2" Grid.Column="0" Content="Cancel" FontSize="21" Margin="12,9,12,9"
+                Click="BTN_Cancel_Clicked"/>
+        <Button Grid.Row="2" Grid.Column="1" Content="Delete" FontSize="21" Margin="12,9,12,9"
+                Click="BTN_Delete_Clicked"/>
+    </Grid>
+</Window>

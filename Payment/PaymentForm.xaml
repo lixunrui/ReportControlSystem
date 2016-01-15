@@ -1,7 +1,7 @@
 ﻿<Window x:Class="ReportControlSystem.PaymentForm"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="PaymentForm" Height="660"  Width="750" Loaded="Windows_Loaded" Closed="Windows_Closed">
+        Title="PaymentForm" Height="660"  Width="750" Closed="Windows_Closed">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
@@ -58,12 +58,15 @@
         <Border BorderBrush="Black" BorderThickness="0,0,0,1" Grid.Row="4" Grid.Column="1" Margin="0,0,3,9"/>
 
         <GroupBox Header="Categories:" FontSize="15"  Grid.Row="1" Grid.Column="2" Grid.RowSpan="4" Margin="9" BorderBrush="Black" BorderThickness="1">
-            <StackPanel Name="PaymentPanel"  >
+            <ScrollViewer>
+                <StackPanel Name="PaymentPanel"  >
 
-            </StackPanel>
+                </StackPanel>
+            </ScrollViewer>
+            
         </GroupBox>
         
         <Button Content="Cancel" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" Margin="12"  FontSize="18" Click="BTN_Cancel_Clicked"/>
-        <Button Content="Save the Payment" Grid.Row="5" Grid.Column="2" Margin="12"  FontSize="18" Click="BTN_Save_Clicked"  />
+        <Button Name="btnSave"  Content="Save the Payment" Grid.Row="5" Grid.Column="2" Margin="12"  FontSize="18" Click="BTN_Save_Clicked"  />
     </Grid>
 </Window>

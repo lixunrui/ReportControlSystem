@@ -31,6 +31,9 @@ namespace ReportControlSystem
 
         List<Period> ClosedPeriods;
 
+        bool validPeriodTable;
+        bool validEmployeeTable;
+
         public PaymentForm()
         {
             InitializeComponent();
@@ -40,16 +43,18 @@ namespace ReportControlSystem
             : this()
         {
             _parent = form;
+            this.Owner = form;
+            this.WindowStartupLocation = WindowStartupLocation.CenterOwner;
             db_manager = manager;
-            
+            validPeriodTable = false;
+            validEmployeeTable = false;
             InitEmployeeCombox();
             InitPeriodCombox();
-        }
 
-        private void Windows_Loaded(object sender, RoutedEventArgs e)
-        {
-            //InitEmployeeCombox();
-            //InitPeriodCombox();
+            if (!validEmployeeTable || !validPeriodTable)
+            {
+                btnSave.IsEnabled = false;
+            }
         }
 
         private void InitPeriodCombox()
@@ -65,14 +70,15 @@ namespace ReportControlSystem
                 PeriodTypes.Add(Convert.ToInt32(r[Constants.PeriodElements.Period_ID]), r[Constants.PeriodTypesElements.Period_Type].ToString());
 
                 Period period = new Period(Convert.ToInt32(r[Constants.PeriodElements.Period_ID]),
-                    Convert.ToDateTime(r[Constants.PeriodElements.Start_Date]),
-                    Convert.ToDateTime(r[Constants.PeriodElements.End_Date]),
+                    Convert.ToDateTime(r[Constants.PeriodElements.Start_Date]).Date,
+                    Convert.ToDateTime(r[Constants.PeriodElements.End_Date]).Date,
                     Convert.ToInt32(r[Constants.PeriodElements.Period_Type_ID]),
                     r[Constants.PeriodElements.Period_Type].ToString(),
                     Convert.ToBoolean(r[Constants.PeriodElements.Period_Status]),
                     Convert.ToInt32(r[Constants.PeriodElements.PeriodDateRange]));
 
                 ClosedPeriods.Add(period);
+                validPeriodTable = true;
             }
 
             comPeriodType.ItemsSource = ClosedPeriods; // PeriodTypes.Values;
@@ -91,6 +97,7 @@ namespace ReportControlSystem
                 Staff staff = new Staff(Convert.ToInt32(r["Staff_ID"]), r["Name"].ToString(), r["EmployeeCode"].ToString(), r["TaxCode"].ToString(), Convert.ToDecimal(r["Rate"]));
 
                 Employees.Add(Convert.ToInt32(r["Staff_ID"]), r["Name"].ToString());
+                validEmployeeTable = true;
             }
             comEmployee.ItemsSource = Employees.Values;
             comEmployee.SelectedIndex = 0;
@@ -123,10 +130,8 @@ namespace ReportControlSystem
 
             while (reader.Read())
             {
-                LoadDate(Convert.ToDateTime(reader[Constants.PeriodElements.Start_Date]), Convert.ToDateTime(reader[Constants.PeriodElements.End_Date]));
+                LoadDate(Convert.ToDateTime(reader[Constants.PeriodElements.Start_Date]).Date, Convert.ToDateTime(reader[Constants.PeriodElements.End_Date]).Date);
             }
-            
-            
         }
 
         private void LoadDate(DateTime startDT, DateTime endDT)
@@ -201,6 +206,7 @@ namespace ReportControlSystem
                     TextBox txtContent = new TextBox();
                     txtContent.Margin = new Thickness(9,0,0,0);
                     txtContent.Name = String.Format("txt{0}", c.Category_Name.Replace(" ", String.Empty));
+                    txtContent.Text = "0";
 
                     //TODO: Validation Binding not working...
                     Binding validationBinding = new Binding("Text");
@@ -224,11 +230,13 @@ namespace ReportControlSystem
 
                     if (PaymentPanel.FindName(txtContent.Name) != null)
                         PaymentPanel.UnregisterName(txtContent.Name);
-                 
+
                     PaymentPanel.RegisterName(txtContent.Name, txtContent);
                     
 
                     PaymentPanel.Children.Add(border);
+
+                    
                 }
             }
         }
@@ -248,7 +256,7 @@ namespace ReportControlSystem
 
                 decimal currentAmount = Convert.ToDecimal(txtBox.Text);
 
-                db_manager.LoadSQLTextFile(SQLStatement.GetInsertPaymentTableQuery(currentSelectedStaff.Staff_ID, currentPeriodID, c.Category_ID, currentAmount));
+                db_manager.LoadSQLTextFile(SQLStatement.GetInsertPaymentTableQuery(currentSelectedStaff.Staff_ID, currentPeriodID, c.Category_ID, currentAmount, currentSelectedStaff.Hours));
 
                 db_manager.LoadSQLTextFile(SQLStatement.GetUpdateHoursForStaff(currentSelectedStaff.Staff_ID));
             }

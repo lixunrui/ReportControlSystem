@@ -62,46 +62,66 @@ namespace ReportControlSystem
 
             if (periodDetailTable == null || periodDetailTable.Rows.Count == 0)
             {
-                // create a message label to indicate there is no period type available
-                // and offer a button to create default period type table
-                RowDefinition periodRow1 = new RowDefinition();
+                // check if there is a period type available
+                DataTable periodTypeTable = dbManager.GetDataTable(SQLStatement.GetPeriodTypeTableQuery());
+                if (periodTypeTable == null || periodTypeTable.Rows.Count == 0)
+                {
+                    // means there is no period type available, we should restore the period type table
+                    // create a message label to indicate there is no period type available
+                    // and offer a button to create default period type table
+                    RowDefinition periodRow1 = new RowDefinition();
 
-                RowDefinition periodRow2 = new RowDefinition();    
+                    RowDefinition periodRow2 = new RowDefinition();
 
-                PeriodGrid.RowDefinitions.Add(periodRow1);
-                PeriodGrid.RowDefinitions.Add(periodRow2);
+                    PeriodGrid.RowDefinitions.Add(periodRow1);
+                    PeriodGrid.RowDefinitions.Add(periodRow2);
 
-                // add a label to the first row
-                TextBlock txtMsg = new TextBlock();
-                txtMsg.Text = @"Unable to detect any period type in the database, please either add a new period type from the Period button, or use the button below to create default period types: Daily, Weekly, Fortnightly, Monthly, Quarterly, Annually.";
-                txtMsg.TextWrapping = TextWrapping.Wrap;
-                txtMsg.FontSize = 15;
-                txtMsg.FontWeight = FontWeights.Bold;
-                txtMsg.Margin = new Thickness(12);
+                    // add a label to the first row
+                    TextBlock txtMsg = new TextBlock();
+                    txtMsg.Text = @"Unable to detect any period type in the database, please either add a new period type from the Period button, or use the button below to create default period types: Daily, Weekly, Fortnightly, Monthly, Quarterly, Annually.";
+                    txtMsg.TextWrapping = TextWrapping.Wrap;
+                    txtMsg.FontSize = 15;
+                    txtMsg.FontWeight = FontWeights.Bold;
+                    txtMsg.Margin = new Thickness(12);
 
-                btnPeriod.BorderBrush = Brushes.Red;
-                btnPeriod.BorderThickness = new Thickness(6); 
+                    btnPeriod.BorderBrush = Brushes.Red;
+                    btnPeriod.BorderThickness = new Thickness(6);
 
-                Grid.SetRow(txtMsg, 0);
+                    Grid.SetRow(txtMsg, 0);
 
-                PeriodGrid.Children.Add(txtMsg);
+                    PeriodGrid.Children.Add(txtMsg);
 
-                // add a button to the second row
-                Button btnAddDefault = new Button();
+                    // add a button to the second row
+                    Button btnAddDefault = new Button();
 
-                btnAddDefault.Content = @"Restore Default Period Types";
-                btnAddDefault.FontSize = 15;
+                    btnAddDefault.Content = @"Restore Default Period Types";
+                    btnAddDefault.FontSize = 15;
 
-                btnAddDefault.Foreground = Brushes.Red;
-                btnAddDefault.Margin = new Thickness(12);
+                    btnAddDefault.Foreground = Brushes.Red;
+                    btnAddDefault.Margin = new Thickness(12);
 
-                btnAddDefault.VerticalAlignment = VerticalAlignment.Top;
+                    btnAddDefault.VerticalAlignment = VerticalAlignment.Top;
 
-                btnAddDefault.Click += btnAddDefault_Click;
+                    btnAddDefault.Click += btnAddDefault_Click;
 
-                Grid.SetRow(btnAddDefault, 1);
+                    Grid.SetRow(btnAddDefault, 1);
 
-                PeriodGrid.Children.Add(btnAddDefault);
+                    PeriodGrid.Children.Add(btnAddDefault);
+                }
+                else
+                {
+                    // meaning there is no closed period, should only display message
+                    TextBlock txtMsg = new TextBlock();
+                    txtMsg.Text = @"In order to generate report, it requires a CLOSED period. Please go to the Period to create/close a period.";
+                    txtMsg.TextWrapping = TextWrapping.Wrap;
+                    txtMsg.FontSize = 15;
+                    txtMsg.FontWeight = FontWeights.Bold;
+                    txtMsg.Margin = new Thickness(12);
+                    txtMsg.VerticalAlignment = VerticalAlignment.Center;
+                    txtMsg.HorizontalAlignment = HorizontalAlignment.Center;
+
+                    PeriodGrid.Children.Add(txtMsg);
+                }
 
             }
             else
@@ -189,7 +209,7 @@ namespace ReportControlSystem
         {
             this.Hide();
 
-            Administrator adminControl = new Administrator(this);
+            Administrator adminControl = new Administrator(this, dbManager);
 
             adminControl.Owner = this;
 
@@ -245,11 +265,11 @@ namespace ReportControlSystem
 
             AutoResetEvent m = new AutoResetEvent(true);
 
-            CustomMessageBox auto = new CustomMessageBox(m, "asdasdasd");
+           // CustomMessageBox auto = new CustomMessageBox(m, "asdasdasd");
 
-            auto.Owner = this;
+           // auto.Owner = this;
 
-            auto.Show("asdasdasd");
+           // auto.Show("asdasdasd");
 
             result = dbManager.RestoreTable(DataBaseName.Period_Type);
 

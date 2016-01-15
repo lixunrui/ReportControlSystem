@@ -33,6 +33,8 @@ namespace ReportControlSystem
             : this()
         {
             _parnet = form;
+            this.Owner = form;
+            this.WindowStartupLocation = WindowStartupLocation.CenterOwner;
             db_manager = manager;
         }
 

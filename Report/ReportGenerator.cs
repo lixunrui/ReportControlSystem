@@ -37,36 +37,115 @@ namespace ReportControlSystem
         private Microsoft.Office.Interop.Excel.Range work_Area = null;
 
         String sheetName;
+        int maxColumnWidth = 9;
 
         internal ReportGenerator(String _sheetName = null)
         {
             CreateExcel(_sheetName);
         }
 
-        internal void GenerateReport(List<DataTable> tables)
+
+        internal void GenerateRoughReport(List<DataTable> tables)
         {
+            int startRow = 1;
             if (tables.Count > 0)
             {
                 // create report header
-                CreateHeader(1, 1, sheetName, 6, FontSizeLevel.ReportHeaderSize, true, null, Color.LightYellow);
+                CreateHeader(startRow++, 1, sheetName, 6, FontSizeLevel.ReportHeaderSize, true, null, Color.LightYellow);
+
+                // create period
+                CreateHeader(startRow, 1, "Period:", 0, FontSizeLevel.NameSize, true, Color.Red, null);
+                // add start time
+                AddData(startRow, 2, tables[0].Rows[0][5].ToString(), "yyyy/MM/dd", 0, true, false, Color.Red);
+
+                //add end time
+                AddData(startRow++, 4, tables[0].Rows[0][6].ToString(), "yyyy/MM/dd", 0, true, false, Color.Red);
             }
 
-            int currenttableIndex = 0;
-            int loop = 2;
+            startRow++;
+            
+            foreach (DataTable table in tables)
+            {
+                int startColumn = 1;
+                // create name header
+                CreateHeader(startRow, startColumn, Constants.EmployeeElements.Employee_Name, 0, FontSizeLevel.NormalFontSize, false, null, null);
+                AddData(startRow + 1, startColumn++, table.Rows[0][0].ToString(), null, 0, false, false, null);
+                
+
+                // add ID
+                CreateHeader(startRow, startColumn, Constants.EmployeeElements.Employee_Code, 0, FontSizeLevel.NormalFontSize, false, null, null);
+                AddData(startRow + 1, startColumn++, table.Rows[0][1].ToString(), null, 0, true, false, Color.Red);
+
+                // add rate
+
+                CreateHeader(startRow, startColumn, Constants.EmployeeElements.Employee_Rate, 0, FontSizeLevel.NormalFontSize, false, null, null);
+                AddData(startRow + 1, startColumn++, table.Rows[0][3].ToString(), null, 0, true, false, Color.Red);
+
+                // hours
+                CreateHeader(startRow, startColumn, Constants.EmployeeElements.Employee_Hours, 0, FontSizeLevel.NormalFontSize, false, null, null);
+                AddData(startRow + 1, startColumn++, table.Rows[0][4].ToString(), null, 0, true, false, Color.Red);
+
+                decimal netTotal = 0;
+
+                foreach (DataRow row in table.Rows)
+                {
+
+                    // add categories
+                    CreateHeader(startRow, startColumn, row[7].ToString(), 0, FontSizeLevel.NormalFontSize, false, null, null);
+                    if (Convert.ToBoolean(row[8]))
+                    {
+                        AddData(startRow+1, startColumn++, String.Format("{0:C}", row[9]), null, 0, true, true, null);
+                        netTotal += Convert.ToDecimal(row[9]);
+                    }
+                    else
+                    {
+                        AddData(startRow+1, startColumn++, String.Format("{0:C}", row[9]), null, 0, true, false, Color.Red);
+                        netTotal -= Convert.ToDecimal(row[9]);
+                    }
+                }
+
+                // add net 
+                CreateHeader(startRow, startColumn, "Net Pay:", 0, FontSizeLevel.NormalFontSize, true, null, Color.Red);
+
+                AddData(startRow + 1, startColumn++, String.Format("{0:C}", netTotal), null, 0, true, true, Color.Red);
+
+                startRow += 3;
+            }
+           
+        }
+
+        internal void GenerateDetailedReport(List<DataTable> tables)
+        {
+            int loop = 1;
+            if (tables.Count > 0)
+            {
+                // create report header
+                CreateHeader(loop++, 1, sheetName, 4, FontSizeLevel.ReportHeaderSize, true, null, Color.LightYellow);
+
+                // create period time
+                CreateHeader(loop, 1, "Period:", 0, FontSizeLevel.NameSize, true, Color.Red, null);
+                // add start time
+                AddData(loop, 2, tables[0].Rows[0][5].ToString(), "yyyy/MM/dd", 0, true, false, Color.Red);
+
+                //add end time
+                AddData(loop++, 4, tables[0].Rows[0][6].ToString(), "yyyy/MM/dd", 0, true, false, Color.Red);
+            }
+
+            loop++;
             foreach (DataTable table in tables)
             {
                 // create name header
-                CreateHeader(loop, 1, table.Rows[0][0].ToString(), 3, FontSizeLevel.NameSize, true, null, null);
+                CreateHeader(loop, 1, table.Rows[0][0].ToString(), 4, FontSizeLevel.NameSize, true, null, Color.LightSkyBlue);
                 loop += 2;
 
                 // add ID
                 CreateHeader(loop, 1, Constants.EmployeeElements.Employee_Code, 0, FontSizeLevel.NormalFontSize, false, null, null);
-                AddData(loop, 2, table.Rows[0][1].ToString(), null, 1, true, false, Color.Red);
+                AddData(loop, 2, table.Rows[0][1].ToString(), null, 0, true, false, Color.Red);
 
                 // add rate
                 loop++;
                 CreateHeader(loop, 1, Constants.EmployeeElements.Employee_Rate, 0, FontSizeLevel.NormalFontSize, false, null, null);
-                AddData(loop, 2, table.Rows[0][3].ToString(), null, 1, true, false, Color.Red);
+                AddData(loop, 2, table.Rows[0][3].ToString(), null, 0, true, false, Color.Red);
 
                 // hours
                 CreateHeader(loop, 4, Constants.EmployeeElements.Employee_Hours, 0, FontSizeLevel.NormalFontSize, false, null, null);
@@ -74,9 +153,8 @@ namespace ReportControlSystem
 
                 loop += 2;
                 // add payment details
-                CreateHeader(7, 1, "Payment Details:", 3, FontSizeLevel.PaymentHeaderSize, true, null, Color.LightYellow);
+                CreateHeader(loop, 1, "Payment Details:", 1, FontSizeLevel.PaymentHeaderSize, true, null, Color.LightYellow);
 
-                currenttableIndex++;
                 // TODO: create period header
                 // ???
 
@@ -149,8 +227,14 @@ namespace ReportControlSystem
 
             work_Area.Merge(HeaderLengthInCell);
 
-            work_Area.ColumnWidth = headerText.Length;
-
+            if (headerText.Length > maxColumnWidth)
+            {
+                maxColumnWidth = headerText.Length;
+            }
+ 
+            work_Area.ColumnWidth = maxColumnWidth;
+            
+           
             if (backGroundColor != null)
             {
                 work_Area.Interior.Color = backGroundColor; // cell background color
@@ -193,7 +277,13 @@ namespace ReportControlSystem
             work_Area.Font.Color = fontColor ?? Color.Black;
 
             work_Area.NumberFormat = format;
-            work_Area.ColumnWidth = data.Length;
+
+            if (data.Length > maxColumnWidth)
+            {
+                maxColumnWidth = data.Length;
+            }
+
+            work_Area.ColumnWidth = maxColumnWidth;
         }
 
         /// <summary>
