@@ -61,6 +61,11 @@ namespace ReportControlSystem
 
         private void Windows_Closed(object sender, EventArgs e)
         {
+            ExitMethod();
+        }
+
+        private void ExitMethod()
+        {
             _parent.Show();
             this.Close();
         }
@@ -84,21 +89,36 @@ namespace ReportControlSystem
 
         private void BTN_Delete_Clicked(object sender, RoutedEventArgs e)
         {
-            //Button btn = sender as Button;
 
-            //if (btn != null)
-            //{
-            //    if (Convert.ToInt32(btn.Tag) == 1) //default user
-            //    {
-            //        MessageBox.Show("Should not delete the default user");
-            //    }
-            //    else
-            //    {
-            //        db_manager.LoadSQLTextFile(SQLStatement.GetDeleteFromUser(Convert.ToInt32(btn.Tag));
-            //        LoadUserTable();
-            //    }
-          
-            //}
+            Button btn = sender as Button;
+
+            if (btn != null)
+            {
+                int id = Convert.ToInt32(btn.Tag);
+
+                AdminDeleteUserForm deleteForm = new AdminDeleteUserForm(this, db_manager, id);
+
+                deleteForm.deleteUserEvent += new EventHandler<ObjectPassedEventArgs>(UserDeleted);
+
+                deleteForm.ShowDialog();
+            }
         }
+
+        private void UserDeleted(object sender, ObjectPassedEventArgs e)
+        {
+            LoadUserTable();
+        }
+
+        private void BTN_Add_Clicked(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("This function has not been implemented yet. Will be added later.");
+        }
+
+        private void BTN_Back_Clicked(object sender, RoutedEventArgs e)
+        {
+            ExitMethod();
+        }
+
+      
     }
 }

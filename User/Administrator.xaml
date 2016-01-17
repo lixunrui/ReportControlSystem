@@ -41,7 +41,7 @@
             </ListView.View>
         </ListView>
 
-        <Button Grid.Row="1" Grid.Column="0" Content ="Back"  Margin="24,9,24,9" FontSize="24"/>
-        <Button Grid.Row="1" Grid.Column="1" Content ="Add"  Margin="24,9,24,9" FontSize="24"/>
+        <Button Grid.Row="1" Grid.Column="0" Content ="Back"  Margin="24,9,24,9" FontSize="24" Click="BTN_Back_Clicked"/>
+        <Button Grid.Row="1" Grid.Column="1" Content ="Add"  Margin="24,9,24,9" FontSize="24" Click="BTN_Add_Clicked"/>
     </Grid>
 </Window>

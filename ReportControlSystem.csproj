@@ -79,8 +79,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="AminAddForm.xaml.cs">
-      <DependentUpon>AminAddForm.xaml</DependentUpon>
+    <Compile Include="User\AdminDelUserForm.xaml.cs">
+      <DependentUpon>AdminDelUserForm.xaml</DependentUpon>
     </Compile>
     <Compile Include="User\AdminConfiguration.xaml.cs">
       <DependentUpon>AdminConfiguration.xaml</DependentUpon>
@@ -125,7 +125,7 @@
     <Compile Include="Staff\Staff.cs" />
     <Compile Include="User\User.cs" />
     <Compile Include="Utility\Validation.cs" />
-    <Page Include="AminAddForm.xaml">
+    <Page Include="User\AdminDelUserForm.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
