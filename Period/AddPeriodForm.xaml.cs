@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+//using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -12,6 +12,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Data.SQLite;
+using Microsoft.Windows.Controls;
+
+
 
 namespace ReportControlSystem
 {
@@ -25,9 +28,11 @@ namespace ReportControlSystem
         Int32 periodTypeID;
         DateTime? startDT;
         DateTime? endDT;
-        Dictionary<int, string> periodTypes;
+        List<PeriodType> periodTypes;
         Period period;
         PeriodType newPeriodType;
+        DatePicker dateStart;
+        DatePicker dateEnd;
 
         internal EventHandler<ObjectPassedEventArgs> NewPeriodAddedEvent;
 
@@ -36,7 +41,8 @@ namespace ReportControlSystem
             InitializeComponent();
         }
 
-        internal AddPeriodForm(Window form, DatabaseManager _db_manager, Dictionary<int, string> _periodTypes)
+        //internal AddPeriodForm(Window form, DatabaseManager _db_manager, Dictionary<int, string> _periodTypes)
+        internal AddPeriodForm(Window form, DatabaseManager _db_manager, List<PeriodType> _periodTypes)
             :this()
         {
             _parent = form;
@@ -46,6 +52,8 @@ namespace ReportControlSystem
             period = new Period(DateTime.Now, DateTime.Now);
             
             db_manager = _db_manager;
+
+            InitDatePickers();
             
             dateStart.SelectedDate = DateTime.Now;
             dateEnd.SelectedDate = DateTime.Now;
@@ -55,13 +63,12 @@ namespace ReportControlSystem
             periodTypeID = 0;
         }
 
-        void InitComBoxPeriodType(Dictionary<int, string> _periodTypes)
+        void InitComBoxPeriodType(List<PeriodType> _periodTypes)
         {
-            _periodTypes.Add(0, "Custom");
-
             periodTypes = _periodTypes;
 
-            comboxPeriodType.ItemsSource = _periodTypes.Values;
+            comboxPeriodType.ItemsSource = _periodTypes; //_periodTypes.Values;
+            //comboxPeriodType.DataContext = _periodTypes;
 
             comboxPeriodType.SelectedIndex = 0;
 
@@ -133,24 +140,23 @@ namespace ReportControlSystem
             var item = box.SelectedValue;
 
             // find the key from
-            int key = periodTypes.FirstOrDefault(x => x.Value.Equals(item.ToString())).Key;
+            //int key = periodTypes.FirstOrDefault(x => x.Value.Equals(item.ToString())).Key;
 
-            periodTypeID = key;
+            periodTypeID = (box.SelectedItem as PeriodType).Period_Type_ID;
+
+            newPeriodType = new PeriodType();
 
             if (periodTypeID > 0)
             {
-                period.Period_Type_ID = periodTypeID;
                 UpdateEndDate();
                 UpdateDatePickerStatus(false);
                 txtSelectedTypeName.Text = "Selected Type Name:";
-                txtTypeName.Text = item.ToString();
+                txtTypeName.Text = (box.SelectedItem as PeriodType).Period_Type;
             }
             else
             {
-                newPeriodType = new PeriodType("Custom Period Type");
                 UpdateDatePickerStatus(true);
                 txtSelectedTypeName.Text = "Insert Type Name:";
-                txtTypeName.IsReadOnly = false;
             }
             
         }
@@ -162,23 +168,27 @@ namespace ReportControlSystem
 
         private void BTN_Create_Clicked(object sender, RoutedEventArgs e)
         {
-            if (periodTypeID == 0)
-            {
-
+           // if (periodTypeID == 0)
+           // {
                 newPeriodType.PeriodDateRange = (period.End_Date.Date - period.Start_Date.Date).Days;
 
                 if (txtTypeName.Text.Length > 0)
                 {
                     newPeriodType.Period_Type = txtTypeName.Text;
                 }
+                else
+                {
+                    newPeriodType.Period_Type = "New Period Type";
+                }
 
                 db_manager.LoadSQLTextFile(SQLStatement.GetInsertPeriodTypeTableQuery(newPeriodType));
+
                 SQLiteDataReader reader = db_manager.ExecuteSQLTextFile(SQLStatement.GetMaxPeriodTypeIDQuery());
                 while (reader.Read())
                 {
                     period.Period_Type_ID = Convert.ToInt32(reader[0]);
                 }
-            }
+          //  }
 
             db_manager.LoadSQLTextFile(SQLStatement.GetInsertPeriodTableQuery(period));
 
@@ -193,6 +203,41 @@ namespace ReportControlSystem
         {
             _parent.Show();
             this.Close();
+        }
+
+
+        private void InitDatePickers()
+        {
+            dateStart = new DatePicker();
+            dateStart.Height = 45;
+            dateStart.FontSize = 18;
+            dateStart.Focusable = false;
+            dateStart.DisplayDate = DateTime.Now;
+            dateStart.BorderBrush = Brushes.Black;
+            dateStart.BorderThickness = new Thickness(1);
+
+            dateStart.SelectedDateChanged += StartDateChanged;
+            dateStart.SelectedDateFormat = DatePickerFormat.Short;
+
+            Grid.SetRow(dateStart, 2);
+            Grid.SetColumn(dateStart, 1);
+
+            dateEnd = new DatePicker();
+            dateEnd.Height = 45;
+            dateEnd.FontSize = 18;
+            dateEnd.Focusable = false;
+            dateEnd.DisplayDate = DateTime.Now;
+
+            dateEnd.BorderBrush = Brushes.Black;
+            dateEnd.BorderThickness = new Thickness(1);
+
+            dateEnd.SelectedDateChanged += EndDateChanged;
+            dateStart.SelectedDateFormat = DatePickerFormat.Short;
+            Grid.SetRow(dateEnd, 3);
+            Grid.SetColumn(dateEnd, 1);
+
+            GridLayout.Children.Add(dateStart);
+            GridLayout.Children.Add(dateEnd);
         }
 
     }

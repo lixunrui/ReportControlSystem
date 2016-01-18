@@ -3,9 +3,9 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="AddPeriodForm" Height="660"  Width="750"
         WindowStartupLocation="CenterScreen"  ResizeMode="NoResize" Closed="Windows_Closed" 
-        BorderBrush="Black" BorderThickness="3" WindowStyle ="None"
+        BorderBrush="Black" BorderThickness="3" WindowStyle ="None" 
         >
-    <Grid Margin="24">
+    <Grid Margin="24" Name="GridLayout">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="*"/>
@@ -19,23 +19,35 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         
-        <TextBlock Text="Period Type:" FontSize="18" VerticalAlignment="Center" Margin="24"/>
-        <ComboBox Name="comboxPeriodType"  Grid.Row="0" Grid.Column="1" MaxHeight="45" 
-                      MinWidth="200" Margin="0,0,36,0" ItemsSource="{Binding}" 
-                  SelectionChanged="ComboxSelectionChangeed"/>
+        <TextBlock Text="Period Time Range:" FontSize="18" VerticalAlignment="Center" Margin="24"/>
+        <ComboBox Name="comboxPeriodType"  Grid.Row="0" Grid.Column="1" MaxHeight="45" FontSize="18"
+                      MinWidth="200" Margin="0,0,36,0"  ItemsSource="{Binding}" DisplayMemberPath="PeriodDateRange"
+                  SelectionChanged="ComboxSelectionChangeed" />
 
-        <TextBlock Name="txtSelectedTypeName" Grid.Row="1" Grid.Column="0" Text="" FontSize="18" VerticalAlignment="Center" Margin="24"/>
-        <TextBox Name ="txtTypeName" Grid.Row="1" Grid.Column="1" Text="" FontSize="18" VerticalAlignment="Center" Margin="0,0,36,0" MaxHeight="45"/>
+        <TextBlock Name="txtSelectedTypeName" Grid.Row="1" Grid.Column="0" Text="" FontSize="18" VerticalAlignment="Center" Margin="24" 
+                   Width="90" TextWrapping="Wrap"/>
+        <TextBox Name ="txtTypeName" Grid.Row="1" Grid.Column="1" Text="" FontSize="18" VerticalAlignment="Center" 
+                 Margin="0,0,36,0" MaxHeight="45" BorderBrush="Black" BorderThickness="1"/>
 
         <TextBlock Text="Start Date:" Grid.Row="2" Grid.Column="0"  
                    FontSize="18" VerticalAlignment="Center" Margin="24"/>
+        <!--<WrapPanel Grid.Row="2" Grid.Column="1" Margin="0,24,0,24">
+            <TextBox Name="dateStart" IsReadOnly="True" Text="" Margin="0,24,36,24" VerticalAlignment="Center" HorizontalAlignment="Left" 
+                     Width="210" Height="30"/>
+            <
+        </WrapPanel>-->
+
+        <!-- available since .Net 4.0
         <DatePicker Name="dateStart"  Grid.Row="2" Grid.Column="1" Margin="0,0,36,0" VerticalAlignment="Center" 
                     SelectedDateChanged="StartDateChanged" FontSize="18"/>
+       -->
 
         <TextBlock Text="End Date:" Grid.Row="3" Grid.Column="0"  
                    FontSize="18" VerticalAlignment="Center" Margin="24"/>
+        <!-- available since .Net 4.0
         <DatePicker Name="dateEnd"  Grid.Row="3" Grid.Column="1" Margin="0,0,36,0" VerticalAlignment="Center" 
                     SelectedDateChanged="EndDateChanged" FontSize="18"/>
+        -->
 
         <Grid Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2">
             <Grid.ColumnDefinitions>

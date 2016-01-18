@@ -146,7 +146,7 @@
                            VerticalAlignment="Center" HorizontalAlignment="Center"
                        Margin="0,0,0,0"/>
                     <TextBox Name="txt_username"  Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" FontSize="15" 
-                             VerticalAlignment="Center"  
+                             VerticalAlignment="Center"  BorderBrush="Black" BorderThickness="1"
                          IsHitTestVisible="True" Text="" Margin="10,0,10,0" Focusable="True"
                              ToolTip="Enter the name of the authorized user" TabIndex="0" />
 
@@ -155,7 +155,7 @@
                            VerticalAlignment="Center" HorizontalAlignment="Center"
                        Margin="0,0,0,0"/>
                     <PasswordBox Name="txt_password" Password=""  Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" FontSize="15"
-                                 VerticalAlignment="Center" 
+                                 VerticalAlignment="Center"  BorderBrush="Black" BorderThickness="1"
                          IsHitTestVisible="True" Margin="10,0,10,0" ToolTip="Enter the password of the authorized user" TabIndex="1"/>
 
                 </Grid>

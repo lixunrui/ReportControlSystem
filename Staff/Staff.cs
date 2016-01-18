@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+//using System.Threading.Tasks;
 
 namespace ReportControlSystem
 {
@@ -43,12 +43,12 @@ namespace ReportControlSystem
             set { _rate = value; }
         }
 
-        decimal _hours;
-        public decimal Hours
-        {
-            get { return _hours; }
-            set { _hours = value; }
-        }
+        //decimal _hours;
+        //public decimal Hours
+        //{
+        //    get { return _hours; }
+        //    set { _hours = value; }
+        //}
 
         String _bankCode;
         public System.String BankCode
@@ -65,16 +65,11 @@ namespace ReportControlSystem
             _rate = rate;
         }
 
-        internal Staff(String name, String employeeCode, String taxCode, decimal rate, decimal hours)
-            : this(name, employeeCode, taxCode, rate)
-        {
-            _hours = hours;
-        }
 
-        internal Staff(String name, String employeeCode, String taxCode, decimal rate, decimal hours, String bankCode)
+        internal Staff(String name, String employeeCode, String taxCode, decimal rate, String bankCode)
             : this(name, employeeCode, taxCode, rate)
         {
-            _hours = hours;
+           
             _bankCode = bankCode;
         }
 
@@ -84,10 +79,10 @@ namespace ReportControlSystem
             _staff_ID = ID;
         }
 
-        internal Staff(Int32 ID, String name, String employeeCode, String taxCode, decimal rate, decimal hours, String bankCode)
+        internal Staff(Int32 ID, String name, String employeeCode, String taxCode, decimal rate,  String bankCode)
             : this(ID, name, employeeCode, taxCode, rate)
         {
-            _hours = hours;
+          
             _bankCode = bankCode;
         }
 

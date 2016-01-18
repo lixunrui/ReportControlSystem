@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+//using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -22,8 +22,9 @@ namespace ReportControlSystem
     {
         MainWindow _parent;
         DatabaseManager db_manager;
-        Dictionary<Int32, String> PeriodTypes;
+        //Dictionary<Int32, String> PeriodTypes;
         DateTime selectedDate;
+        List<PeriodType> PeriodTypes;
 
         public PeriodForm()
         {
@@ -57,16 +58,21 @@ namespace ReportControlSystem
         {
             DataTable periodTypeTable = db_manager.GetDataTable(SQLStatement.GetPeriodTypeTableQuery());
 
-            PeriodTypes = new Dictionary<Int32, String>();
+           // PeriodTypes = new Dictionary<Int32, String>();
+            PeriodTypes = new List<PeriodType>();
 
-            PeriodTypes.Add(0, "All Types");
+            PeriodTypes.Add(new PeriodType(0, "All Types",0));
 
             foreach (DataRow r in periodTypeTable.Rows)
             {
-                PeriodTypes.Add(Convert.ToInt32(r[Constants.PeriodTypesElements.Period_Type_ID]),r[Constants.PeriodTypesElements.Period_Type].ToString());   
+                //PeriodTypes.Add(Convert.ToInt32(r[Constants.PeriodTypesElements.Period_Type_ID]),r[Constants.PeriodTypesElements.Period_Type].ToString());
+                PeriodTypes.Add(new PeriodType(
+                    Convert.ToInt32(r[Constants.PeriodTypesElements.Period_Type_ID]), 
+                    r[Constants.PeriodTypesElements.Period_Type].ToString(),
+                    Convert.ToInt32(r[Constants.PeriodTypesElements.Range])));
             }
 
-            comboxPeriodType.ItemsSource = PeriodTypes.Values;
+            comboxPeriodType.ItemsSource = PeriodTypes; //PeriodTypes.Values;
             comboxPeriodType.SelectedIndex = 0;
         }
 
@@ -81,7 +87,9 @@ namespace ReportControlSystem
             }
             else
             {
-                int key = PeriodTypes.FirstOrDefault(x => x.Value.Equals(comboxPeriodType.SelectedValue.ToString())).Key;
+                //int key = PeriodTypes.FirstOrDefault(x => x.Value.Equals(comboxPeriodType.SelectedValue.ToString())).Key;
+
+                int key = (comboxPeriodType.SelectedItem as PeriodType).Period_Type_ID;
 
                 periodTable = db_manager.GetDataTable(SQLStatement.GetPeriodFromTypeID(key));
             }
@@ -141,7 +149,8 @@ namespace ReportControlSystem
 
         private void BTN_Add_New_Period(object sender, RoutedEventArgs e)
         {
-            PeriodTypes.Remove(0);
+            //PeriodTypes.Remove(0);
+            PeriodTypes.RemoveAt(0);
 
             AddPeriodForm newForm = new AddPeriodForm(this, db_manager, PeriodTypes);
 

@@ -8,13 +8,14 @@ using System.Windows;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("ReportControlSystem")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("This software is developed by Raymond for Mia.")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Microsoft")]
+[assembly: AssemblyCompany("Raymond")]
 [assembly: AssemblyProduct("ReportControlSystem")]
 [assembly: AssemblyCopyright("Copyright © Raymond 2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
+
 
 // Setting ComVisible to false makes the types in this assembly not visible 
 // to COM components.  If you need to access a type in this assembly from 
@@ -51,5 +52,5 @@ using System.Windows;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.2.22.0")]
-[assembly: AssemblyFileVersion("1.2.22.0")]
+[assembly: AssemblyVersion("1.2.24.0")]
+[assembly: AssemblyFileVersion("1.2.24.0")]

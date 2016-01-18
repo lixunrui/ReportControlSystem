@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+//using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -59,14 +59,19 @@ namespace ReportControlSystem
 
             foreach (DataRow r in staffTable.Rows)
             {
-                Staff c = new Staff(Convert.ToInt32(r["Staff_ID"]), r["Name"].ToString(), r["EmployeeCode"].ToString(), r["TaxCode"].ToString(), Convert.ToDecimal(r["Rate"]), Convert.ToDecimal(r["Hours"]), r["BankCode"].ToString());
+                Staff c = new Staff(Convert.ToInt32(r["Staff_ID"]), r["Name"].ToString(), r["EmployeeCode"].ToString(), r["TaxCode"].ToString(), Convert.ToDecimal(r["Rate"]), r["BankCode"].ToString());
                 staff.Add(c);
+                
             }
 
             EmployeeListView.ItemsSource = staff;
 
             // default to the first one
-            currentStaff = staff[0];
+            if (staff.Count>0)
+            {
+                currentStaff = staff[0];
+            }
+
         }
 
         private void BTN_UpdateStaff_Clicked(object sender, RoutedEventArgs e)
@@ -125,13 +130,6 @@ namespace ReportControlSystem
 
         private void Employee_SelectedChanged(object sender, SelectionChangedEventArgs e)
         {
-            //foreach (Staff s in e.RemovedItems)
-            //{
-            //    if (currentStaff==s)
-            //    {
-            //    }
-            //}
-
             foreach (Staff s in e.AddedItems)
             {
                 if (currentStaff != s)

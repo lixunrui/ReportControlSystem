@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using System.Data.SQLite;
+//using System.Threading.Tasks;
+
 using System.Data;
 using System.IO;
-
+using System.Diagnostics;
+using System.Data.SQLite;
 
 namespace ReportControlSystem
 {
@@ -66,7 +67,16 @@ namespace ReportControlSystem
                 _dbStatus = DataBaseStatus.DatabaseOK;
             }
 
-            m_dbConnection = new SQLiteConnection();
+            try
+            {
+                m_dbConnection = new SQLiteConnection();
+            }
+            catch (System.Exception ex)
+            {
+                Debug.Print(ex.InnerException.Source);
+                throw new Exception(ex.Message, ex.InnerException);
+            }
+            
 
             string connectionString = string.Format("Data Source={0};Version=3;MultipleActiveResultSets=true;", dbpath);
 

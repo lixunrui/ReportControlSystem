@@ -20,7 +20,7 @@
             <TextBlock Text="Period Types:" FontSize="21" FontWeight="Bold" Margin="12,36,12,9" 
                        VerticalAlignment="Center" HorizontalAlignment="Center"/>
 
-            <ComboBox ItemsSource="{Binding}" Name="comboxPeriodType"  Margin="12,36,12,9" MaxHeight="45" 
+            <ComboBox ItemsSource="{Binding}" DisplayMemberPath="Period_Type" Name="comboxPeriodType"  Margin="12,36,12,9" MaxHeight="45" 
                       MinWidth="200"
                   FontSize="21" SelectionChanged="ComboBoxSelectedChanged"/>
             </DockPanel>

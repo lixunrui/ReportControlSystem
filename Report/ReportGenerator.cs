@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+//using System.Threading.Tasks;
 using System.Drawing;
 using System.Data;
 
@@ -12,7 +12,7 @@ using System.Data;
     employee.employeecode,  1
     employee.Taxcode, 		2
     employee.rate,			3
-    employee.hours,			4  
+    payment.hours,			4  
     period.start_date, 		5
     period.end_date, 		6
     category.category_name, 7 
@@ -74,16 +74,16 @@ namespace ReportControlSystem
 
                 // add ID
                 CreateHeader(startRow, startColumn, Constants.EmployeeElements.Employee_Code, 0, FontSizeLevel.NormalFontSize, false, null, null);
-                AddData(startRow + 1, startColumn++, table.Rows[0][1].ToString(), null, 0, true, false, Color.Red);
+                AddData(startRow + 1, startColumn++, table.Rows[0][1].ToString(), null, 0, false, false, Color.Red);
 
                 // add rate
 
                 CreateHeader(startRow, startColumn, Constants.EmployeeElements.Employee_Rate, 0, FontSizeLevel.NormalFontSize, false, null, null);
-                AddData(startRow + 1, startColumn++, table.Rows[0][3].ToString(), null, 0, true, false, Color.Red);
+                AddData(startRow + 1, startColumn++, table.Rows[0][3].ToString(), null, 0, false, false, Color.Red);
 
                 // hours
-                CreateHeader(startRow, startColumn, Constants.EmployeeElements.Employee_Hours, 0, FontSizeLevel.NormalFontSize, false, null, null);
-                AddData(startRow + 1, startColumn++, table.Rows[0][4].ToString(), null, 0, true, false, Color.Red);
+                CreateHeader(startRow, startColumn, Constants.PaymentElements.Payment_Hours, 0, FontSizeLevel.NormalFontSize, false, null, null);
+                AddData(startRow + 1, startColumn++, table.Rows[0][4].ToString(), null, 0, false, false, Color.Red);
 
                 decimal netTotal = 0;
 
@@ -135,7 +135,7 @@ namespace ReportControlSystem
             foreach (DataTable table in tables)
             {
                 // create name header
-                CreateHeader(loop, 1, table.Rows[0][0].ToString(), 4, FontSizeLevel.NameSize, true, null, Color.LightSkyBlue);
+                CreateHeader(loop, 1, table.Rows[0][0].ToString(), 3, FontSizeLevel.NameSize, true, null, Color.LightSkyBlue);
                 loop += 2;
 
                 // add ID
@@ -148,8 +148,8 @@ namespace ReportControlSystem
                 AddData(loop, 2, table.Rows[0][3].ToString(), null, 0, true, false, Color.Red);
 
                 // hours
-                CreateHeader(loop, 4, Constants.EmployeeElements.Employee_Hours, 0, FontSizeLevel.NormalFontSize, false, null, null);
-                AddData(loop, 5, table.Rows[0][4].ToString(), null, 0, true, false, Color.Red);
+                CreateHeader(loop, 3, Constants.PaymentElements.Payment_Hours, 0, FontSizeLevel.NormalFontSize, false, null, null);
+                AddData(loop, 4, table.Rows[0][4].ToString(), null, 0, true, false, Color.Red);
 
                 loop += 2;
                 // add payment details
@@ -237,7 +237,7 @@ namespace ReportControlSystem
            
             if (backGroundColor != null)
             {
-                work_Area.Interior.Color = backGroundColor; // cell background color
+                work_Area.Interior.Color = System.Drawing.ColorTranslator.ToOle(backGroundColor.Value); // cell background color
             }
             if (isBold)
             {
@@ -246,7 +246,15 @@ namespace ReportControlSystem
             
             work_Area.Font.Size = (int)fontLevel; // font size
 
-            work_Area.Font.Color = fontColor ?? Color.Black; // font color
+            if (fontColor == null)
+            {
+                work_Area.Font.Color = System.Drawing.ColorTranslator.ToOle(Color.Black); // font color
+            }
+            else
+            {
+                work_Area.Font.Color = System.Drawing.ColorTranslator.ToOle(fontColor.Value);
+            }
+            
 
             if ((int)fontLevel > (int)FontSizeLevel.NormalFontSize)
             {
@@ -274,7 +282,14 @@ namespace ReportControlSystem
                 work_Area.Font.Bold = true;
             }
 
-            work_Area.Font.Color = fontColor ?? Color.Black;
+            if (fontColor == null)
+            {
+                work_Area.Font.Color = System.Drawing.ColorTranslator.ToOle(Color.Black);
+            }
+            else
+            {
+                work_Area.Font.Color = System.Drawing.ColorTranslator.ToOle(fontColor.Value);
+            }
 
             work_Area.NumberFormat = format;
 

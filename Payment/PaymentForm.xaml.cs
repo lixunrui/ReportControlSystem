@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+//using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -23,13 +23,13 @@ namespace ReportControlSystem
     {
         Window _parent;
         DatabaseManager db_manager;
-        Dictionary<Int32, String> PeriodTypes;
-        Dictionary<Int32, String> Employees;
+
         Staff currentSelectedStaff;
         List<Category> staffCategories;
         Int32 currentPeriodID;
 
         List<Period> ClosedPeriods;
+        List<Staff> Employees;
 
         bool validPeriodTable;
         bool validEmployeeTable;
@@ -61,14 +61,10 @@ namespace ReportControlSystem
         {
             DataTable periodTypeTable = db_manager.GetDataTable(SQLStatement.GetPeriodAndTypeTableQuery());
 
-            PeriodTypes = new Dictionary<Int32, String>();
-
             ClosedPeriods = new List<Period>();
 
             foreach (DataRow r in periodTypeTable.Rows)
             {
-                PeriodTypes.Add(Convert.ToInt32(r[Constants.PeriodElements.Period_ID]), r[Constants.PeriodTypesElements.Period_Type].ToString());
-
                 Period period = new Period(Convert.ToInt32(r[Constants.PeriodElements.Period_ID]),
                     Convert.ToDateTime(r[Constants.PeriodElements.Start_Date]).Date,
                     Convert.ToDateTime(r[Constants.PeriodElements.End_Date]).Date,
@@ -81,7 +77,7 @@ namespace ReportControlSystem
                 validPeriodTable = true;
             }
 
-            comPeriodType.ItemsSource = ClosedPeriods; // PeriodTypes.Values;
+            comPeriodType.ItemsSource = ClosedPeriods; 
             
             comPeriodType.SelectedIndex = 0;
         }
@@ -90,27 +86,27 @@ namespace ReportControlSystem
         {
             DataTable staffTable = db_manager.GetDataTable(SQLStatement.GetStaffTableQuery());
 
-            Employees = new Dictionary<Int32, String>();
+            Employees = new List<Staff>();
 
             foreach (DataRow r in staffTable.Rows)
             {
                 Staff staff = new Staff(Convert.ToInt32(r["Staff_ID"]), r["Name"].ToString(), r["EmployeeCode"].ToString(), r["TaxCode"].ToString(), Convert.ToDecimal(r["Rate"]));
 
-                Employees.Add(Convert.ToInt32(r["Staff_ID"]), r["Name"].ToString());
+                Employees.Add(staff);
                 validEmployeeTable = true;
             }
-            comEmployee.ItemsSource = Employees.Values;
+            comEmployee.ItemsSource = Employees;
             comEmployee.SelectedIndex = 0;
 
         }
 
-        void ResetEmployeeTotalHours(int employeeID)
-        {
-            if (currentSelectedStaff != null)
-            {
-                db_manager.LoadSQLTextFile(SQLStatement.GetUpdateHoursForStaff(currentSelectedStaff.Staff_ID));
-            }
-        }
+        //void ResetEmployeeTotalHours(int employeeID)
+        //{
+        //    if (currentSelectedStaff != null)
+        //    {
+        //        db_manager.LoadSQLTextFile(SQLStatement.GetUpdateHoursForStaff(currentSelectedStaff.Staff_ID));
+        //    }
+        //}
 
         private void Windows_Closed(object sender, EventArgs e)
         {
@@ -144,14 +140,12 @@ namespace ReportControlSystem
         {
             ComboBox cmb = sender as ComboBox;
 
-            var item = cmb.SelectedValue;
+            Staff item = cmb.SelectedItem as Staff;
 
-            int key = Employees.FirstOrDefault(x => x.Value.Equals(item.ToString())).Key;
-
-            if (key > 0)
+            if (item.Staff_ID > 0)
             {
                 List<Int32> categoryID = new List<Int32>();
-                SQLiteDataReader reader = db_manager.ExecuteSQLTextFile(SQLStatement.GetStaffFromIDQuery(key));
+                SQLiteDataReader reader = db_manager.ExecuteSQLTextFile(SQLStatement.GetStaffFromIDQuery(item.Staff_ID));
                 while (reader.Read())
                 {
                     currentSelectedStaff = new Staff(
@@ -160,14 +154,14 @@ namespace ReportControlSystem
                         reader[Constants.EmployeeElements.Employee_Code].ToString(),
                         reader[Constants.EmployeeElements.Employee_TaxCode].ToString(),
                         Convert.ToDecimal(reader[Constants.EmployeeElements.Employee_Rate]),
-                        Convert.ToDecimal(reader[Constants.EmployeeElements.Employee_Hours]),
+                       // Convert.ToDecimal(reader[Constants.EmployeeElements.Employee_Hours]),
                         reader[Constants.EmployeeElements.Employee_BankCode].ToString());
                 }
                 reader.Close();
 
                 UpdateEmployeeInfo();
 
-                reader = db_manager.ExecuteSQLTextFile(SQLStatement.GetStaffCategoryFor(key));
+                reader = db_manager.ExecuteSQLTextFile(SQLStatement.GetStaffCategoryFor(item.Staff_ID));
                 while (reader.Read())
                 {
                     categoryID.Add(Convert.ToInt32(reader[Constants.CategoryElements.Category_ID]));
@@ -181,7 +175,7 @@ namespace ReportControlSystem
             txtEmployeeID.Text = currentSelectedStaff.EmployeeCode;
             txtBank.Text = currentSelectedStaff.BankCode;
             txtRate.Text = currentSelectedStaff.Rate.ToString();
-            txtTotalHours.Text = currentSelectedStaff.Hours.ToString();
+           // txtTotalHours.Text = currentSelectedStaff.Hours.ToString();
         }
 
         private void LoadCategories(List<Int32> categoryID)
@@ -239,7 +233,7 @@ namespace ReportControlSystem
                     
                     PaymentPanel.Children.Add(border);  
                 }
-            }
+            } // end foreach
         }
 
         private void TxtContent_LostFocus_Event(object sender, RoutedEventArgs e)
@@ -268,9 +262,9 @@ namespace ReportControlSystem
 
                 decimal currentAmount = Convert.ToDecimal(txtBox.Text);
 
-                db_manager.LoadSQLTextFile(SQLStatement.GetInsertPaymentTableQuery(currentSelectedStaff.Staff_ID, currentPeriodID, c.Category_ID, currentAmount, currentSelectedStaff.Hours));
+                db_manager.LoadSQLTextFile(SQLStatement.GetInsertPaymentTableQuery(currentSelectedStaff.Staff_ID, currentPeriodID, c.Category_ID, currentAmount, Convert.ToDecimal(txtTotalHours.Text)));
 
-                db_manager.LoadSQLTextFile(SQLStatement.GetUpdateHoursForStaff(currentSelectedStaff.Staff_ID));
+                //db_manager.LoadSQLTextFile(SQLStatement.GetUpdateHoursForStaff(currentSelectedStaff.Staff_ID));
             }
 
             ExitForm();

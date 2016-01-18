@@ -66,13 +66,13 @@
                          Margin="66,12,12,0" MinWidth="180" BorderBrush="Black" BorderThickness="0,0,0,1" 
                          Width="Auto" />
 
-                    <TextBlock Text="Hours:" Grid.Row="6" Grid.Column="0" VerticalAlignment="Center" Margin="6,0,0,0"/>
+                    <!--<TextBlock Text="Hours:" Grid.Row="6" Grid.Column="0" VerticalAlignment="Center" Margin="6,0,0,0"/>
                     <TextBox Name="txtHours" Grid.Row="6" Grid.Column="0" HorizontalAlignment="Left" IsReadOnly="True"
                          Margin="66,12,12,0" MinWidth="180" BorderBrush="Black" BorderThickness="0,0,0,1" 
-                         Width="Auto" />
+                         Width="Auto" />-->
 
-                    <TextBlock Text="Bank Code:" Grid.Row="7" Grid.Column="0" VerticalAlignment="Center" Margin="6,0,0,0"/>
-                    <TextBox Name="txtBankCode" Grid.Row="8" Grid.Column="0" HorizontalAlignment="Left" IsReadOnly="True"
+                    <TextBlock Text="Bank Code:" Grid.Row="6" Grid.Column="0" VerticalAlignment="Center" Margin="6,0,0,0"/>
+                    <TextBox Name="txtBankCode" Grid.Row="7" Grid.Column="0" HorizontalAlignment="Left" IsReadOnly="True"
                          Margin="3,0,0,9" MinWidth="180" BorderBrush="Black" BorderThickness="0,0,0,1" 
                          Width="Auto" />
 
@@ -163,7 +163,7 @@
                                         </GridViewColumn.CellTemplate>
                                     </GridViewColumn>
 
-                                    <GridViewColumn Header="Name" Width="Auto" >
+                                    <GridViewColumn Header="Name" Width="210" >
                                         <GridViewColumn.CellTemplate>
                                             <DataTemplate>
                                                 <TextBlock Text="{Binding Category_Name}"/>
@@ -171,7 +171,7 @@
                                         </GridViewColumn.CellTemplate>
                                     </GridViewColumn>
 
-                                    <GridViewColumn Header="Type" Width="Auto">
+                                    <GridViewColumn Header="Type" Width="120">
                                         <GridViewColumn.CellTemplate>
                                             <DataTemplate>
                                                 <TextBlock Text="{Binding Category_Type}"/>

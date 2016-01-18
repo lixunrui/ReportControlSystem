@@ -19,26 +19,27 @@
         </Grid.RowDefinitions>
 
         <TextBlock  Text="Employee:" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="18"/>
-        <ComboBox Name="comEmployee" FontSize="18"  Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" ItemsSource="{Binding}" 
+        <ComboBox Name="comEmployee" FontSize="18"  Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" ItemsSource="{Binding}" DisplayMemberPath="Name"
                   SelectionChanged="ComEmployeeSelectionChanged"/>
 
-        <GroupBox Margin="6"  Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Header="Employee Details:"  FontSize="15" BorderThickness="1" BorderBrush="Black">
+        <GroupBox Margin="6"  Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Header="Employee Details:"  
+                  FontSize="15" BorderThickness="1" BorderBrush="Black">
             <StackPanel Margin="12">
 
                 <TextBlock Margin="9" FontSize="15" Text="Employee ID:" Grid.Row="0" Grid.Column="0"/>
-                <TextBlock Name="txtEmployeeID"  FontSize="15" Text="asdasdasd" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Center"/>
+                <TextBlock Name="txtEmployeeID"  FontSize="15" Text="" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Center"/>
                 <Border BorderBrush="Black" BorderThickness="1" Grid.Row="0" Grid.Column="1" />
 
                 <TextBlock FontSize="15" Margin="9" Text="Bank Details:" Grid.Row="1" Grid.Column="0"/>
-                <TextBlock Name="txtBank"  Text="asdasdasd" FontSize="15"  Grid.Row="1" Grid.Column="1" HorizontalAlignment="Center"/>
+                <TextBlock Name="txtBank"  Text="" FontSize="15"  Grid.Row="1" Grid.Column="1" HorizontalAlignment="Center"/>
                 <Border BorderBrush="Black" BorderThickness="1" Grid.Row="1" Grid.Column="1" />
 
                 <TextBlock Margin="9" Text="Current Rate:" FontSize="15" Grid.Row="2" Grid.Column="0"/>
-                <TextBlock Name="txtRate"  Text="asdasdasd" FontSize="15" Grid.Row="2" Grid.Column="1"  HorizontalAlignment="Center"/>
+                <TextBlock Name="txtRate"  Text="0" FontSize="15" Grid.Row="2" Grid.Column="1"  HorizontalAlignment="Center"/>
                 <Border BorderBrush="Black" BorderThickness="1" Grid.Row="2" Grid.Column="1" />
 
                 <TextBlock Margin="9" FontSize="15" Text="Current Total Hours:" Grid.Row="3" Grid.Column="0"/>
-                <TextBlock Name="txtTotalHours"  Text="asdasdasd" FontSize="15" Grid.Row="3" Grid.Column="1" HorizontalAlignment="Center"/>
+                <TextBox Name="txtTotalHours" Width="321"  Text="0" FontSize="15" Grid.Row="3" Grid.Column="1" HorizontalAlignment="Left"/>
                 <Border BorderBrush="Black" BorderThickness="1" Grid.Row="3" Grid.Column="1" />
             </StackPanel>  
         </GroupBox>

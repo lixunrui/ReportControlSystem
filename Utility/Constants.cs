@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+//using System.Threading.Tasks;
 
 namespace ReportControlSystem
 {
@@ -16,7 +16,6 @@ namespace ReportControlSystem
             internal static String Employee_Code = "EmployeeCode";
             internal static String Employee_TaxCode = "TaxCode";
             internal static String Employee_Rate = "Rate";
-            internal static String Employee_Hours = "Hours";
             internal static String Employee_BankCode = "BankCode";
         }
 
@@ -42,6 +41,7 @@ namespace ReportControlSystem
         {
             internal static String Period_Type_ID = "Period_Type_ID";
             internal static String Period_Type = "Period_Type";
+            internal static String Range = "PeriodDateRange";
         }
 
         internal static class PeriodElements

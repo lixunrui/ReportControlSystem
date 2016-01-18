@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+//using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -37,8 +37,6 @@ namespace ReportControlSystem
 
         private void InitializeCustomerComponent()
         {
-            dbManager = new DatabaseManager(@"C:\");
-            Reload();
             UpdateGroupsStatus();
         }
 
@@ -342,6 +340,16 @@ namespace ReportControlSystem
 
         private void BTN_Logon_Clicked(object sender, RoutedEventArgs e)
         {
+            try
+            {
+                dbManager = new DatabaseManager(@"C:\");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.InnerException.StackTrace, ex.Message);
+                return;
+            }
+            
             string username = txt_username.Text;
             string password = txt_password.Password;
             if (dbManager.CheckUser(username, password))
@@ -349,6 +357,7 @@ namespace ReportControlSystem
                 LogonPanel.Visibility = Visibility.Collapsed;
                 this.Title = string.Format("Welcome {0} to RCS", username);
                 UpdateGroupsStatus(true);
+                Reload();
             }
             else
             {

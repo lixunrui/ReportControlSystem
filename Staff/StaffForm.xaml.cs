@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+//using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -78,7 +78,7 @@ namespace ReportControlSystem
                 txtEmployeeCode.Text = currentStaff.EmployeeCode;
                 txtTaxCode.Text = currentStaff.TaxCode;
                 txtRate.Text = currentStaff.Rate.ToString();
-                txtHours.Text = currentStaff.Hours.ToString();
+               // txtHours.Text = currentStaff.Hours.ToString();
                 txtBankCode.Text = currentStaff.BankCode;
 
                 LoadEmployeeCategories();
@@ -185,7 +185,8 @@ namespace ReportControlSystem
         {
             if (currentStaff == null)
             {
-                currentStaff = new Staff(txtName.Text, txtEmployeeCode.Text, txtTaxCode.Text, Convert.ToDecimal(txtRate.Text), Convert.ToDecimal(txtHours.Text), txtBankCode.Text);
+                //currentStaff = new Staff(txtName.Text, txtEmployeeCode.Text, txtTaxCode.Text, Convert.ToDecimal(txtRate.Text), Convert.ToDecimal(txtHours.Text), txtBankCode.Text);
+                currentStaff = new Staff(txtName.Text, txtEmployeeCode.Text, txtTaxCode.Text, Convert.ToDecimal(txtRate.Text), txtBankCode.Text);
                 db_manager.LoadSQLTextFile(SQLStatement.GetInsertStaffTableQuery(currentStaff));
                 // update current staff ID
                 DataTable staffs = db_manager.GetDataTable(SQLStatement.GetMaxStaffIDTableQuery());
@@ -206,7 +207,7 @@ namespace ReportControlSystem
                     currentStaff.EmployeeCode = txtEmployeeCode.Text;
                     currentStaff.TaxCode = txtTaxCode.Text;
                     currentStaff.Rate = Convert.ToDecimal(txtRate.Text);
-                    currentStaff.Hours = Convert.ToDecimal(txtHours.Text);
+                    //currentStaff.Hours = Convert.ToDecimal(txtHours.Text);
                     currentStaff.BankCode = txtBankCode.Text;
                     db_manager.LoadSQLTextFile(SQLStatement.GetUpdateForStaff(currentStaff));
                 }
@@ -239,7 +240,7 @@ namespace ReportControlSystem
 
             txtRate.IsReadOnly = readOnly;
 
-            txtHours.IsReadOnly = readOnly;
+            //txtHours.IsReadOnly = readOnly;
 
             txtBankCode.IsReadOnly = readOnly;
 

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+//using System.Threading.Tasks;
 
 namespace ReportControlSystem
 {
@@ -138,7 +138,6 @@ namespace ReportControlSystem
 		                EmployeeCode	NVARCHAR(30) NOT NULL,
 				        TaxCode		    NVARCHAR(1) NOT NULL,
 				        Rate            decimal(3,3) Not Null ,
-				        Hours           decimal(3,3) default 0,
 				        BankCode        NVARCHAR(30) ,
                         Deleted             bin not null default 0,
 				        UNIQUE  (Staff_ID, Rate)
@@ -465,7 +464,7 @@ where period.period_ID = {0} and employee.staff_id = {1};", periodID, staffID);
         {
             String query = String.Empty;
 
-            query = string.Format(@"insert into Employee (Name, EmployeeCode, TaxCode, Rate, Hours, BankCode ) values ('{0}','{1}', '{2}', {3}, {4}, '{5}');", s.Name, s.EmployeeCode, s.TaxCode, s.Rate,s.Hours, s.BankCode);
+            query = string.Format(@"insert into Employee (Name, EmployeeCode, TaxCode, Rate, BankCode ) values ('{0}','{1}', '{2}', {3},  '{4}');", s.Name, s.EmployeeCode, s.TaxCode, s.Rate, s.BankCode);
 
             return query;
         }
@@ -563,26 +562,25 @@ where period.period_ID = {0} and employee.staff_id = {1};", periodID, staffID);
         {
             String query = String.Empty;
 
-            query = string.Format(@"update Employee Set {0}='{7}', {1}='{8}', {2}='{9}', {3}={10}, {4}={11}, {5}='{12}' where {6}={13};", Constants.EmployeeElements.Employee_Name, Constants.EmployeeElements.Employee_Code, Constants.EmployeeElements.Employee_TaxCode, Constants.EmployeeElements.Employee_Rate, 
-                Constants.EmployeeElements.Employee_Hours, Constants.EmployeeElements.Employee_BankCode, 
+            query = string.Format(@"update Employee Set {0}='{6}', {1}='{7}', {2}='{8}', {3}={9}, {4}='{10}' where {5}={11};", Constants.EmployeeElements.Employee_Name, Constants.EmployeeElements.Employee_Code, Constants.EmployeeElements.Employee_TaxCode, Constants.EmployeeElements.Employee_Rate, Constants.EmployeeElements.Employee_BankCode, 
                 Constants.EmployeeElements.Employee_ID, 
                 s.Name, s.EmployeeCode, 
                 s.TaxCode, s.Rate, 
-                s.Hours, s.BankCode, s.Staff_ID);
+                s.BankCode, s.Staff_ID);
 
             return query;
         }
 
-        internal static String GetUpdateHoursForStaff(int id)
-        {
-            String query = String.Empty;
+        //internal static String GetUpdateHoursForStaff(int id)
+        //{
+        //    String query = String.Empty;
 
-            query = string.Format(@"update Employee Set {0}=0 where {1}={2};", Constants.EmployeeElements.Employee_Hours, 
-                Constants.EmployeeElements.Employee_ID,
-                id);
+        //    query = string.Format(@"update Employee Set {0}=0 where {1}={2};", Constants.EmployeeElements.Employee_Hours, 
+        //        Constants.EmployeeElements.Employee_ID,
+        //        id);
 
-            return query;
-        }
+        //    return query;
+        //}
 
 
         internal static String GetUpdatePeriodCloseFromID(int periodID)
