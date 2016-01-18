@@ -169,7 +169,7 @@ namespace ReportControlSystem
 
                 if (txtTypeName.Text.Length > 0)
                 {
-                    newPeriodType.Period_Type = txtTypeName.Text + String.Format("Time: {0} Days", newPeriodType.PeriodDateRange);
+                    newPeriodType.Period_Type = txtTypeName.Text;
                 }
 
                 db_manager.LoadSQLTextFile(SQLStatement.GetInsertPeriodTypeTableQuery(newPeriodType));

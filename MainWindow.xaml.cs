@@ -139,10 +139,19 @@ namespace ReportControlSystem
                 {
                     Button btn = new Button();
 
-                    string btnContent = string.Format("{0}:{1}-{2} Report", periodDetailTable.Rows[i]["Period_Type"].ToString(), periodDetailTable.Rows[i][Constants.PeriodElements.Start_Date].ToString(), periodDetailTable.Rows[i][Constants.PeriodElements.End_Date].ToString());
+                    string btnContent = string.Format("{0} Report\n{1}\n{2} ", periodDetailTable.Rows[i]["Period_Type"].ToString(), 
+                        Convert.ToDateTime(periodDetailTable.Rows[i][Constants.PeriodElements.Start_Date]).ToShortDateString(),
+                        Convert.ToDateTime(periodDetailTable.Rows[i][Constants.PeriodElements.End_Date]).ToShortDateString());
 
-                    btn.Content = btnContent;
-                    btn.FontSize = 15;
+                    btn.Content = new TextBlock()
+                    {
+                        FontSize = 15,
+                        Text = btnContent,
+                        TextWrapping = TextWrapping.Wrap,
+                        VerticalAlignment=VerticalAlignment.Center
+                    };
+
+                    btn.MaxHeight = 90;
 
                   //  btn.Foreground = Brushes.Red;
                     btn.Margin = new Thickness(12);

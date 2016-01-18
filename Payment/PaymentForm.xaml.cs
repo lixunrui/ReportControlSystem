@@ -136,8 +136,8 @@ namespace ReportControlSystem
 
         private void LoadDate(DateTime startDT, DateTime endDT)
         {
-            txtStartDate.Text = startDT.ToString("yyyy-MM-dd");
-            txtEndDate.Text = endDT.ToString("yyyy-MM-dd");
+            txtStartDate.Text = startDT.ToShortDateString();
+            txtEndDate.Text = endDT.ToShortDateString();
         }
 
         private void ComEmployeeSelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -207,17 +207,21 @@ namespace ReportControlSystem
                     txtContent.Margin = new Thickness(9,0,0,0);
                     txtContent.Name = String.Format("txt{0}", c.Category_Name.Replace(" ", String.Empty));
                     txtContent.Text = "0";
+                    txtContent.LostFocus += TxtContent_LostFocus_Event;
 
                     //TODO: Validation Binding not working...
-                    Binding validationBinding = new Binding("Text");
+                    //Binding validationBinding = new Binding();
 
-                    DecimalValidation decimalValidation = new DecimalValidation();
+                    //DecimalValidation decimalValidation = new DecimalValidation();
 
-                    validationBinding.ValidationRules.Add(decimalValidation);
-                    validationBinding.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
-                    //validationBinding.Source = txtContent;
+                    //validationBinding.ValidationRules.Add(decimalValidation);
+                    ////validationBinding.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
+                    //validationBinding.ValidatesOnDataErrors = true;
+                    //validationBinding.Path = new PropertyPath(TextBox.TextProperty);
+                    //validationBinding.Source = txtContent.DataContext;
 
-                    txtContent.SetBinding(TextBox.TextProperty, validationBinding);
+                    //BindingOperations.SetBinding(txtContent, TextBox.TextProperty, validationBinding);
+
 
                     Border border = new Border();
                     border.BorderBrush = Brushes.Black;
@@ -233,11 +237,19 @@ namespace ReportControlSystem
 
                     PaymentPanel.RegisterName(txtContent.Name, txtContent);
                     
-
-                    PaymentPanel.Children.Add(border);
-
-                    
+                    PaymentPanel.Children.Add(border);  
                 }
+            }
+        }
+
+        private void TxtContent_LostFocus_Event(object sender, RoutedEventArgs e)
+        {
+            TextBox txtContent = sender as TextBox;
+            var bindingExpression = txtContent.GetBindingExpression(TextBox.TextProperty);
+
+            if (bindingExpression != null)
+            {
+                bindingExpression.UpdateSource();
             }
         }
 

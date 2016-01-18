@@ -52,18 +52,22 @@
 
 
                 <Button Name="btnStaff"  Grid.Row="0" Grid.Column="0" Content="Staff Maintenance" FontSize="15"  Margin="24" Click="BTN_Staff_Clicked"  />
-                <TextBlock Grid.Row="0" Grid.Column="1" Text="Click this to update/view Staff info" Margin="9" TextWrapping="Wrap"/>
+                <TextBlock Grid.Row="0" Grid.Column="1" Text="Click this to update/view Staff info"
+                           Margin="9" TextWrapping="Wrap"/>
 
                 <Button Name="btnCategory" Grid.Row="1" Grid.Column="0" Content="Category Maintenance" FontSize="15"  Margin="24" Click="BTN_Category_Clicked" />
-                <TextBlock Grid.Row="1" Grid.Column="2" Text="Click this to update/view Category info" Margin="9" TextWrapping="Wrap"/>
+                <TextBlock Grid.Row="1" Grid.Column="2" Text="Click this to update/view Category info" 
+                           Margin="9" TextWrapping="Wrap"/>
 
                 <Button Name="btnPeriod"  Grid.Row="2" Grid.Column="0" Content="Period Maintenance" FontSize="15"  Margin="24" Click="BTN_Period_Clicked"  />
-                <TextBlock Grid.Row="2" Grid.Column="2" Text="Click this to update/view Period info" Margin="9" TextWrapping="Wrap"/>
+                <TextBlock Grid.Row="2" Grid.Column="2" Text="Click this to update/view Period info" 
+                           Margin="9" TextWrapping="Wrap"/>
 
                 <Button Name="btnAdmin"  Grid.Row="3" Grid.Column="0" Margin="24" Click="BTN_Administratorw_Clicked"  >
                     <TextBlock Text="Administrator Maintenance" FontSize="15"  TextWrapping="Wrap"/>
                 </Button>
-                <TextBlock Grid.Row="3" Grid.Column="2" Text="Click this to update/view Administrator info" Margin="9" TextWrapping="Wrap"/>
+                <TextBlock Grid.Row="3" Grid.Column="2" Text="Click this to update/view Administrator info" 
+                           Margin="9" TextWrapping="Wrap"/>
 
                 <Border Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3"  BorderBrush="Black" BorderThickness="0,0,0,2" />
                 <Border Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3"  BorderBrush="Black" BorderThickness="0,0,0,2" />
